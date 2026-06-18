@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>SIMIVOZ - Servicios</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --deep-forest: #051A05;
+  --surface: #121414;
+  --surface-container: #1e2020;
+  --surface-container-low: #1a1c1c;
+  --surface-container-lowest: #0c0f0f;
+  --surface-container-high: #282a2b;
+  --surface-container-highest: #333535;
+  --primary: #75ff9e;
+  --primary-container: #00e676;
+  --on-primary: #003918;
+  --on-primary-container: #00210b;
+  --text: #e2e2e2;
+  --text-secondary: #bacbb9;
+  --outline: #859585;
+  --outline-variant: #3b4a3d;
+  --secondary-container: #354d32;
+  --surface-variant: #333535;
+  --touch-min: 44px;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: var(--surface);
+  color: var(--text);
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-font-smoothing: antialiased;
+}
+
+*:focus-visible {
+  outline: 3px solid var(--primary-container) !important;
+  outline-offset: 2px !important;
+}
+
+header {
+  width: 100%;
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  background: var(--surface);
+  border-bottom: 2px solid var(--outline-variant);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 1rem;
+  height: var(--touch-min);
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.header-left h1 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--primary);
+}
+
+.btn-icon {
+  width: var(--touch-min);
+  height: var(--touch-min);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  color: var(--primary);
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+}
+
+.btn-icon:hover {
+  background: var(--secondary-container);
+}
+
+.btn-icon:active {
+  transform: scale(0.96);
+}
+
+.search-section {
+  background: var(--surface-container-low);
+  padding: 1rem;
+}
+
+.search-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.search-wrapper input {
+  width: 100%;
+  height: var(--touch-min);
+  padding: 0 3rem 0 3.5rem;
+  border-radius: 0.25rem;
+  border: 2px solid var(--outline);
+  background: var(--surface-container-highest);
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
+  font-size: 1.125rem;
+}
+
+.search-wrapper input:focus {
+  outline: none;
+  border-color: var(--primary-container);
+}
+
+.search-wrapper input::placeholder {
+  color: var(--outline);
+}
+
+.search-icon {
+  position: absolute;
+  left: 1rem;
+  color: var(--outline);
+  pointer-events: none;
+}
+
+.voice-search-btn {
+  position: absolute;
+  right: 0.5rem;
+  width: 2.5rem;
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--primary-container);
+  border: none;
+  border-radius: 50%;
+  color: var(--on-primary-container);
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.voice-search-btn:active {
+  transform: scale(0.9);
+}
+
+.voice-search-btn.listening {
+  animation: pulse-glow 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 5px var(--primary-container); }
+  50% { box-shadow: 0 0 20px var(--primary-container); }
+}
+
+.map-section {
+  position: relative;
+  height: 300px;
+  width: 100%;
+  overflow: hidden;
+  border-bottom: 2px solid var(--outline-variant);
+}
+
+.map-placeholder {
+  position: absolute;
+  inset: 0;
+  background: var(--surface-container-high);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+}
+
+.map-label {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  background: rgba(18, 20, 20, 0.8);
+  backdrop-filter: blur(4px);
+  padding: 0.25rem 0.75rem;
+  border: 1px solid var(--outline-variant);
+  border-radius: 0.125rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--primary);
+}
+
+.recenter-btn {
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
+  width: 3rem;
+  height: 3rem;
+  background: var(--surface);
+  color: var(--primary);
+  border: 2px solid var(--primary);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+  transition: transform 0.2s;
+}
+
+.recenter-btn:active {
+  transform: scale(0.9);
+}
+
+.categories-section {
+  padding: 1.5rem 1rem;
+  max-width: 42rem;
+  margin: 0 auto;
+  width: 100%;
+  flex: 1;
+}
+
+.categories-section h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 1rem;
+}
+
+.category-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.category-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 1.5rem;
+  background: var(--surface-container);
+  border: 2px solid var(--outline);
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.category-btn:hover {
+  background: var(--secondary-container);
+}
+
+.category-btn:active {
+  transform: scale(0.98);
+}
+
+.category-btn.highlighted {
+  border-color: var(--primary-container);
+}
+
+.category-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.category-icon {
+  width: 3.5rem;
+  height: 3.5rem;
+  background: var(--primary-container);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--on-primary-container);
+  flex-shrink: 0;
+}
+
+.category-icon.secondary {
+  background: var(--surface-variant);
+  color: var(--primary);
+}
+
+.category-name {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.category-name.primary {
+  color: var(--primary);
+}
+
+.arrow-icon {
+  color: var(--outline);
+  transition: color 0.2s;
+}
+
+.category-btn:hover .arrow-icon {
+  color: var(--primary);
+}
+
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  z-index: 50;
+  background: var(--surface-container-lowest);
+  border-top: 2px solid var(--outline-variant);
+}
+
+.bottom-nav-inner {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 100%;
+  padding: 0.25rem 0.5rem;
+}
+
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--touch-min);
+  width: 20%;
+  padding: 0.25rem;
+  border-radius: 9999px;
+  text-decoration: none;
+  color: var(--text-secondary);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  transition: background 0.2s;
+}
+
+.nav-item:hover {
+  background: var(--surface-variant);
+}
+
+.nav-item:active {
+  transform: scale(0.9);
+}
+
+.nav-item.active {
+  background: var(--primary);
+  color: var(--on-primary);
+}
+
+body.modo-simplificado .simplified-hide {
+  display: none !important;
+}
+
+body.modo-simplificado .simplified-full-btn {
+  height: 88px !important;
+  font-size: 1.25rem !important;
+}
+
+.nav-spacer {
+  height: 5rem;
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-left">
+    <a href="inicio.html" class="btn-icon" aria-label="Volver al inicio">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+    </a>
+    <h1>SIMIVOZ</h1>
+  </div>
+  <a href="configuracion.html" class="btn-icon" aria-label="Configuración">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+  </a>
+</header>
+
+<main>
+  <div class="search-section">
+    <div class="search-wrapper">
+      <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="text" placeholder="Buscar servicios..." aria-label="Buscar servicios">
+      <button class="voice-search-btn" aria-label="Búsqueda por voz" id="voice-search-btn">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="map-section">
+    <div class="map-placeholder">
+      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--outline-variant)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      <p>Mapa de servicios cercanos</p>
+    </div>
+    <div class="map-label">Vista de Mapa</div>
+    <button class="recenter-btn" aria-label="Centrar mapa">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v4"/><path d="M12 18v4"/><path d="M2 12h4"/><path d="M18 12h4"/></svg>
+    </button>
+  </div>
+
+  <section class="categories-section">
+    <h2>Servicios Cercanos</h2>
+    <div class="category-list">
+      <a href="detalle-servicio.html?id=1" class="category-btn highlighted" style="text-decoration:none;color:inherit;display:flex;">
+        <div class="category-left">
+          <div class="category-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg>
+          </div>
+          <span class="category-name primary">Farmacias</span>
+        </div>
+        <svg class="arrow-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+      </a>
+
+      <button class="category-btn">
+        <div class="category-left">
+          <div class="category-icon secondary">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M2 21h20v-2H2v2zM20 8h-5V3H9v5H4l8 8 8-8z"/></svg>
+          </div>
+          <span class="category-name">Hospitales</span>
+        </div>
+        <svg class="arrow-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+      </button>
+
+      <button class="category-btn">
+        <div class="category-left">
+          <div class="category-icon secondary">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor" stroke="none"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+          </div>
+          <span class="category-name">Supermercados</span>
+        </div>
+        <svg class="arrow-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+      </button>
+
+      <button class="category-btn">
+        <div class="category-left">
+          <div class="category-icon secondary">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+          </div>
+          <span class="category-name">Transporte</span>
+        </div>
+        <svg class="arrow-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+      </button>
+    </div>
+  </section>
+</main>
+
+<nav class="bottom-nav" aria-label="Navegación principal">
+  <div class="bottom-nav-inner">
+    <a href="inicio.html" class="nav-item">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+      <span>Inicio</span>
+    </a>
+    <a href="voz.html" class="nav-item">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+      <span>Voz</span>
+    </a>
+    <a href="lectura.html" class="nav-item">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+      <span>Lectura</span>
+    </a>
+    <a href="servicios.html" class="nav-item active" aria-current="page">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      <span>Mapa</span>
+    </a>
+    <a href="configuracion.html" class="nav-item">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      <span>Ajustes</span>
+    </a>
+  </div>
+</nav>
+
+<div class="nav-spacer"></div>
+
+<script>
+var voiceBtn = document.getElementById('voice-search-btn')
+var isListening = false
+var searchRecognition = null
+var searchInput = document.querySelector('.search-wrapper input')
+
+voiceBtn.addEventListener('click', function() {
+  if (isListening) {
+    detenerBusquedaVoz()
+  } else {
+    iniciarBusquedaVoz()
+  }
+})
+
+function iniciarBusquedaVoz() {
+  if (!('webkitSpeechRecognition' in window || 'SpeechRecognition' in window)) {
+    var msg = new SpeechSynthesisUtterance('Tu navegador no soporta búsqueda por voz')
+    msg.lang = 'es-PE'
+    window.speechSynthesis.speak(msg)
+    return
+  }
+
+  var SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition
+  searchRecognition = new SpeechRecognition()
+  searchRecognition.lang = 'es-PE'
+  searchRecognition.continuous = false
+  searchRecognition.interimResults = false
+  isListening = true
+  voiceBtn.classList.add('listening')
+  searchInput.placeholder = 'Escuchando...'
+
+  var msg = new SpeechSynthesisUtterance('Di qué servicio buscas')
+  msg.lang = 'es-PE'
+  window.speechSynthesis.speak(msg)
+
+  searchRecognition.onresult = function(event) {
+    var text = event.results[0][0].transcript
+    searchInput.value = text
+    var confirm = new SpeechSynthesisUtterance('Buscando ' + text)
+    confirm.lang = 'es-PE'
+    window.speechSynthesis.speak(confirm)
+    detenerBusquedaVoz()
+  }
+
+  searchRecognition.onerror = function() {
+    var err = new SpeechSynthesisUtterance('Error de reconocimiento, intenta de nuevo')
+    err.lang = 'es-PE'
+    window.speechSynthesis.speak(err)
+    detenerBusquedaVoz()
+  }
+
+  searchRecognition.onend = function() {
+    detenerBusquedaVoz()
+  }
+
+  searchRecognition.start()
+}
+
+function detenerBusquedaVoz() {
+  if (searchRecognition) {
+    searchRecognition.stop()
+    searchRecognition = null
+  }
+  isListening = false
+  voiceBtn.classList.remove('listening')
+  searchInput.placeholder = 'Buscar servicios...'
+}
+</script>
+</body>
+</html>

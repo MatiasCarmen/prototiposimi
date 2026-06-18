@@ -210,73 +210,17 @@ main {
   width: 100%;
 }
 
-.hidden {
+body.modo-simplificado .simplified-hide {
   display: none !important;
 }
 
-.voice-modal {
-  position: fixed;
-  inset: 0;
-  background: rgba(5, 26, 5, 0.95);
-  z-index: 60;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 1rem;
+body.modo-simplificado .simplified-full-btn {
+  height: 88px !important;
+  font-size: 1.25rem !important;
 }
 
-.voice-modal-inner {
-  text-align: center;
-}
-
-.pulse-ring {
-  width: 12rem;
-  height: 12rem;
-  position: relative;
-  margin: 0 auto 2.5rem;
-}
-
-.ring-outer {
-  position: absolute;
-  inset: 0;
-  background: var(--primary-container);
-  opacity: 0.2;
-  border-radius: 50%;
-  animation: ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;
-}
-
-.ring-middle {
-  position: absolute;
-  inset: 1rem;
-  background: var(--primary-container);
-  opacity: 0.4;
-  border-radius: 50%;
-  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-}
-
-.ring-inner {
-  position: absolute;
-  inset: 2rem;
-  background: var(--primary-container);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 0 40px #00e676;
-}
-
-.voice-modal-inner h2 {
-  font-size: 2.25rem;
-  font-weight: 700;
-  color: var(--primary);
-  margin-bottom: 1rem;
-  letter-spacing: -0.02em;
-}
-
-.voice-modal-inner p {
-  font-size: 1.125rem;
-  color: var(--text);
-  margin-bottom: 2.5rem;
+.hidden {
+  display: none !important;
 }
 
 .btn-cancel {
@@ -330,10 +274,10 @@ main {
     <svg class="icon" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
   </a>
 
-  <button class="btn-massive" aria-label="Hablar con SimiVoz" onclick="toggleVoice()">
+  <a href="voz.html" class="btn-massive" aria-label="Hablar con SimiVoz">
     <span>HABLAR CON SIMIVOZ</span>
     <svg class="icon" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
-  </button>
+  </a>
 
   <a href="servicios.html" class="btn-massive" aria-label="Servicios Cercanos">
     <span>SERVICIOS CERCANOS</span>
@@ -347,21 +291,6 @@ main {
 
   <p class="sr-only" aria-live="polite">Bienvenido al menú principal de SIMIVOZ. Las opciones son: Escuchar contenido, Hablar con SimiVoz, Servicios cercanos y Configuración.</p>
 </main>
-
-<div id="voice-modal" class="hidden voice-modal">
-  <div class="voice-modal-inner">
-    <div class="pulse-ring">
-      <div class="ring-outer"></div>
-      <div class="ring-middle"></div>
-      <div class="ring-inner">
-        <svg width="48" height="48" viewBox="0 0 24 24" fill="var(--on-primary)" stroke="none"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
-      </div>
-    </div>
-    <h2>Escuchando...</h2>
-    <p>Di un comando o "Volver" para salir.</p>
-    <button class="btn-cancel" onclick="toggleVoice()">CANCELAR</button>
-  </div>
-</div>
 
 <nav class="bottom-nav" aria-label="Navegación principal">
   <div class="bottom-nav-inner">
@@ -391,18 +320,6 @@ main {
 <div class="nav-spacer"></div>
 
 <script>
-function toggleVoice() {
-  var modal = document.getElementById('voice-modal')
-  modal.classList.toggle('hidden')
-}
-
-document.addEventListener('keydown', function(e) {
-  if (e.key === 'Escape') {
-    var modal = document.getElementById('voice-modal')
-    if (!modal.classList.contains('hidden')) toggleVoice()
-  }
-})
-
 document.querySelectorAll('.btn-massive, .nav-item').forEach(function(el) {
   el.addEventListener('click', function() {
     if (window.navigator.vibrate) window.navigator.vibrate(50)

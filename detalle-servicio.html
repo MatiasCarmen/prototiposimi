@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html class="dark" lang="es">
+<head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Detalle de Servicio - SIMIVOZ</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+tailwind.config = {
+  darkMode: "class",
+  theme: {
+    extend: {
+      colors: {
+        "primary": "#75ff9e",
+        "primary-container": "#00e676",
+        "on-primary": "#003918",
+        "on-primary-container": "#00210b",
+        "surface": "#121414",
+        "surface-container": "#1e2020",
+        "surface-container-high": "#282a2b",
+        "surface-container-lowest": "#0c0f0f",
+        "surface-variant": "#333535",
+        "on-surface": "#e2e2e2",
+        "on-surface-variant": "#bacbb9",
+        "outline": "#859585",
+        "outline-variant": "#3b4a3d",
+        "secondary-container": "#354d32",
+        "on-secondary-container": "#a2bc9a",
+        "background": "#121414",
+        "on-background": "#e2e2e2",
+        "error": "#ffb4ab",
+        "on-primary-fixed": "#00210b",
+        "primary-fixed": "#62ff96",
+        "surface-tint": "#00e475"
+      },
+      borderRadius: {
+        DEFAULT: "0.125rem", lg: "0.25rem", xl: "0.5rem", full: "0.75rem"
+      },
+      spacing: {
+        "touch-min": "44px", "xs": "0.5rem", "sm": "1rem", "md": "1.5rem", "lg": "2.5rem", "xl": "4rem",
+        "margin-mobile": "1rem", "margin-desktop": "3rem", "gutter": "1.5rem"
+      },
+      fontFamily: { "inter": ["Inter"] },
+      fontSize: {
+        "headline-lg": ["2.25rem", { lineHeight: "1.2", letterSpacing: "-0.02em", fontWeight: "700" }],
+        "headline-md": ["1.5rem", { lineHeight: "1.3", fontWeight: "600" }],
+        "body-lg": ["1.125rem", { lineHeight: "1.6", fontWeight: "400" }],
+        "body-md": ["1rem", { lineHeight: "1.5", fontWeight: "400" }],
+        "label-lg": ["0.875rem", { lineHeight: "1.2", letterSpacing: "0.05em", fontWeight: "600" }]
+      }
+    }
+  }
+}
+</script>
+<style>
+body {
+  background-color: #121414;
+  color: #e2e2e2;
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+}
+*:focus-visible {
+  outline: 3px solid #75ff9e !important;
+  outline-offset: 2px !important;
+}
+body.modo-simplificado .simplified-hide { display: none !important; }
+body.modo-simplificado .simplified-full-btn { height: 88px !important; font-size: 1.25rem !important; }
+
+.interactive-scale:active {
+  transform: scale(0.95) !important;
+}
+.leaflet-container {
+  background: #1a1c1c;
+}
+.leaflet-control-zoom a {
+  background: #1e2020 !important;
+  color: #e2e2e2 !important;
+  border-color: #3b4a3d !important;
+}
+.leaflet-control-attribution {
+  background: rgba(18,20,20,0.8) !important;
+  color: #859585 !important;
+}
+.leaflet-popup-content-wrapper {
+  background: #1e2020 !important;
+  color: #e2e2e2 !important;
+  border: 1px solid #3b4a3d !important;
+  border-radius: 0.5rem !important;
+}
+.leaflet-popup-tip {
+  background: #1e2020 !important;
+}
+</style>
+</head>
+<body class="min-h-screen flex flex-col bg-background text-on-background font-inter">
+
+<header class="w-full top-0 sticky bg-background border-b-2 border-outline-variant z-50">
+  <div class="flex justify-between items-center px-margin-mobile h-touch-min md:px-margin-desktop md:h-16">
+    <div class="flex items-center gap-4">
+      <a href="servicios.html" class="text-primary p-2 interactive-scale transition-transform" aria-label="Volver">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+      </a>
+      <h1 class="font-headline-md text-headline-md font-extrabold text-primary tracking-tighter">SIMIVOZ</h1>
+    </div>
+    <a href="configuracion.html" class="text-primary p-2 interactive-scale transition-transform" aria-label="Configuración">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+    </a>
+  </div>
+</header>
+
+<main class="flex-grow flex flex-col p-margin-mobile md:p-margin-desktop max-w-4xl mx-auto w-full gap-gutter">
+
+  <section class="grid grid-cols-1 md:grid-cols-3 gap-gutter" aria-live="polite">
+    <div class="md:col-span-2 bg-surface-container-high border-2 border-primary-container p-lg rounded-xl flex flex-col justify-between">
+      <div>
+        <div class="flex items-center gap-2 mb-2">
+          <span class="bg-primary-container text-on-primary-container px-3 py-1 rounded-full font-label-lg text-label-lg" id="service-category">FARMACIA</span>
+          <span class="flex items-center gap-1 text-primary font-bold text-sm">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+            Abierto
+          </span>
+        </div>
+        <h2 class="text-headline-lg text-on-surface mb-xs" id="service-name">Farmacia Central "San José"</h2>
+        <p class="text-body-lg text-on-surface-variant flex items-start gap-2">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="mt-1 flex-shrink-0"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          <span id="service-address">Avenida de la Constitución 124, Planta Baja, Sector 4.</span>
+        </p>
+      </div>
+      <div class="mt-lg flex items-center gap-4">
+        <div class="bg-surface-variant p-4 rounded-lg flex flex-col items-center min-w-[120px]">
+          <span class="text-on-surface-variant font-label-lg text-label-lg">DISTANCIA</span>
+          <span class="text-primary font-bold text-headline-md" id="distance-display">250 m</span>
+        </div>
+        <div class="bg-surface-variant p-4 rounded-lg flex flex-col items-center min-w-[120px]">
+          <span class="text-on-surface-variant font-label-lg text-label-lg">TIEMPO</span>
+          <span class="text-primary font-bold text-headline-md" id="time-display">3 min</span>
+        </div>
+      </div>
+    </div>
+    <div class="bg-surface-container border border-outline-variant rounded-xl overflow-hidden relative min-h-[200px] md:min-h-[300px]">
+      <div class="absolute inset-0 bg-gradient-to-t from-background to-transparent z-10 pointer-events-none"></div>
+      <img class="absolute inset-0 w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD-jUt7n7cPJAbRcQZiqUD2_eMZezJyV5WDhoIKXncacu_wq73X3IfOB6af4EoABjQAu25eW_4p1ocm-Ul9gkQ49V8qL60h2o_dN81cw57CJNZGv3Yc853SrovHLVoGy2TE79s-rilWBkF0SyznWYvA-sZSnNrUPRWAijGgkK0uACh2psc6q73Klwj3xI4iwWx_NpbLhHePhBC8WgymncML6ynGiTXmqMJjA4jMqlFH52Oy6uDCFArr_fd-7C6YbDpOIuuQ3LRBE7UT" alt="Interior de farmacia">
+      <div class="absolute bottom-4 left-4 z-20">
+        <span class="bg-background/80 backdrop-blur-md border border-outline px-3 py-1 rounded-lg text-on-surface text-sm">Vista de local</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="flex flex-col gap-sm mt-md">
+    <button class="w-full bg-primary-container text-on-primary-container h-24 md:h-32 rounded-xl flex items-center justify-between px-lg interactive-scale transition-all border-4 border-transparent active:border-on-primary-container" onclick="getDirections()">
+      <div class="flex items-center gap-gutter">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        <span class="font-headline-md text-headline-md font-extrabold uppercase">Indicaciones</span>
+      </div>
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+    </button>
+    <button class="w-full bg-transparent border-4 border-primary-container text-primary-container h-24 md:h-32 rounded-xl flex items-center justify-between px-lg interactive-scale transition-all active:bg-primary-container active:text-on-primary-container" onclick="callService()">
+      <div class="flex items-center gap-gutter">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        <span class="font-headline-md text-headline-md font-extrabold uppercase">Llamar</span>
+      </div>
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+    </button>
+    <a href="servicios.html" class="w-full bg-surface-variant text-on-surface h-24 md:h-28 rounded-xl flex items-center justify-center gap-gutter interactive-scale transition-all border-2 border-outline-variant no-underline">
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+      <span class="font-headline-md text-headline-md font-bold uppercase">Volver</span>
+    </a>
+  </section>
+
+  <section class="mt-lg">
+    <h3 class="font-headline-md text-headline-md text-on-surface mb-md">Ubicación exacta</h3>
+    <div id="map" class="w-full aspect-video md:aspect-[21/9] rounded-xl overflow-hidden border-2 border-outline-variant" style="min-height: 300px;"></div>
+  </section>
+</main>
+
+<div class="h-[100px] md:hidden"></div>
+
+<nav class="fixed bottom-0 w-full z-50 h-[80px] bg-background border-t-2 border-outline-variant flex justify-around items-center px-base md:hidden">
+  <a href="inicio.html" class="flex flex-col items-center justify-center text-on-surface w-full h-full active:scale-90 transition-all no-underline">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+    <span class="font-label-lg text-label-lg">Inicio</span>
+  </a>
+  <a href="voz.html" class="flex flex-col items-center justify-center text-on-surface w-full h-full active:scale-90 transition-all no-underline">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+    <span class="font-label-lg text-label-lg">Voz</span>
+  </a>
+  <a href="lectura.html" class="flex flex-col items-center justify-center text-on-surface w-full h-full active:scale-90 transition-all no-underline">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+    <span class="font-label-lg text-label-lg">Lectura</span>
+  </a>
+  <a href="servicios.html" class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full w-full h-full border-2 border-primary active:scale-90 transition-all no-underline">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+    <span class="font-label-lg text-label-lg">Mapa</span>
+  </a>
+  <a href="configuracion.html" class="flex flex-col items-center justify-center text-on-surface w-full h-full active:scale-90 transition-all no-underline">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+    <span class="font-label-lg text-label-lg">Ajustes</span>
+  </a>
+</nav>
+
+<script>
+var servicios = [
+  { id: 1, nombre: 'Farmacia Central "San José"', direccion: 'Av. Constitución 124, Planta Baja, Sector 4', categoria: 'FARMACIA', lat: -12.043, lng: -77.038, icon: 'local_pharmacy', telefono: '+51 1 234 5678' },
+  { id: 2, nombre: 'Farmacia Central 24h', direccion: 'Jr. Unión 456, Centro', categoria: 'FARMACIA', lat: -12.048, lng: -77.030, icon: 'local_pharmacy', telefono: '+51 1 234 5679' },
+  { id: 3, nombre: 'Farmacias de Guardia Sur', direccion: 'Av. Principal 789, Sector Sur', categoria: 'FARMACIA', lat: -12.055, lng: -77.035, icon: 'local_pharmacy', telefono: '+51 1 234 5680' }
+]
+
+var params = new URLSearchParams(window.location.search)
+var serviceId = parseInt(params.get('id')) || 1
+var servicio = servicios.find(function(s) { return s.id === serviceId }) || servicios[0]
+
+document.getElementById('service-name').textContent = servicio.nombre
+document.getElementById('service-address').textContent = servicio.direccion
+document.getElementById('service-category').textContent = servicio.categoria
+
+var map, userMarker, serviceMarker
+
+function initMap(lat, lng) {
+  map = L.map('map', {
+    center: [lat, lng],
+    zoom: 16,
+    zoomControl: true,
+    attributionControl: true
+  })
+
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; OpenStreetMap contributors',
+    maxZoom: 19
+  }).addTo(map)
+
+  userMarker = L.circleMarker([lat, lng], {
+    radius: 10,
+    fillColor: '#75ff9e',
+    color: '#003918',
+    weight: 3,
+    opacity: 1,
+    fillOpacity: 0.8
+  }).addTo(map).bindPopup('Estás aquí')
+
+  var serviceLat = servicio.lat || lat + (Math.random() - 0.5) * 0.01
+  var serviceLng = servicio.lng || lng + (Math.random() - 0.5) * 0.01
+
+  serviceMarker = L.marker([serviceLat, serviceLng], {
+    icon: L.divIcon({
+      className: '',
+      html: '<div style="background:#00e676;width:24px;height:24px;border-radius:50%;border:4px solid #003918;box-shadow:0 0 12px rgba(0,230,118,0.6);"></div>',
+      iconSize: [24, 24],
+      iconAnchor: [12, 12]
+    })
+  }).addTo(map).bindPopup('<b>' + servicio.nombre + '</b><br>' + servicio.direccion)
+
+  var bounds = L.latLngBounds([lat, lng], [serviceLat, serviceLng])
+  map.fitBounds(bounds, { padding: [50, 50] })
+
+  var dist = calculateDistance(lat, lng, serviceLat, serviceLng)
+  document.getElementById('distance-display').textContent = Math.round(dist * 1000) + ' m'
+  document.getElementById('time-display').textContent = Math.round(dist * 12) + ' min'
+}
+
+function calculateDistance(lat1, lon1, lat2, lon2) {
+  var R = 6371
+  var dLat = (lat2 - lat1) * Math.PI / 180
+  var dLon = (lon2 - lon1) * Math.PI / 180
+  var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+          Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+          Math.sin(dLon/2) * Math.sin(dLon/2)
+  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a))
+  return R * c
+}
+
+function getDirections() {
+  if (serviceMarker) {
+    var latlng = serviceMarker.getLatLng()
+    var msg = new SpeechSynthesisUtterance('Abriendo indicaciones hacia ' + servicio.nombre)
+    msg.lang = 'es-PE'
+    window.speechSynthesis.speak(msg)
+    window.open('https://www.openstreetmap.org/directions?from=&to=' + latlng.lat + '%2C' + latlng.lng, '_blank')
+  }
+}
+
+function callService() {
+  var msg = new SpeechSynthesisUtterance('Llamando a ' + servicio.nombre)
+  msg.lang = 'es-PE'
+  window.speechSynthesis.speak(msg)
+  alert('Llamando a ' + servicio.nombre + '...')
+}
+
+if (navigator.geolocation) {
+  navigator.geolocation.getCurrentPosition(
+    function(pos) {
+      initMap(pos.coords.latitude, pos.coords.longitude)
+    },
+    function() {
+      initMap(-12.0464, -77.0428)
+    },
+    { enableHighAccuracy: true, timeout: 10000 }
+  )
+} else {
+  initMap(-12.0464, -77.0428)
+}
+</script>
+</body>
+</html>

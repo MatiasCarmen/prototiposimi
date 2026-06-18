@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html class="dark" lang="es">
+<head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Audio Player - SIMIVOZ</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+<script>
+tailwind.config = {
+  darkMode: "class",
+  theme: {
+    extend: {
+      colors: {
+        "primary": "#75ff9e", "primary-container": "#00e676", "primary-fixed": "#62ff96", "primary-fixed-dim": "#00e475",
+        "on-primary": "#003918", "on-primary-container": "#00612e", "on-primary-fixed": "#00210b", "on-primary-fixed-variant": "#005226",
+        "surface": "#121414", "surface-container": "#1e2020", "surface-container-high": "#282a2b",
+        "surface-container-low": "#1a1c1c", "surface-container-lowest": "#0c0f0f", "surface-container-highest": "#333535",
+        "surface-variant": "#333535", "on-surface": "#e2e2e2", "on-surface-variant": "#bacbb9",
+        "outline": "#859585", "outline-variant": "#3b4a3d",
+        "secondary": "#b3ceab", "secondary-container": "#354d32",
+        "on-secondary": "#1f361d", "on-secondary-container": "#a2bc9a",
+        "background": "#121414", "on-background": "#e2e2e2",
+        "tertiary": "#e7e4e3", "tertiary-container": "#cac8c7",
+        "error": "#ffb4ab", "error-container": "#93000a", "on-error": "#690005", "on-error-container": "#ffdad6",
+        "inverse-surface": "#e2e2e2", "inverse-on-surface": "#2f3131", "inverse-primary": "#006d35", "surface-tint": "#00e475"
+      },
+      borderRadius: { DEFAULT: "0.125rem", lg: "0.25rem", xl: "0.5rem", full: "0.75rem" },
+      spacing: {
+        "touch-target-min": "44px", "xs": "0.5rem", "sm": "1rem", "md": "1.5rem", "lg": "2.5rem", "xl": "4rem",
+        "margin-mobile": "1rem", "margin-desktop": "3rem", "gutter": "1.5rem", "base": "4px"
+      },
+      fontFamily: {
+        "headline-md": ["Inter"], "headline-lg": ["Inter"], "label-lg": ["Inter"],
+        "body-md": ["Inter"], "interactive-text": ["Inter"], "headline-lg-mobile": ["Inter"], "body-lg": ["Inter"]
+      },
+      fontSize: {
+        "headline-md": ["1.5rem", { "lineHeight": "1.3", "fontWeight": "600" }],
+        "headline-lg": ["2.25rem", { "lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+        "label-lg": ["0.875rem", { "lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "600" }],
+        "body-md": ["1rem", { "lineHeight": "1.5", "fontWeight": "400" }],
+        "interactive-text": ["1.125rem", { "lineHeight": "1", "fontWeight": "700" }],
+        "headline-lg-mobile": ["1.75rem", { "lineHeight": "1.2", "fontWeight": "700" }],
+        "body-lg": ["1.125rem", { "lineHeight": "1.6", "fontWeight": "400" }]
+      }
+    }
+  }
+}
+</script>
+<style>
+body.modo-simplificado .simplified-hide { display: none !important; }
+body.modo-simplificado .simplified-full-btn { height: 88px !important; font-size: 1.25rem !important; }
+
+*:focus-visible { outline: 3px solid #75ff9e !important; outline-offset: 2px !important; }
+.audio-wave {
+  animation: pulse-ring 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+}
+@keyframes pulse-ring {
+  0% { transform: scale(0.8); box-shadow: 0 0 0 0 rgba(0, 230, 118, 0.7); }
+  70% { transform: scale(1); box-shadow: 0 0 0 40px rgba(0, 230, 118, 0); }
+  100% { transform: scale(0.8); box-shadow: 0 0 0 0 rgba(0, 230, 118, 0); }
+}
+</style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex flex-col antialiased">
+
+<header class="w-full top-0 sticky border-b-2 border-outline-variant bg-background z-40">
+  <div class="flex justify-between items-center px-margin-mobile md:px-margin-desktop h-touch-target-min">
+    <button onclick="history.back()" class="flex items-center justify-center w-touch-target-min h-touch-target-min text-primary hover:bg-secondary-container active:scale-95 transition-transform rounded-full" aria-label="Volver">
+      <span class="material-symbols-outlined">arrow_back</span>
+    </button>
+    <h1 class="font-headline-md text-headline-md font-bold text-primary">SIMIVOZ</h1>
+    <a href="configuracion.html" class="flex items-center justify-center w-touch-target-min h-touch-target-min text-on-surface-variant hover:bg-secondary-container active:scale-95 transition-transform rounded-full" aria-label="Ajustes">
+      <span class="material-symbols-outlined">settings</span>
+    </a>
+  </div>
+</header>
+
+<main class="flex-grow flex flex-col items-center justify-center px-margin-mobile md:px-margin-desktop py-lg pb-32">
+  <div class="text-center mb-xl w-full max-w-2xl">
+    <h2 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-primary mb-sm uppercase tracking-wide">Reproduciendo</h2>
+    <p class="font-body-lg text-body-lg text-on-surface-variant border-2 border-outline-variant bg-surface rounded-xl p-md truncate" id="audio-title" title="Guía de Accesibilidad en Interfaces Digitales Avanzadas">
+      Guía de Accesibilidad en Interfaces Digitales Avanzadas
+    </p>
+  </div>
+
+  <div class="relative flex items-center justify-center w-64 h-64 mb-xl">
+    <div class="absolute inset-0 rounded-full border-4 border-secondary-container opacity-50"></div>
+    <div class="absolute inset-4 rounded-full border-4 border-outline-variant opacity-70"></div>
+    <div class="absolute inset-8 rounded-full border-4 border-primary-container audio-wave"></div>
+    <div class="relative z-10 flex items-center justify-center w-32 h-32 bg-primary rounded-full border-4 border-background shadow-[0_0_0_4px_#00e676]">
+      <span class="material-symbols-outlined text-on-primary text-6xl" style="font-variation-settings: 'FILL' 1;">graphic_eq</span>
+    </div>
+  </div>
+
+  <div class="w-full max-w-2xl mb-xl">
+    <div class="flex justify-between font-label-lg text-label-lg text-on-surface-variant mb-xs">
+      <span id="currentTime">02:14</span>
+      <span id="totalTime">05:30</span>
+    </div>
+    <div class="relative w-full h-4 bg-surface-container-highest rounded-full overflow-hidden border border-outline-variant">
+      <div class="absolute top-0 left-0 h-full bg-primary" id="progressBar" style="width: 40%;"></div>
+    </div>
+  </div>
+
+  <div class="flex items-center justify-center gap-gutter w-full max-w-2xl mb-xl">
+    <button onclick="cambiarVelocidad()" class="flex flex-col items-center justify-center min-w-[80px] min-h-[80px] bg-transparent border-2 border-primary rounded-xl text-on-surface hover:bg-secondary-container active:scale-95 transition-all" aria-label="Velocidad">
+      <span class="material-symbols-outlined text-3xl mb-1">speed</span>
+      <span class="font-label-lg text-label-lg" id="speedDisplay">1.0x</span>
+    </button>
+
+    <button onclick="detener()" class="flex items-center justify-center w-20 h-20 bg-surface-container border-2 border-error rounded-full text-error hover:bg-error-container hover:text-on-error-container active:scale-95 transition-all" aria-label="Detener">
+      <span class="material-symbols-outlined text-4xl" style="font-variation-settings: 'FILL' 1;">stop</span>
+    </button>
+
+    <button onclick="togglePlayPause()" class="flex items-center justify-center w-24 h-24 bg-primary text-on-primary font-bold rounded-full border-4 border-background shadow-[0_0_0_2px_#00e676] hover:bg-primary-fixed active:scale-95 transition-all" aria-label="Pausar" id="playPauseBtn">
+      <span class="material-symbols-outlined text-5xl" style="font-variation-settings: 'FILL' 1;" id="playPauseIcon">pause</span>
+    </button>
+
+    <button onclick="adelantar()" class="flex items-center justify-center w-20 h-20 bg-surface-container border-2 border-outline-variant rounded-full text-on-surface hover:bg-secondary-container active:scale-95 transition-all" aria-label="Adelantar">
+      <span class="material-symbols-outlined text-4xl" style="font-variation-settings: 'FILL' 1;">fast_forward</span>
+    </button>
+
+    <button onclick="toggleVolumen()" class="flex flex-col items-center justify-center min-w-[80px] min-h-[80px] bg-transparent border-2 border-primary rounded-xl text-on-surface hover:bg-secondary-container active:scale-95 transition-all" aria-label="Volumen">
+      <span class="material-symbols-outlined text-3xl mb-1" id="volumeIcon">volume_up</span>
+      <span class="font-label-lg text-label-lg">Vol</span>
+    </button>
+  </div>
+</main>
+
+<nav class="md:hidden fixed bottom-0 w-full z-50 border-t-2 border-outline-variant bg-surface-container-lowest">
+  <ul class="flex justify-around items-center w-full px-sm py-xs">
+    <li><a href="inicio.html" class="flex flex-col items-center justify-center text-on-surface-variant p-xs min-h-[44px] hover:bg-secondary-container active:scale-90 transition-all rounded-lg no-underline"><span class="material-symbols-outlined">home</span><span class="font-label-lg text-label-lg mt-1">Inicio</span></a></li>
+    <li><a href="voz.html" class="flex flex-col items-center justify-center text-on-surface-variant p-xs min-h-[44px] hover:bg-secondary-container active:scale-90 transition-all rounded-lg no-underline"><span class="material-symbols-outlined">mic</span><span class="font-label-lg text-label-lg mt-1">Voz</span></a></li>
+    <li><a href="lectura.html" aria-current="page" class="flex flex-col items-center justify-center bg-primary text-on-primary rounded-full p-xs min-h-[44px] active:scale-90 transition-all no-underline"><span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">auto_stories</span><span class="font-label-lg text-label-lg mt-1">Lectura</span></a></li>
+    <li><a href="servicios.html" class="flex flex-col items-center justify-center text-on-surface-variant p-xs min-h-[44px] hover:bg-secondary-container active:scale-90 transition-all rounded-lg no-underline"><span class="material-symbols-outlined">map</span><span class="font-label-lg text-label-lg mt-1">Mapa</span></a></li>
+    <li><a href="configuracion.html" class="flex flex-col items-center justify-center text-on-surface-variant p-xs min-h-[44px] hover:bg-secondary-container active:scale-90 transition-all rounded-lg no-underline"><span class="material-symbols-outlined">settings</span><span class="font-label-lg text-label-lg mt-1">Ajustes</span></a></li>
+  </ul>
+</nav>
+
+<script>
+var synth = window.speechSynthesis
+var utterance = null
+var isPlaying = false
+var velocidad = 1.0
+var volumenActivo = true
+var progressInterval = null
+var startTime = 0
+var totalDuration = 30
+
+var titulo = localStorage.getItem('simivoz_audio_titulo') || 'Guía de Accesibilidad en Interfaces Digitales Avanzadas'
+var contenido = localStorage.getItem('simivoz_audio_contenido') || 'No hay contenido para reproducir. Vuelve a la lectura y selecciona un texto.'
+
+document.getElementById('audio-title').textContent = titulo
+
+function togglePlayPause() {
+  if (isPlaying) {
+    pausar()
+  } else {
+    reproducir()
+  }
+}
+
+function reproducir() {
+  if (synth.speaking) {
+    synth.resume()
+    isPlaying = true
+    document.getElementById('playPauseIcon').textContent = 'pause'
+    iniciarProgreso()
+    return
+  }
+  utterance = new SpeechSynthesisUtterance(contenido)
+  utterance.lang = 'es-PE'
+  utterance.rate = velocidad
+  utterance.volume = volumenActivo ? 1 : 0
+
+  utterance.onstart = function() {
+    isPlaying = true
+    document.getElementById('playPauseIcon').textContent = 'pause'
+    startTime = Date.now()
+    iniciarProgreso()
+  }
+  utterance.onend = function() {
+    isPlaying = false
+    document.getElementById('playPauseIcon').textContent = 'play_arrow'
+    detenerProgreso()
+    document.getElementById('progressBar').style.width = '100%'
+    document.getElementById('currentTime').textContent = document.getElementById('totalTime').textContent
+  }
+  utterance.onpause = function() {
+    isPlaying = false
+    document.getElementById('playPauseIcon').textContent = 'play_arrow'
+    detenerProgreso()
+  }
+  utterance.onresume = function() {
+    isPlaying = true
+    document.getElementById('playPauseIcon').textContent = 'pause'
+    iniciarProgreso()
+  }
+  synth.speak(utterance)
+}
+
+function pausar() {
+  if (synth.speaking) {
+    if (synth.paused) {
+      synth.resume()
+    } else {
+      synth.pause()
+    }
+  }
+}
+
+function cambiarVelocidad() {
+  var opts = [0.5, 0.75, 1.0, 1.25, 1.5, 2.0]
+  var i = opts.indexOf(velocidad)
+  velocidad = opts[(i + 1) % opts.length]
+  document.getElementById('speedDisplay').textContent = velocidad.toFixed(2).replace(/\.?0+$/, '') + 'x'
+  if (utterance) utterance.rate = velocidad
+}
+
+function detener() {
+  if (synth.speaking) {
+    synth.cancel()
+  }
+  isPlaying = false
+  document.getElementById('playPauseIcon').textContent = 'play_arrow'
+  document.getElementById('progressBar').style.width = '0%'
+  document.getElementById('currentTime').textContent = '00:00'
+  detenerProgreso()
+}
+
+function adelantar() {
+  var w = parseFloat(document.getElementById('progressBar').style.width || '0')
+  document.getElementById('progressBar').style.width = Math.min(w + 10, 100) + '%'
+  var segundos = Math.floor((w + 10) / 100 * totalDuration)
+  document.getElementById('currentTime').textContent = formatoTiempo(segundos)
+}
+
+function toggleVolumen() {
+  volumenActivo = !volumenActivo
+  document.getElementById('volumeIcon').textContent = volumenActivo ? 'volume_up' : 'volume_off'
+  if (utterance) utterance.volume = volumenActivo ? 1 : 0
+}
+
+function iniciarProgreso() {
+  detenerProgreso()
+  progressInterval = setInterval(function() {
+    var elapsed = (Date.now() - startTime) / 1000
+    var pct = Math.min((elapsed / totalDuration) * 100, 100)
+    document.getElementById('progressBar').style.width = pct + '%'
+    document.getElementById('currentTime').textContent = formatoTiempo(Math.floor(elapsed))
+  }, 200)
+}
+
+function detenerProgreso() {
+  if (progressInterval) clearInterval(progressInterval)
+  progressInterval = null
+}
+
+function formatoTiempo(seg) {
+  var m = Math.floor(seg / 60)
+  var s = seg % 60
+  return (m < 10 ? '0' : '') + m + ':' + (s < 10 ? '0' : '') + s
+}
+</script>
+</body>
+</html>

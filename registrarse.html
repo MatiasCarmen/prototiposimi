@@ -300,6 +300,15 @@ form {
   border-bottom: 2px solid rgba(0, 230, 118, 0.3);
 }
 
+body.modo-simplificado .simplified-hide {
+  display: none !important;
+}
+
+body.modo-simplificado .simplified-full-btn {
+  height: 88px !important;
+  font-size: 1.25rem !important;
+}
+
 footer {
   width: 100%;
   padding: 2rem;
@@ -406,6 +415,72 @@ function togglePassword() {
   var input = document.getElementById('password')
   var isPassword = input.getAttribute('type') === 'password'
   input.setAttribute('type', isPassword ? 'text' : 'password')
+}
+
+var voiceBtn = document.querySelector('.voice-btn')
+var isVoiceListening = false
+var voiceRecognition = null
+
+voiceBtn.addEventListener('click', function() {
+  if (isVoiceListening) {
+    detenerVoiceRecognition()
+  } else {
+    iniciarVoiceRecognition()
+  }
+})
+
+function iniciarVoiceRecognition() {
+  if (!('webkitSpeechRecognition' in window || 'SpeechRecognition' in window)) {
+    var msg = new SpeechSynthesisUtterance('Tu navegador no soporta reconocimiento de voz')
+    msg.lang = 'es-PE'
+    window.speechSynthesis.speak(msg)
+    return
+  }
+
+  var SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition
+  voiceRecognition = new SpeechRecognition()
+  voiceRecognition.lang = 'es-PE'
+  voiceRecognition.continuous = true
+  voiceRecognition.interimResults = false
+  isVoiceListening = true
+  voiceBtn.textContent = 'ESCUCHANDO...'
+  voiceBtn.style.background = 'rgba(0, 230, 118, 0.2)'
+
+  var msg = new SpeechSynthesisUtterance('Di tu nombre completo para registrarte')
+  msg.lang = 'es-PE'
+  window.speechSynthesis.speak(msg)
+
+  voiceRecognition.onresult = function(event) {
+    var text = event.results[event.results.length - 1][0].transcript
+    document.getElementById('full_name').value = text
+    var success = new SpeechSynthesisUtterance('Nombre capturado. Completa el formulario o di siguiente')
+    success.lang = 'es-PE'
+    window.speechSynthesis.speak(success)
+    detenerVoiceRecognition()
+  }
+
+  voiceRecognition.onerror = function() {
+    var err = new SpeechSynthesisUtterance('Error al capturar voz, intenta de nuevo')
+    err.lang = 'es-PE'
+    window.speechSynthesis.speak(err)
+    detenerVoiceRecognition()
+  }
+
+  voiceRecognition.onend = function() {
+    detenerVoiceRecognition()
+  }
+
+  voiceRecognition.start()
+}
+
+function detenerVoiceRecognition() {
+  if (voiceRecognition) {
+    voiceRecognition.stop()
+    voiceRecognition = null
+  }
+  isVoiceListening = false
+  voiceBtn.textContent = 'REGISTRARSE CON VOZ'
+  voiceBtn.style.background = ''
 }
 </script>
 </body>

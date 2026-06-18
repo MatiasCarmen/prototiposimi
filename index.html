@@ -297,6 +297,15 @@ main {
   margin-top: 0.125rem;
 }
 
+body.modo-simplificado .simplified-hide {
+  display: none !important;
+}
+
+body.modo-simplificado .simplified-full-btn {
+  height: 88px !important;
+  font-size: 1.25rem !important;
+}
+
 .hidden {
   display: none !important;
 }
@@ -442,17 +451,17 @@ footer {
           <input type="password" id="login-password" name="password" placeholder="&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;" aria-label="Contraseña" required>
         </div>
       </div>
-      <button type="submit" class="btn-primary">ENTRAR</button>
+      <button type="submit" class="btn-primary" aria-label="Iniciar sesión con tus credenciales">ENTRAR</button>
       <div class="helper-links">
-        <button type="button" class="helper-link">OLVIDÉ MI CONTRASEÑA</button>
-        <a href="registrarse.html" class="helper-link" style="display:inline-flex;align-items:center;gap:0.5rem;text-decoration:none;color:var(--text);">
+        <button type="button" class="helper-link" aria-label="Recuperar contraseña perdida">OLVIDÉ MI CONTRASEÑA</button>
+        <a href="registrarse.html" class="helper-link" style="display:inline-flex;align-items:center;gap:0.5rem;text-decoration:none;color:var(--text);" aria-label="Crear una nueva cuenta">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
           CREAR CUENTA
         </a>
       </div>
     </form>
 
-    <button class="voice-toggle" onclick="toggleVoice()" aria-label="Activar comando de voz">
+    <button class="voice-toggle" onclick="toggleVoice()" aria-label="Iniciar sesión usando comandos de voz de SIMIVOZ">
       <div class="voice-icon-wrapper">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
       </div>
@@ -464,7 +473,7 @@ footer {
   </div>
 </main>
 
-<div id="voice-feedback" class="hidden voice-feedback">
+<div id="voice-feedback" class="hidden voice-feedback" aria-live="polite" role="dialog" aria-modal="true" aria-labelledby="voice-feedback-title">
   <div class="pulse-ring">
     <div class="ring-outer"></div>
     <div class="ring-middle"></div>
@@ -472,21 +481,88 @@ footer {
       <svg width="48" height="48" viewBox="0 0 24 24" fill="var(--on-primary-container)" stroke="none"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
     </div>
   </div>
-  <h2>Escuchando...</h2>
-  <p>Di tu usuario o "Cancelar" para volver.</p>
-  <button class="btn-cancel" onclick="toggleVoice()">CANCELAR</button>
+  <h2 id="voice-feedback-title">Escuchando...</h2>
+  <p id="voice-feedback-desc">Di "Iniciar" para entrar, "Registrar" para crear cuenta o "Cancelar" para salir.</p>
+  <button class="btn-cancel" onclick="toggleVoice()" aria-label="Cancelar comando de voz y cerrar diálogo">CANCELAR</button>
 </div>
 
 <footer></footer>
 
 <script>
+var isListening = false
+var recognition = null
+
 function handleLogin(e) {
   e.preventDefault()
+  localStorage.setItem('simivoz_usuario_logeado', 'true')
+  location.href = 'inicio.html'
 }
 
 function toggleVoice() {
   const feedback = document.getElementById('voice-feedback')
-  feedback.classList.toggle('hidden')
+  const isHidden = feedback.classList.toggle('hidden')
+  isListening = !isHidden
+
+  if (isListening) {
+    iniciarSpeechRecognition()
+  } else {
+    detenerSpeechRecognition()
+  }
+}
+
+function iniciarSpeechRecognition() {
+  if (!('webkitSpeechRecognition' in window || 'SpeechRecognition' in window)) {
+    document.getElementById('voice-feedback-title').textContent = 'No compatible'
+    document.getElementById('voice-feedback-desc').textContent = 'Tu navegador no soporta control por voz.'
+    return
+  }
+
+  var SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition
+  recognition = new SpeechRecognition()
+  recognition.lang = 'es-PE'
+  recognition.continuous = true
+  recognition.interimResults = false
+
+  recognition.onstart = function() {
+    var msg = new SpeechSynthesisUtterance('Escuchando comandos de inicio de sesión')
+    msg.lang = 'es-PE'
+    window.speechSynthesis.speak(msg)
+  }
+
+  recognition.onresult = function(event) {
+    var resultText = event.results[event.results.length - 1][0].transcript.toLowerCase().trim()
+    console.log('Comando captado:', resultText)
+    
+    if (resultText.includes('iniciar') || resultText.includes('entrar') || resultText.includes('ingresar') || resultText.includes('entrate')) {
+      var msg = new SpeechSynthesisUtterance('Iniciando sesión')
+      msg.lang = 'es-PE'
+      window.speechSynthesis.speak(msg)
+      setTimeout(function() {
+        localStorage.setItem('simivoz_usuario_logeado', 'true')
+        location.href = 'inicio.html'
+      }, 1000)
+    } else if (resultText.includes('registrar') || resultText.includes('crear cuenta') || resultText.includes('cuenta')) {
+      var msg = new SpeechSynthesisUtterance('Redirigiendo a registro')
+      msg.lang = 'es-PE'
+      window.speechSynthesis.speak(msg)
+      setTimeout(function() { location.href = 'registrarse.html' }, 1000)
+    } else if (resultText.includes('cancelar') || resultText.includes('salir') || resultText.includes('volver')) {
+      toggleVoice()
+    }
+  }
+
+  recognition.onerror = function(e) {
+    console.error('Error de voz:', e)
+  }
+
+  recognition.start()
+}
+
+function detenerSpeechRecognition() {
+  if (recognition) {
+    recognition.stop()
+    recognition = null
+  }
 }
 
 document.addEventListener('keydown', function(e) {

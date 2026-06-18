@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html class="dark" lang="es">
+<head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Bienvenido a SIMIVOZ</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+<script>
+tailwind.config = {
+  darkMode: "class",
+  theme: {
+    extend: {
+      colors: {
+        "primary": "#75ff9e",
+        "primary-container": "#00e676",
+        "primary-fixed": "#62ff96",
+        "on-primary": "#003918",
+        "on-primary-container": "#00612e",
+        "on-primary-fixed": "#00210b",
+        "surface": "#121414",
+        "surface-container": "#1e2020",
+        "surface-container-high": "#282a2b",
+        "surface-container-low": "#1a1c1c",
+        "surface-container-lowest": "#0c0f0f",
+        "surface-container-highest": "#333535",
+        "surface-variant": "#333535",
+        "on-surface": "#e2e2e2",
+        "on-surface-variant": "#bacbb9",
+        "outline": "#859585",
+        "outline-variant": "#3b4a3d",
+        "secondary-container": "#354d32",
+        "on-secondary-container": "#a2bc9a",
+        "background": "#121414",
+        "on-background": "#e2e2e2",
+        "tertiary-container": "#cac8c7",
+        "error": "#ffb4ab",
+        "inverse-surface": "#e2e2e2",
+        "inverse-on-surface": "#2f3131",
+        "surface-tint": "#00e475",
+        "surface-dim": "#121414",
+        "surface-bright": "#38393a"
+      },
+      borderRadius: {
+        DEFAULT: "0.125rem", lg: "0.25rem", xl: "0.5rem", full: "0.75rem"
+      },
+      spacing: {
+        "touch-target-min": "44px", "xs": "0.5rem", "sm": "1rem", "md": "1.5rem", "lg": "2.5rem", "xl": "4rem",
+        "margin-mobile": "1rem", "margin-desktop": "3rem", "gutter": "1.5rem", "base": "4px"
+      },
+      fontFamily: {
+        "headline-md": ["Inter"], "headline-lg": ["Inter"], "label-lg": ["Inter"],
+        "body-md": ["Inter"], "interactive-text": ["Inter"], "headline-lg-mobile": ["Inter"], "body-lg": ["Inter"]
+      },
+      fontSize: {
+        "headline-md": ["1.5rem", { "lineHeight": "1.3", "fontWeight": "600" }],
+        "headline-lg": ["2.25rem", { "lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+        "label-lg": ["0.875rem", { "lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "600" }],
+        "body-md": ["1rem", { "lineHeight": "1.5", "fontWeight": "400" }],
+        "interactive-text": ["1.125rem", { "lineHeight": "1", "fontWeight": "700" }],
+        "headline-lg-mobile": ["1.75rem", { "lineHeight": "1.2", "fontWeight": "700" }],
+        "body-lg": ["1.125rem", { "lineHeight": "1.6", "fontWeight": "400" }]
+      }
+    }
+  }
+}
+</script>
+<style>
+.ambient-glow {
+  background: radial-gradient(circle at center, rgba(0, 230, 118, 0.15) 0%, rgba(18, 20, 20, 0) 70%);
+  pointer-events: none;
+}
+.icon-glow {
+  filter: drop-shadow(0 0 20px rgba(0, 230, 118, 0.4));
+}
+.glass-panel {
+  background: rgba(18, 20, 20, 0.6);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(59, 74, 61, 0.3);
+}
+body.modo-simplificado .simplified-hide { display: none !important; }
+body.modo-simplificado .simplified-full-btn { height: 88px !important; font-size: 1.25rem !important; }
+
+*:focus-visible {
+  outline: 3px solid #75ff9e !important;
+  outline-offset: 2px !important;
+}
+</style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex flex-col relative overflow-hidden antialiased selection:bg-primary-container selection:text-on-primary-fixed">
+
+<div class="fixed inset-0 ambient-glow z-0"></div>
+
+<header class="bg-background border-b-2 border-outline-variant flex items-center justify-between px-margin-mobile h-touch-target-min z-50 relative">
+  <span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">accessibility_new</span>
+  <h1 class="font-headline-md text-headline-md text-primary tracking-tight font-extrabold uppercase">SIMIVOZ</h1>
+  <div class="w-6"></div>
+</header>
+
+<main class="flex-1 flex flex-col items-center justify-center p-margin-mobile md:p-margin-desktop relative z-10 w-full max-w-2xl mx-auto mb-24 md:mb-0">
+  <div class="glass-panel p-md md:p-xl rounded-xl flex flex-col items-center text-center w-full relative">
+    <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-primary-container to-transparent opacity-50"></div>
+
+    <div class="mb-lg relative w-32 h-32 flex items-center justify-center rounded-full border-2 border-outline-variant bg-surface-container-low icon-glow">
+      <span class="material-symbols-outlined text-[64px] text-primary" style="font-variation-settings: 'FILL' 1;">accessibility_new</span>
+      <div class="absolute inset-0 border border-primary-container rounded-full opacity-20 animate-ping" style="animation-duration: 3s;"></div>
+    </div>
+
+    <h2 class="font-headline-lg-mobile text-headline-lg-mobile md:font-headline-lg md:text-headline-lg text-inverse-surface mb-sm tracking-tight">Bienvenido a SIMIVOZ</h2>
+    <p class="font-body-lg text-body-lg text-on-surface-variant max-w-md mx-auto mb-xl">Tu asistente personal para una navegación sin límites.</p>
+
+    <div aria-label="Progreso del tutorial, paso 1 de 3" class="flex gap-xs mt-auto mb-sm">
+      <div aria-current="step" class="w-8 h-2 rounded-full bg-primary-container"></div>
+      <div class="w-2 h-2 rounded-full bg-surface-variant"></div>
+      <div class="w-2 h-2 rounded-full bg-surface-variant"></div>
+    </div>
+  </div>
+</main>
+
+<nav class="bg-surface-container border-t-2 border-primary fixed bottom-0 w-full z-50 h-24 flex justify-between items-center px-margin-mobile gap-gutter md:relative md:border-none md:bg-transparent md:h-auto md:w-full md:max-w-2xl md:mx-auto md:mb-xl md:px-0">
+  <button onclick="omitirTutorial()" class="flex flex-col items-center justify-center text-on-surface-variant border-2 border-outline-variant rounded-full px-lg py-sm w-full mx-2 hover:opacity-90 active:scale-95 transition-transform min-h-[44px]">
+    <span class="material-symbols-outlined mb-1">close</span>
+    <span class="font-bold tracking-wider">OMITIR</span>
+  </button>
+  <a href="lector-inteligente.html" class="flex flex-col items-center justify-center bg-primary text-on-primary rounded-full px-lg py-sm w-full mx-2 hover:opacity-90 active:scale-95 transition-transform min-h-[44px] no-underline">
+    <span class="material-symbols-outlined mb-1">arrow_forward</span>
+    <span class="font-bold tracking-wider">SIGUIENTE</span>
+  </a>
+</nav>
+
+<script>
+function omitirTutorial() {
+  localStorage.setItem('simivoz_tutorial_completado', 'true')
+  location.href = 'inicio.html'
+}
+</script>
+</body>
+</html>

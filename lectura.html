@@ -413,6 +413,15 @@ article h2 {
   height: 5rem;
 }
 
+body.modo-simplificado .simplified-hide {
+  display: none !important;
+}
+
+body.modo-simplificado .simplified-full-btn {
+  height: 88px !important;
+  font-size: 1.25rem !important;
+}
+
 ::-webkit-scrollbar { width: 8px; }
 ::-webkit-scrollbar-track { background: var(--surface); }
 ::-webkit-scrollbar-thumb { background: var(--outline-variant); border-radius: 10px; }
@@ -509,8 +518,6 @@ article h2 {
 var textElement = document.getElementById('texto-contenido')
 var btnLeer = document.getElementById('btn-leer-todo')
 var currentFontSize = 18
-var synth = window.speechSynthesis
-var utterance = null
 
 function changeTextSize(delta) {
   currentFontSize = Math.min(Math.max(currentFontSize + delta, 12), 36)
@@ -528,36 +535,17 @@ function toggleHighContrast() {
   document.body.classList.toggle('high-contrast')
 }
 
-function speakContent() {
-  if (synth.speaking) {
-    synth.cancel()
-    btnLeer.classList.remove('reading-active')
-    btnLeer.querySelector('svg').style.display = 'block'
-    return
-  }
-
-  var textToRead = textElement.innerText
-  utterance = new SpeechSynthesisUtterance(textToRead)
-  utterance.lang = 'es-ES'
-  utterance.rate = 0.9
-
-  utterance.onstart = function() {
-    btnLeer.classList.add('reading-active')
-  }
-
-  utterance.onend = function() {
-    btnLeer.classList.remove('reading-active')
-  }
-
-  synth.speak(utterance)
-}
-
-btnLeer.addEventListener('click', speakContent)
+btnLeer.addEventListener('click', function() {
+  var titulo = document.querySelector('#articulo-lectura h2')?.innerText || 'Artículo'
+  localStorage.setItem('simivoz_audio_titulo', titulo)
+  localStorage.setItem('simivoz_audio_contenido', textElement.innerText)
+  location.href = 'audio-player.html'
+})
 
 document.addEventListener('keydown', function(e) {
   if (e.code === 'Space' && document.activeElement === btnLeer) {
     e.preventDefault()
-    speakContent()
+    btnLeer.click()
   }
 })
 

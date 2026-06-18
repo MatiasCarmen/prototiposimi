@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>SIMIVOZ - Configuración</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --deep-forest: #051A05;
+  --surface: #121414;
+  --surface-container: #1e2020;
+  --surface-container-low: #1a1c1c;
+  --surface-container-lowest: #0c0f0f;
+  --surface-container-high: #282a2b;
+  --surface-container-highest: #333535;
+  --primary: #75ff9e;
+  --primary-container: #00e676;
+  --on-primary: #003918;
+  --on-primary-container: #00210b;
+  --text: #e2e2e2;
+  --text-secondary: #bacbb9;
+  --outline: #859585;
+  --outline-variant: #3b4a3d;
+  --secondary-container: #354d32;
+  --surface-variant: #333535;
+  --touch-min: 44px;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: var(--surface);
+  color: var(--text);
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  -webkit-tap-highlight-color: transparent;
+}
+
+*:focus-visible {
+  outline: 3px solid var(--primary) !important;
+  outline-offset: 3px !important;
+}
+
+body.modo-simplificado .simplified-hide {
+  display: none !important;
+}
+
+body.modo-simplificado .simplified-full-btn {
+  height: 88px !important;
+  font-size: 1.25rem !important;
+}
+
+header {
+  width: 100%;
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  background: var(--surface);
+  border-bottom: 2px solid var(--outline-variant);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 1rem;
+  height: var(--touch-min);
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.header-left h1 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--primary);
+}
+
+.btn-icon {
+  width: var(--touch-min);
+  height: var(--touch-min);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  color: var(--primary);
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+}
+
+.btn-icon:hover {
+  background: var(--secondary-container);
+}
+
+.btn-icon:active {
+  transform: scale(0.95);
+}
+
+main {
+  flex: 1;
+  width: 100%;
+  max-width: 56rem;
+  margin: 0 auto;
+  padding: 1.5rem 1rem;
+  padding-bottom: 8rem;
+}
+
+.page-header {
+  margin-bottom: 2.5rem;
+}
+
+.page-header h2 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 0.25rem;
+}
+
+@media (min-width: 768px) {
+  .page-header h2 {
+    font-size: 2.25rem;
+  }
+}
+
+.page-header p {
+  font-size: 1rem;
+  color: var(--text-secondary);
+}
+
+.settings-group {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.setting-card {
+  background: var(--surface-container);
+  border: 2px solid var(--outline-variant);
+  padding: 1rem;
+  border-radius: 0.25rem;
+}
+
+.setting-row {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+@media (min-width: 768px) {
+  .setting-row {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+.setting-label {
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 0.25rem;
+}
+
+.setting-desc {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+}
+
+.font-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.font-btn {
+  width: var(--touch-min);
+  height: var(--touch-min);
+  background: var(--secondary-container);
+  color: var(--primary);
+  border: 2px solid var(--primary);
+  border-radius: 0.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+  transition: transform 0.2s;
+}
+
+.font-btn:active {
+  transform: scale(0.9);
+}
+
+.font-display {
+  font-weight: 700;
+  font-size: 1.5rem;
+  min-width: 3.75rem;
+  text-align: center;
+  color: var(--text);
+}
+
+.toggle-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  width: 3.5rem;
+  height: 2rem;
+  border-radius: 9999px;
+  background: var(--outline-variant);
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s;
+  flex-shrink: 0;
+}
+
+.toggle-btn.active {
+  background: var(--primary);
+}
+
+.toggle-btn:focus-visible {
+  outline: 3px solid var(--primary);
+  outline-offset: 3px;
+}
+
+.toggle-dot {
+  display: inline-block;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  background: var(--surface-container-highest);
+  transition: transform 0.2s, background 0.2s;
+  transform: translateX(0.25rem);
+}
+
+.toggle-btn.active .toggle-dot {
+  transform: translateX(1.75rem);
+  background: var(--on-primary);
+}
+
+.speed-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.speed-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.speed-value {
+  font-weight: 700;
+  font-size: 1.5rem;
+  color: var(--primary);
+}
+
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  cursor: pointer;
+  width: 100%;
+}
+
+input[type="range"]::-webkit-slider-runnable-track {
+  background: var(--outline-variant);
+  height: 8px;
+  border-radius: 4px;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  margin-top: -12px;
+  background: var(--primary);
+  height: 32px;
+  width: 32px;
+  border-radius: 50%;
+  border: 2px solid var(--on-primary);
+}
+
+.speed-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+.btn-save {
+  width: 100%;
+  height: 64px;
+  background: var(--primary);
+  color: var(--on-primary);
+  border: none;
+  border-radius: 0.25rem;
+  font-family: 'Inter', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+  margin-top: 1.5rem;
+}
+
+.btn-save:active {
+  transform: scale(0.98);
+}
+
+.btn-save.saved {
+  background: var(--primary-container);
+}
+
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  z-index: 50;
+  background: var(--surface-container-lowest);
+  border-top: 2px solid var(--outline-variant);
+}
+
+.bottom-nav-inner {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 100%;
+  padding: 0.25rem 0.5rem;
+}
+
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--touch-min);
+  width: 20%;
+  padding: 0.25rem;
+  border-radius: 9999px;
+  text-decoration: none;
+  color: var(--text-secondary);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  transition: background 0.2s;
+}
+
+.nav-item:hover {
+  background: var(--surface-variant);
+}
+
+.nav-item:active {
+  transform: scale(0.9);
+}
+
+.nav-item.active {
+  background: var(--primary);
+  color: var(--on-primary);
+}
+
+.nav-spacer {
+  height: 5rem;
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-left">
+    <a href="inicio.html" class="btn-icon" aria-label="Volver al inicio">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+    </a>
+    <h1>SIMIVOZ</h1>
+  </div>
+</header>
+
+<main>
+  <div class="page-header">
+    <h2>Ajustes</h2>
+    <p>Personaliza tu experiencia auditiva y visual.</p>
+  </div>
+
+  <div class="settings-group">
+    <div class="setting-card">
+      <div class="setting-row">
+        <div>
+          <p class="setting-label">TAMAÑO DE FUENTE</p>
+          <p class="setting-desc simplified-hide">Ajusta qué tan grande se ve el texto.</p>
+        </div>
+        <div class="font-controls">
+          <button class="font-btn" id="font-decrease" aria-label="Reducir fuente">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </button>
+          <span class="font-display" id="font-size-display">AA</span>
+          <button class="font-btn" id="font-increase" aria-label="Aumentar fuente">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="setting-card">
+      <div class="setting-row">
+        <div>
+          <p class="setting-label">MODO CONTRASTE</p>
+          <p class="setting-desc simplified-hide">Colores de alta visibilidad para mayor claridad.</p>
+        </div>
+        <button class="toggle-btn" id="toggle-contrast" aria-label="Activar modo contraste">
+          <span class="toggle-dot" id="contrast-dot"></span>
+        </button>
+      </div>
+    </div>
+
+    <div class="setting-card">
+      <div class="setting-row">
+        <div>
+          <p class="setting-label">MODO SIMPLIFICADO</p>
+          <p class="setting-desc simplified-hide">Interfaz de navegación asistida y botones grandes.</p>
+        </div>
+        <button class="toggle-btn" id="toggle-simplified" aria-label="Activar modo simplificado">
+          <span class="toggle-dot" id="simplified-dot"></span>
+        </button>
+      </div>
+    </div>
+
+    <div class="setting-card" onclick="location.href='elegir-voz.html'" style="cursor:pointer">
+      <div class="setting-row">
+        <div>
+          <p class="setting-label">VOZ DEL ASISTENTE</p>
+          <p class="setting-desc simplified-hide" id="voz-seleccionada">Femenina (Clara)</p>
+        </div>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-primary flex-shrink-0"><polyline points="9 18 15 12 9 6"/></svg>
+      </div>
+    </div>
+
+    <div class="setting-card" onclick="location.href='historial.html'" style="cursor:pointer">
+      <div class="setting-row">
+        <div>
+          <p class="setting-label">HISTORIAL</p>
+          <p class="setting-desc simplified-hide">Revisa tu actividad reciente.</p>
+        </div>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-primary flex-shrink-0"><polyline points="9 18 15 12 9 6"/></svg>
+      </div>
+    </div>
+
+    <div class="setting-card">
+      <div class="speed-section">
+        <div class="speed-header">
+          <div>
+            <p class="setting-label">VELOCIDAD DE VOZ</p>
+            <p class="setting-desc simplified-hide">Controla la rapidez de la narración.</p>
+          </div>
+          <span class="speed-value" id="speed-value">1.0x</span>
+        </div>
+        <input type="range" id="voice-speed" min="0.5" max="2.0" step="0.1" value="1.0" aria-label="Velocidad de voz">
+        <div class="speed-labels">
+          <span>Lento</span>
+          <span>Rápido</span>
+        </div>
+      </div>
+    </div>
+
+    <button class="btn-save" id="save-btn">GUARDAR CAMBIOS</button>
+  </div>
+</main>
+
+<nav class="bottom-nav" aria-label="Navegación principal">
+  <div class="bottom-nav-inner">
+    <a href="inicio.html" class="nav-item">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+      <span>Inicio</span>
+    </a>
+    <a href="voz.html" class="nav-item">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+      <span>Voz</span>
+    </a>
+    <a href="lectura.html" class="nav-item">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+      <span>Lectura</span>
+    </a>
+    <a href="servicios.html" class="nav-item">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      <span>Mapa</span>
+    </a>
+    <a href="configuracion.html" class="nav-item active" aria-current="page">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      <span>Ajustes</span>
+    </a>
+  </div>
+</nav>
+
+<div class="nav-spacer"></div>
+
+<script>
+var simplifiedMode = false
+var contrastMode = false
+var currentFontSizeIndex = 2
+var fontSizes = ['0.75rem', '0.875rem', '1rem', '1.125rem', '1.25rem']
+
+var simplifiedBtn = document.getElementById('toggle-simplified')
+var simplifiedDot = document.getElementById('simplified-dot')
+
+simplifiedBtn.addEventListener('click', function() {
+  simplifiedMode = !simplifiedMode
+  document.body.classList.toggle('modo-simplificado', simplifiedMode)
+  simplifiedBtn.classList.toggle('active', simplifiedMode)
+})
+
+var contrastBtn = document.getElementById('toggle-contrast')
+var contrastDot = document.getElementById('contrast-dot')
+
+contrastBtn.addEventListener('click', function() {
+  contrastMode = !contrastMode
+  contrastBtn.classList.toggle('active', contrastMode)
+})
+
+var speedSlider = document.getElementById('voice-speed')
+var speedValue = document.getElementById('speed-value')
+
+speedSlider.addEventListener('input', function(e) {
+  speedValue.textContent = parseFloat(e.target.value).toFixed(1) + 'x'
+})
+
+var fontDisplay = document.getElementById('font-size-display')
+
+document.getElementById('font-increase').addEventListener('click', function() {
+  if (currentFontSizeIndex < fontSizes.length - 1) {
+    currentFontSizeIndex++
+    updateFontSize()
+  }
+})
+
+document.getElementById('font-decrease').addEventListener('click', function() {
+  if (currentFontSizeIndex > 0) {
+    currentFontSizeIndex--
+    updateFontSize()
+  }
+})
+
+function updateFontSize() {
+  var size = fontSizes[currentFontSizeIndex]
+  document.querySelector('main').style.fontSize = size
+  var labels = ['A-', 'A', 'A+', 'A++', 'A+++']
+  fontDisplay.textContent = labels[currentFontSizeIndex]
+}
+
+document.getElementById('save-btn').addEventListener('click', function() {
+  var btn = this
+  btn.textContent = 'GUARDADO'
+  btn.classList.add('saved')
+  var settings = {
+    fontSize: fontSizes[currentFontSizeIndex],
+    contrast: contrastMode,
+    simplified: simplifiedMode,
+    speed: speedSlider.value
+  }
+  localStorage.setItem('simivoz_config', JSON.stringify(settings))
+  setTimeout(function() {
+    btn.textContent = 'GUARDAR CAMBIOS'
+    btn.classList.remove('saved')
+  }, 2000)
+})
+
+var savedVoice = localStorage.getItem('simivoz_voice')
+if (savedVoice) {
+  var labels = { femenina: 'Femenina (Clara)', masculina: 'Masculina (Grave)', neutra: 'Neutra' }
+  document.getElementById('voz-seleccionada').textContent = labels[savedVoice] || 'Femenina (Clara)'
+}
+</script>
+</body>
+</html>

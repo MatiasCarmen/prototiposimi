@@ -380,6 +380,15 @@ main {
   color: var(--on-primary);
 }
 
+body.modo-simplificado .simplified-hide {
+  display: none !important;
+}
+
+body.modo-simplificado .simplified-full-btn {
+  height: 88px !important;
+  font-size: 1.25rem !important;
+}
+
 .nav-spacer {
   height: 5rem;
 }
@@ -417,12 +426,12 @@ main {
   <div class="transcript-section">
     <div class="transcript-header">
       <label for="transcript-box">Transcripción en tiempo real</label>
-      <button class="clear-btn" id="clear-btn">Limpiar</button>
+      <button class="clear-btn" id="clear-btn" aria-label="Limpiar cuadro de texto">Limpiar</button>
     </div>
-    <div class="transcript-box-wrapper" id="transcript-container">
-      <textarea id="transcript-box" placeholder="Haz clic en el micrófono para empezar a hablar..." readonly></textarea>
+    <div class="transcript-box-wrapper" id="transcript-container" aria-live="polite">
+      <textarea id="transcript-box" placeholder="Haz clic en el micrófono para empezar a hablar..." readonly aria-label="Texto de transcripción de voz"></textarea>
       <div class="volume-bar">
-        <div class="volume-bar-fill" id="volume-meter"></div>
+        <div class="volume-bar-fill" id="volume-meter" aria-label="Nivel de volumen de entrada"></div>
       </div>
     </div>
   </div>
@@ -486,16 +495,21 @@ var recognition
 if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
   var SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition
   recognition = new SpeechRecognition()
-  recognition.lang = 'es-ES'
+  recognition.lang = 'es-PE'
   recognition.continuous = true
   recognition.interimResults = true
 
   recognition.onstart = function() {
     isListening = true
     voiceStatus.textContent = 'Escuchando...'
+    micBtn.setAttribute('aria-label', 'Detener asistente de voz. Grabación en curso')
     transcriptContainer.classList.add('listening-active')
     micBtn.classList.add('listening')
     rings.forEach(function(r) { r.classList.add('active') })
+
+    var msg = new SpeechSynthesisUtterance('Asistente de voz iniciado. Te escucho')
+    msg.lang = 'es-PE'
+    window.speechSynthesis.speak(msg)
   }
 
   recognition.onresult = function(event) {
@@ -511,6 +525,36 @@ if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
     if (finalTranscript) {
       transcriptBox.value += (transcriptBox.value ? ' ' : '') + finalTranscript
       transcriptBox.scrollTop = transcriptBox.scrollHeight
+      var cmd = finalTranscript.toLowerCase().trim()
+      if (cmd.match(/^(buscar|encuentra|dónde hay|necesito)\s/)) {
+        var termino = cmd.replace(/^(buscar|encuentra|dónde hay|necesito)\s+/, '')
+        localStorage.setItem('simivoz_busqueda', termino)
+        var msg = new SpeechSynthesisUtterance('Buscando ' + termino + ' en tu zona')
+        msg.lang = 'es-PE'
+        window.speechSynthesis.speak(msg)
+        recognition.stop()
+        setTimeout(function() { location.href = 'resultados-busqueda.html' }, 1500)
+      } else if (cmd.match(/^(ir a|abrir|navegar a)\s/)) {
+        var destinos = { inicio: 'inicio.html', voz: 'voz.html', lectura: 'lectura.html', mapa: 'servicios.html', servicios: 'servicios.html', ajustes: 'configuracion.html', configuracion: 'configuracion.html', ayuda: 'ayuda.html' }
+        var dest = finalTranscript.toLowerCase().replace(/^(ir a|abrir|navegar a)\s+/, '')
+        var matched = false
+        for (var key in destinos) {
+          if (dest.includes(key)) {
+            var msg = new SpeechSynthesisUtterance('Abriendo ' + key)
+            msg.lang = 'es-PE'
+            window.speechSynthesis.speak(msg)
+            recognition.stop()
+            setTimeout(function(url) { return function() { location.href = url } }(destinos[key]), 1500)
+            matched = true
+            break
+          }
+        }
+        if (!matched) {
+          var msg = new SpeechSynthesisUtterance('No encontré el destino ' + dest)
+          msg.lang = 'es-PE'
+          window.speechSynthesis.speak(msg)
+        }
+      }
     }
     if (interimTranscript) {
       var width = Math.floor(Math.random() * 60) + 40
@@ -521,19 +565,29 @@ if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
   recognition.onend = function() {
     isListening = false
     voiceStatus.textContent = 'Listo para escuchar'
+    micBtn.setAttribute('aria-label', 'Iniciar asistente de voz')
     transcriptContainer.classList.remove('listening-active')
     micBtn.classList.remove('listening')
     volumeMeter.style.width = '0%'
     rings.forEach(function(r) { r.classList.remove('active') })
+
+    var msg = new SpeechSynthesisUtterance('Asistente desactivado')
+    msg.lang = 'es-PE'
+    window.speechSynthesis.speak(msg)
   }
 
   recognition.onerror = function() {
     voiceStatus.textContent = 'Error: No se detectó voz'
+    micBtn.setAttribute('aria-label', 'Iniciar asistente de voz. Error de detección previo')
     isListening = false
     transcriptContainer.classList.remove('listening-active')
     micBtn.classList.remove('listening')
     volumeMeter.style.width = '0%'
     rings.forEach(function(r) { r.classList.remove('active') })
+
+    var msg = new SpeechSynthesisUtterance('Error en la detección de voz, por favor inténtalo de nuevo')
+    msg.lang = 'es-PE'
+    window.speechSynthesis.speak(msg)
   }
 } else {
   micBtn.disabled = true
