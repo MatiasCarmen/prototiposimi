@@ -10,19 +10,26 @@
   box-sizing: border-box;
 }
 
-html {
-  scroll-behavior: smooth;
-}
-
 body {
-  font-family: var(--fuente-principal);
-  color: var(--color-texto);
-  background-color: var(--color-fondo);
+  font-family: 'Inter', sans-serif;
+  color: var(--text);
+  background-color: var(--bg);
   line-height: 1.6;
+  min-height: 100vh;
 }
 
-img {
-  max-width: 100%;
-  height: auto;
-  display: block;
+/* Base High Contrast Classes */
+.btn-primary {
+  background-color: var(--primary);
+  color: var(--on-primary);
+  font-weight: 700;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  border: none;
+  cursor: pointer;
+  min-height: var(--touch-min);
+}
+
+.text-primary {
+  color: var(--primary);
 }

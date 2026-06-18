@@ -1,487 +1,62 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="utf-8">
-<meta content="width=device-width, initial-scale=1.0" name="viewport">
-<title>SIMIVOZ - Registro</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
-<style>
-*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-
-:root {
-  --deep-forest: #051A05;
-  --surface: #0a1e0a;
-  --surface-container: #0f260f;
-  --surface-container-low: #081808;
-  --primary: #75ff9e;
-  --primary-container: #00e676;
-  --on-primary-container: #00210b;
-  --text: #e2e2e2;
-  --text-secondary: #bacbb9;
-  --error: #ffb4ab;
-  --outline: #859585;
-  --outline-variant: #3b4a3d;
-  --touch-min: 44px;
-}
-
-body {
-  font-family: 'Inter', sans-serif;
-  background-color: var(--deep-forest);
-  color: var(--text);
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  -webkit-tap-highlight-color: transparent;
-}
-
-*:focus-visible {
-  outline: 3px solid var(--primary-container) !important;
-  outline-offset: 2px !important;
-}
-
-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 1rem;
-  height: var(--touch-min);
-  border-bottom: 2px solid var(--primary-container);
-  background: var(--surface);
-  position: sticky;
-  top: 0;
-  z-index: 40;
-}
-
-header h1 {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: var(--primary);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-.btn-icon {
-  width: var(--touch-min);
-  height: var(--touch-min);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: none;
-  border: none;
-  color: var(--primary);
-  border-radius: 0.5rem;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-
-.btn-icon:hover, .btn-icon:focus-visible {
-  background: var(--primary-container);
-  color: var(--on-primary-container);
-}
-
-main {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 3rem 1rem 2.5rem;
-  max-width: 36rem;
-  margin: 0 auto;
-  width: 100%;
-}
-
-.logo-section {
-  margin-bottom: 2rem;
-  opacity: 0.9;
-}
-
-.logo-section img {
-  width: 6rem;
-  height: auto;
-  margin: 0 auto;
-  display: block;
-}
-
-.header-section {
-  width: 100%;
-  text-align: center;
-  margin-bottom: 2.5rem;
-}
-
-.header-section h1 {
-  font-size: 2.25rem;
-  font-weight: 700;
-  color: var(--primary-container);
-  letter-spacing: -0.02em;
-  line-height: 1.2;
-  margin-bottom: 0.5rem;
-}
-
-.header-section p {
-  font-size: 1.125rem;
-  color: var(--text-secondary);
-}
-
-.voice-btn {
-  width: 100%;
-  height: 64px;
-  border: 2px solid var(--primary-container);
-  color: var(--text);
-  background: transparent;
-  border-radius: 0.5rem;
-  font-family: 'Inter', sans-serif;
-  font-size: 1.125rem;
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.75rem;
-  cursor: pointer;
-  transition: transform 0.1s, background 0.2s;
-}
-
-.voice-btn:hover {
-  background: rgba(0, 230, 118, 0.1);
-}
-
-.voice-btn:active {
-  transform: scale(0.97);
-}
-
-.divider {
-  display: flex;
-  align-items: center;
-  padding: 2rem 0;
-}
-
-.divider::before, .divider::after {
-  content: '';
-  flex: 1;
-  border-top: 1px solid var(--outline-variant);
-}
-
-.divider span {
-  flex-shrink: 0;
-  margin: 0 1rem;
-  color: var(--outline);
-  font-size: 0.7rem;
-  font-weight: 600;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-}
-
-form {
-  width: 100%;
-}
-
-.form-group {
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 1.5rem;
-}
-
-.form-group label {
-  font-size: 0.875rem;
-  font-weight: 600;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  color: var(--text);
-  margin-left: 0.25rem;
-  margin-bottom: 0.5rem;
-  transition: color 0.2s;
-}
-
-.form-group label.active {
-  color: var(--primary-container);
-}
-
-.form-group input {
-  width: 100%;
-  height: 56px;
-  background: var(--surface-container-low);
-  border: 2px solid var(--outline-variant);
-  border-radius: 0.25rem;
-  padding: 0 1rem;
-  font-family: 'Inter', sans-serif;
-  font-size: 1rem;
-  color: var(--text);
-  transition: border-color 0.2s;
-}
-
-.form-group input:focus {
-  outline: none;
-  border-color: var(--primary-container);
-}
-
-.form-group input::placeholder {
-  color: var(--outline);
-  opacity: 0.7;
-}
-
-.password-wrapper {
-  position: relative;
-}
-
-.password-wrapper input {
-  padding-right: 3.5rem;
-}
-
-.toggle-pass {
-  position: absolute;
-  right: 0.5rem;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 2.75rem;
-  height: 2.75rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: none;
-  border: none;
-  color: var(--text-secondary);
-  cursor: pointer;
-  border-radius: 0.25rem;
-}
-
-.toggle-pass:hover {
-  color: var(--primary);
-}
-
-.btn-primary {
-  width: 100%;
-  height: 64px;
-  background: var(--primary-container);
-  color: var(--on-primary-container);
-  border: none;
-  border-radius: 0.5rem;
-  font-family: 'Inter', sans-serif;
-  font-size: 1.125rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  cursor: pointer;
-  box-shadow: 0 4px 20px rgba(0, 230, 118, 0.1);
-  transition: transform 0.1s, background 0.2s;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-top: 1rem;
-}
-
-.btn-primary:hover {
-  background: #00c868;
-}
-
-.btn-primary:active {
-  transform: scale(0.97);
-}
-
-.nav-link {
-  margin-top: 3rem;
-  text-align: center;
-}
-
-.nav-link a {
-  font-size: 1rem;
-  color: var(--text-secondary);
-  text-decoration: none;
-  padding: 1rem 0;
-  display: inline-block;
-  transition: color 0.2s;
-}
-
-.nav-link a:hover {
-  color: var(--primary-container);
-}
-
-.nav-link a span {
-  color: var(--primary-container);
-  font-weight: 700;
-  border-bottom: 2px solid rgba(0, 230, 118, 0.3);
-}
-
-body.modo-simplificado .simplified-hide {
-  display: none !important;
-}
-
-body.modo-simplificado .simplified-full-btn {
-  height: 88px !important;
-  font-size: 1.25rem !important;
-}
-
-footer {
-  width: 100%;
-  padding: 2rem;
-  text-align: center;
-  color: var(--outline);
-  font-size: 0.75rem;
-  font-weight: 600;
-  opacity: 0.5;
-}
-</style>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>SIMIVOZ - Registro</title>
+  <link rel="stylesheet" href="css/variables.css">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 1rem;
+      height: var(--touch-min);
+      border-bottom: 2px solid var(--primary);
+      background: var(--bg);
+    }
+    header h1 { color: var(--primary); font-size: 1.5rem; font-weight: 700; text-transform: uppercase; }
+    main { flex: 1; display: flex; flex-direction: column; align-items: center; padding: 2rem 1rem; max-width: 36rem; margin: 0 auto; width: 100%; }
+    .form-group { width: 100%; margin-bottom: 1.5rem; }
+    .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 600; }
+    .form-group input { width: 100%; height: 56px; padding: 0 1rem; border: 2px solid var(--outline); border-radius: 0.5rem; }
+    .btn-primary { width: 100%; height: 64px; background: var(--primary); color: var(--on-primary); border: none; border-radius: 0.5rem; font-weight: 700; cursor: pointer; }
+  </style>
 </head>
 <body>
-
-<header>
-  <div style="display:flex;align-items:center;gap:0.5rem">
-    <button class="btn-icon" aria-label="Abrir menú">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-    </button>
+  <header>
     <h1>SIMIVOZ</h1>
-  </div>
-  <a href="index.html" class="btn-icon" aria-label="Volver al inicio">
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-  </a>
-</header>
-
-<main>
-  <div class="logo-section">
-    <img src="assets/img/logoSimi.png" alt="SIMIVOZ">
-  </div>
-
-  <div class="header-section">
+    <a href="index.html" class="btn-icon" aria-label="Volver">X</a>
+  </header>
+  <main>
     <h1>CREAR CUENTA</h1>
-    <p>Únete a la comunidad de accesibilidad</p>
-  </div>
-
-  <button class="voice-btn" aria-label="Registrarse usando comandos de voz">
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
-    REGISTRARSE CON VOZ
-  </button>
-
-  <div class="divider">
-    <span>O usa el formulario</span>
-  </div>
-
-  <form novalidate>
-    <div class="form-group">
-      <label for="full_name">NOMBRE COMPLETO</label>
-      <input type="text" id="full_name" name="full_name" placeholder="Ej. Juan Pérez" aria-label="Nombre completo" required>
-    </div>
-
-    <div class="form-group">
-      <label for="email">CORREO ELECTRÓNICO</label>
-      <input type="email" id="email" name="email" placeholder="usuario@ejemplo.com" aria-label="Correo electrónico" required>
-    </div>
-
-    <div class="form-group">
-      <label for="password">CONTRASEÑA</label>
-      <div class="password-wrapper">
-        <input type="password" id="password" name="password" placeholder="Mínimo 8 caracteres" aria-label="Contraseña" required>
-        <button type="button" class="toggle-pass" aria-label="Mostrar contraseña" onclick="togglePassword()">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-        </button>
+    <form id="registroForm">
+      <div class="form-group">
+        <label for="full_name">NOMBRE</label>
+        <input type="text" id="full_name" required>
       </div>
-    </div>
-
-    <div class="form-group">
-      <label for="confirm_password">CONFIRMAR CONTRASEÑA</label>
-      <input type="password" id="confirm_password" name="confirm_password" placeholder="Repite tu contraseña" aria-label="Confirmar contraseña" required>
-    </div>
-
-    <button type="submit" class="btn-primary">CREAR CUENTA</button>
-  </form>
-
-  <div class="nav-link">
-    <a href="index.html">Ya tengo una cuenta. <span>Iniciar sesión</span></a>
-  </div>
-</main>
-
-<footer>© 2024 SIMIVOZ. ACCESIBILIDAD GARANTIZADA WCAG 2.2 AAA.</footer>
-
-<script>
-document.querySelectorAll('input').forEach(function(input) {
-  input.addEventListener('focus', function() {
-    var label = input.closest('.form-group').querySelector('label')
-    if (label) label.classList.add('active')
-  })
-  input.addEventListener('blur', function() {
-    var label = input.closest('.form-group').querySelector('label')
-    if (label) label.classList.remove('active')
-  })
-})
-
-var form = document.querySelector('form')
-form.addEventListener('submit', function(e) {
-  e.preventDefault()
-  var btn = form.querySelector('button[type="submit"]')
-  btn.textContent = 'PROCESANDO...'
-  setTimeout(function() {
-    window.location.href = 'index.html'
-  }, 1200)
-})
-
-function togglePassword() {
-  var input = document.getElementById('password')
-  var isPassword = input.getAttribute('type') === 'password'
-  input.setAttribute('type', isPassword ? 'text' : 'password')
-}
-
-var voiceBtn = document.querySelector('.voice-btn')
-var isVoiceListening = false
-var voiceRecognition = null
-
-voiceBtn.addEventListener('click', function() {
-  if (isVoiceListening) {
-    detenerVoiceRecognition()
-  } else {
-    iniciarVoiceRecognition()
-  }
-})
-
-function iniciarVoiceRecognition() {
-  if (!('webkitSpeechRecognition' in window || 'SpeechRecognition' in window)) {
-    var msg = new SpeechSynthesisUtterance('Tu navegador no soporta reconocimiento de voz')
-    msg.lang = 'es-PE'
-    window.speechSynthesis.speak(msg)
-    return
-  }
-
-  var SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition
-  voiceRecognition = new SpeechRecognition()
-  voiceRecognition.lang = 'es-PE'
-  voiceRecognition.continuous = true
-  voiceRecognition.interimResults = false
-  isVoiceListening = true
-  voiceBtn.textContent = 'ESCUCHANDO...'
-  voiceBtn.style.background = 'rgba(0, 230, 118, 0.2)'
-
-  var msg = new SpeechSynthesisUtterance('Di tu nombre completo para registrarte')
-  msg.lang = 'es-PE'
-  window.speechSynthesis.speak(msg)
-
-  voiceRecognition.onresult = function(event) {
-    var text = event.results[event.results.length - 1][0].transcript
-    document.getElementById('full_name').value = text
-    var success = new SpeechSynthesisUtterance('Nombre capturado. Completa el formulario o di siguiente')
-    success.lang = 'es-PE'
-    window.speechSynthesis.speak(success)
-    detenerVoiceRecognition()
-  }
-
-  voiceRecognition.onerror = function() {
-    var err = new SpeechSynthesisUtterance('Error al capturar voz, intenta de nuevo')
-    err.lang = 'es-PE'
-    window.speechSynthesis.speak(err)
-    detenerVoiceRecognition()
-  }
-
-  voiceRecognition.onend = function() {
-    detenerVoiceRecognition()
-  }
-
-  voiceRecognition.start()
-}
-
-function detenerVoiceRecognition() {
-  if (voiceRecognition) {
-    voiceRecognition.stop()
-    voiceRecognition = null
-  }
-  isVoiceListening = false
-  voiceBtn.textContent = 'REGISTRARSE CON VOZ'
-  voiceBtn.style.background = ''
-}
-</script>
+      <div class="form-group">
+        <label for="email">CORREO</label>
+        <input type="email" id="email" required>
+      </div>
+      <button type="submit" class="btn-primary">REGISTRARSE</button>
+    </form>
+  </main>
+  <script>
+    document.getElementById('registroForm').onsubmit = (e) => {
+        e.preventDefault();
+        alert('Registro simulado con éxito.');
+        location.href = 'index.html';
+    };
+  </script>
 </body>
 </html>

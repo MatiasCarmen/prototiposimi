@@ -1,0 +1,84 @@
+@import 'variables.css';
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 1rem;
+  height: var(--touch-min);
+  border-bottom: 2px solid var(--primary);
+  background: var(--bg);
+  position: sticky;
+  top: 0;
+  z-index: 40;
+}
+
+header h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--primary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.btn-icon {
+  width: var(--touch-min);
+  height: var(--touch-min);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  color: var(--primary);
+  border-radius: 0.5rem;
+  cursor: pointer;
+}
+
+.btn-icon:hover, .btn-icon:focus-visible {
+  background: var(--primary);
+  color: var(--on-primary);
+  outline: 3px solid var(--primary);
+}
+
+main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  max-width: 42rem;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.form-container {
+  width: 100%;
+  background: var(--surface);
+  border: 2px solid var(--outline);
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+}
+
+.btn-primary {
+  width: 100%;
+  min-height: var(--touch-min);
+  background: var(--primary);
+  color: var(--on-primary);
+  border: none;
+  font-size: 1.5rem;
+  font-weight: 700;
+  border-radius: 0.5rem;
+  cursor: pointer;
+}

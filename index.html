@@ -5,28 +5,13 @@
 <meta content="width=device-width, initial-scale=1.0" name="viewport">
 <title>SIMIVOZ - Inicio</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/variables.css">
 <style>
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
-:root {
-  --deep-forest: #051A05;
-  --surface: #0a1e0a;
-  --surface-container: #0f260f;
-  --surface-container-low: #081808;
-  --primary: #75ff9e;
-  --primary-container: #00e676;
-  --on-primary-container: #00210b;
-  --text: #e2e2e2;
-  --text-secondary: #bacbb9;
-  --error: #ffb4ab;
-  --outline: #3b4a3d;
-  --outline-variant: #2a3a2a;
-  --touch-min: 44px;
-}
-
 body {
   font-family: 'Inter', sans-serif;
-  background-color: var(--deep-forest);
+  background-color: var(--bg);
   color: var(--text);
   min-height: 100vh;
   display: flex;
@@ -40,8 +25,8 @@ header {
   align-items: center;
   padding: 0 1rem;
   height: var(--touch-min);
-  border-bottom: 2px solid var(--primary-container);
-  background: var(--surface);
+  border-bottom: 2px solid var(--primary);
+  background: var(--bg);
   position: sticky;
   top: 0;
   z-index: 40;
@@ -70,8 +55,8 @@ header h1 {
 }
 
 .btn-icon:hover, .btn-icon:focus-visible {
-  background: var(--primary-container);
-  color: var(--on-primary-container);
+  background: var(--primary);
+  color: var(--on-primary);
   outline: 3px solid var(--primary);
   outline-offset: 2px;
 }
