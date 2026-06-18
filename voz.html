@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>SIMIVOZ - Asistente de Voz</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --deep-forest: #051A05;
+  --surface: #121414;
+  --surface-container: #1e2020;
+  --surface-container-low: #1a1c1c;
+  --surface-container-lowest: #0c0f0f;
+  --surface-container-high: #282a2b;
+  --primary: #75ff9e;
+  --primary-container: #00e676;
+  --on-primary: #003918;
+  --text: #e2e2e2;
+  --text-secondary: #bacbb9;
+  --outline: #859585;
+  --outline-variant: #3b4a3d;
+  --secondary-container: #354d32;
+  --on-secondary-container: #a2bc9a;
+  --surface-variant: #333535;
+  --touch-min: 44px;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: var(--surface);
+  color: var(--text);
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  -webkit-tap-highlight-color: transparent;
+  overflow-x: hidden;
+}
+
+*:focus-visible {
+  outline: 3px solid var(--primary) !important;
+  outline-offset: 3px !important;
+}
+
+header {
+  width: 100%;
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  background: rgba(18, 20, 20, 0.8);
+  backdrop-filter: blur(12px);
+  border-bottom: 2px solid var(--outline-variant);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 1rem;
+  height: var(--touch-min);
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.header-left h1 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--primary);
+}
+
+.btn-icon {
+  width: var(--touch-min);
+  height: var(--touch-min);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  color: var(--primary);
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+}
+
+.btn-icon:hover {
+  background: var(--secondary-container);
+}
+
+.btn-icon:active {
+  transform: scale(0.95);
+}
+
+main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem 1rem;
+  max-width: 56rem;
+  margin: 0 auto;
+  width: 100%;
+  position: relative;
+  z-index: 10;
+}
+
+.status-section {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.status-label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--primary);
+  margin-bottom: 0.25rem;
+}
+
+.status-hint {
+  font-size: 1.125rem;
+  color: var(--text-secondary);
+  font-style: italic;
+}
+
+.mic-zone {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 0;
+}
+
+.pulse-ring {
+  position: absolute;
+  width: 12rem;
+  height: 12rem;
+  border: 2px solid var(--primary);
+  border-radius: 50%;
+  opacity: 0;
+}
+
+.pulse-ring.active {
+  animation: pulse-ring 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.pulse-ring.delay-1 { animation-delay: 0.6s; }
+.pulse-ring.delay-2 { animation-delay: 1.2s; }
+
+@keyframes pulse-ring {
+  0% { transform: scale(0.95); opacity: 0.8; }
+  50% { transform: scale(1.1); opacity: 0.3; }
+  100% { transform: scale(1.3); opacity: 0; }
+}
+
+.mic-btn {
+  position: relative;
+  z-index: 10;
+  width: 6rem;
+  height: 6rem;
+  background: var(--primary);
+  color: var(--on-primary);
+  border: 4px solid var(--surface);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.3s, background 0.3s;
+  animation: pulse-subtle 2s ease-in-out infinite;
+}
+
+@media (min-width: 768px) {
+  .mic-btn {
+    width: 10rem;
+    height: 10rem;
+  }
+}
+
+.mic-btn:hover {
+  background: var(--primary-container);
+}
+
+.mic-btn:active {
+  transform: scale(0.9);
+}
+
+.mic-btn.listening {
+  animation: pulse-btn 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse-subtle {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+@keyframes pulse-btn {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.08); }
+}
+
+.transcript-section {
+  width: 100%;
+  margin-bottom: 1.5rem;
+}
+
+.transcript-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.transcript-header label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+.clear-btn {
+  background: none;
+  border: none;
+  color: var(--secondary);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 600;
+  min-height: var(--touch-min);
+  padding: 0 0.75rem;
+  cursor: pointer;
+}
+
+.clear-btn:hover {
+  text-decoration: underline;
+}
+
+.transcript-box-wrapper {
+  border-radius: 0.5rem;
+  background: rgba(30, 32, 32, 0.6);
+  backdrop-filter: blur(4px);
+  border: 2px solid var(--secondary);
+  overflow: hidden;
+  min-height: 160px;
+  display: flex;
+  flex-direction: column;
+}
+
+.transcript-box-wrapper.listening-active {
+  border-color: var(--primary);
+}
+
+#transcript-box {
+  width: 100%;
+  flex: 1;
+  background: transparent;
+  border: none;
+  padding: 1rem;
+  font-family: 'Inter', sans-serif;
+  font-size: 1.125rem;
+  color: var(--text);
+  resize: none;
+  min-height: 120px;
+  outline: none;
+}
+
+#transcript-box::placeholder {
+  color: var(--surface-variant);
+}
+
+.volume-bar {
+  height: 4px;
+  background: var(--surface-container-low);
+  width: 100%;
+}
+
+.volume-bar-fill {
+  height: 100%;
+  background: var(--primary);
+  width: 0;
+  transition: width 0.1s;
+}
+
+.helper-cards {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.75rem;
+}
+
+@media (min-width: 768px) {
+  .helper-cards {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.helper-card {
+  background: rgba(40, 42, 43, 0.8);
+  backdrop-filter: blur(4px);
+  border: 1px solid var(--outline-variant);
+  padding: 1rem;
+  border-radius: 0.25rem;
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  animation: fade-in-up 0.6s ease-out forwards;
+  opacity: 0;
+}
+
+.helper-card:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.helper-card h3 {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 0.25rem;
+  text-transform: uppercase;
+}
+
+.helper-card p {
+  font-size: 1rem;
+  color: var(--text-secondary);
+}
+
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  z-index: 50;
+  background: rgba(12, 15, 15, 0.9);
+  backdrop-filter: blur(12px);
+  border-top: 2px solid var(--outline-variant);
+}
+
+.bottom-nav-inner {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 100%;
+  padding: 0.25rem 0.5rem;
+}
+
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--touch-min);
+  width: 20%;
+  padding: 0.25rem;
+  border-radius: 9999px;
+  text-decoration: none;
+  color: var(--text-secondary);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  transition: background 0.2s;
+}
+
+.nav-item:hover {
+  background: var(--surface-variant);
+}
+
+.nav-item:active {
+  transform: scale(0.9);
+}
+
+.nav-item.active {
+  background: var(--primary);
+  color: var(--on-primary);
+}
+
+.nav-spacer {
+  height: 5rem;
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-left">
+    <a href="inicio.html" class="btn-icon" aria-label="Volver al inicio">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+    </a>
+    <h1>SIMIVOZ</h1>
+  </div>
+  <a href="configuracion.html" class="btn-icon" aria-label="Configuración">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+  </a>
+</header>
+
+<main>
+  <div class="status-section">
+    <p class="status-label" id="voice-status">Listo para escuchar</p>
+    <p class="status-hint">Di algo como: "Ir a inicio" o "Leer texto"</p>
+  </div>
+
+  <div class="mic-zone">
+    <div class="pulse-ring" id="ring-1"></div>
+    <div class="pulse-ring delay-1" id="ring-2"></div>
+    <div class="pulse-ring delay-2" id="ring-3"></div>
+    <button class="mic-btn" id="mic-btn" aria-label="Iniciar asistente de voz">
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+    </button>
+  </div>
+
+  <div class="transcript-section">
+    <div class="transcript-header">
+      <label for="transcript-box">Transcripción en tiempo real</label>
+      <button class="clear-btn" id="clear-btn">Limpiar</button>
+    </div>
+    <div class="transcript-box-wrapper" id="transcript-container">
+      <textarea id="transcript-box" placeholder="Haz clic en el micrófono para empezar a hablar..." readonly></textarea>
+      <div class="volume-bar">
+        <div class="volume-bar-fill" id="volume-meter"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="helper-cards">
+    <div class="helper-card">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+      <div>
+        <h3>Lectura asistida</h3>
+        <p>Puedes pedirme que lea en voz alta cualquier texto seleccionado o documento cargado.</p>
+      </div>
+    </div>
+    <div class="helper-card">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      <div>
+        <h3>Navegación</h3>
+        <p>Usa comandos como "Abrir mapa" o "Ir a ajustes" para navegar manos libres.</p>
+      </div>
+    </div>
+  </div>
+</main>
+
+<nav class="bottom-nav" aria-label="Navegación principal">
+  <div class="bottom-nav-inner">
+    <a href="inicio.html" class="nav-item">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+      <span>Inicio</span>
+    </a>
+    <a href="voz.html" class="nav-item active" aria-current="page">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+      <span>Voz</span>
+    </a>
+    <a href="lectura.html" class="nav-item">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+      <span>Lectura</span>
+    </a>
+    <a href="servicios.html" class="nav-item">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      <span>Mapa</span>
+    </a>
+    <a href="configuracion.html" class="nav-item">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      <span>Ajustes</span>
+    </a>
+  </div>
+</nav>
+
+<div class="nav-spacer"></div>
+
+<script>
+var micBtn = document.getElementById('mic-btn')
+var transcriptBox = document.getElementById('transcript-box')
+var transcriptContainer = document.getElementById('transcript-container')
+var voiceStatus = document.getElementById('voice-status')
+var volumeMeter = document.getElementById('volume-meter')
+var clearBtn = document.getElementById('clear-btn')
+var rings = [document.getElementById('ring-1'), document.getElementById('ring-2'), document.getElementById('ring-3')]
+var isListening = false
+var recognition
+
+if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+  var SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition
+  recognition = new SpeechRecognition()
+  recognition.lang = 'es-ES'
+  recognition.continuous = true
+  recognition.interimResults = true
+
+  recognition.onstart = function() {
+    isListening = true
+    voiceStatus.textContent = 'Escuchando...'
+    transcriptContainer.classList.add('listening-active')
+    micBtn.classList.add('listening')
+    rings.forEach(function(r) { r.classList.add('active') })
+  }
+
+  recognition.onresult = function(event) {
+    var interimTranscript = ''
+    var finalTranscript = ''
+    for (var i = event.resultIndex; i < event.results.length; i++) {
+      if (event.results[i].isFinal) {
+        finalTranscript += event.results[i][0].transcript
+      } else {
+        interimTranscript += event.results[i][0].transcript
+      }
+    }
+    if (finalTranscript) {
+      transcriptBox.value += (transcriptBox.value ? ' ' : '') + finalTranscript
+      transcriptBox.scrollTop = transcriptBox.scrollHeight
+    }
+    if (interimTranscript) {
+      var width = Math.floor(Math.random() * 60) + 40
+      volumeMeter.style.width = width + '%'
+    }
+  }
+
+  recognition.onend = function() {
+    isListening = false
+    voiceStatus.textContent = 'Listo para escuchar'
+    transcriptContainer.classList.remove('listening-active')
+    micBtn.classList.remove('listening')
+    volumeMeter.style.width = '0%'
+    rings.forEach(function(r) { r.classList.remove('active') })
+  }
+
+  recognition.onerror = function() {
+    voiceStatus.textContent = 'Error: No se detectó voz'
+    isListening = false
+    transcriptContainer.classList.remove('listening-active')
+    micBtn.classList.remove('listening')
+    volumeMeter.style.width = '0%'
+    rings.forEach(function(r) { r.classList.remove('active') })
+  }
+} else {
+  micBtn.disabled = true
+  voiceStatus.textContent = 'Navegador no compatible'
+  transcriptBox.placeholder = 'Tu navegador no soporta la API de reconocimiento de voz.'
+}
+
+micBtn.addEventListener('click', function() {
+  if (!recognition) return
+  if (isListening) { recognition.stop() } else { recognition.start() }
+})
+
+clearBtn.addEventListener('click', function() {
+  transcriptBox.value = ''
+})
+</script>
+
+</body>
+</html>
