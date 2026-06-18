@@ -1,0 +1,10 @@
+:root {
+  --color-primario: #1a73e8;
+  --color-secundario: #34a853;
+  --color-fondo: #f5f5f5;
+  --color-texto: #1f1f1f;
+  --fuente-principal: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  --fuente-titulos: 'Georgia', serif;
+  --radio-borde: 8px;
+  --sombra-suave: 0 2px 8px rgba(0,0,0,.12);
+}

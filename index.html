@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>SIMIVOZ - Inicio</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --deep-forest: #051A05;
+  --surface: #0a1e0a;
+  --surface-container: #0f260f;
+  --surface-container-low: #081808;
+  --primary: #75ff9e;
+  --primary-container: #00e676;
+  --on-primary-container: #00210b;
+  --text: #e2e2e2;
+  --text-secondary: #bacbb9;
+  --error: #ffb4ab;
+  --outline: #3b4a3d;
+  --outline-variant: #2a3a2a;
+  --touch-min: 44px;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: var(--deep-forest);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  -webkit-tap-highlight-color: transparent;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 1rem;
+  height: var(--touch-min);
+  border-bottom: 2px solid var(--primary-container);
+  background: var(--surface);
+  position: sticky;
+  top: 0;
+  z-index: 40;
+}
+
+header h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--primary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.btn-icon {
+  width: var(--touch-min);
+  height: var(--touch-min);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  color: var(--primary);
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-icon:hover, .btn-icon:focus-visible {
+  background: var(--primary-container);
+  color: var(--on-primary-container);
+  outline: 3px solid var(--primary);
+  outline-offset: 2px;
+}
+
+main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  max-width: 42rem;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.logo-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 2.5rem;
+}
+
+.logo-section img {
+  width: 8rem;
+  height: auto;
+  margin-bottom: 1rem;
+  filter: drop-shadow(0 0 10px rgba(117,255,158,0.3));
+}
+
+.welcome {
+  font-size: 2.25rem;
+  font-weight: 800;
+  color: var(--primary);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+.tagline {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--primary);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-top: 0.25rem;
+}
+
+.form-container {
+  width: 100%;
+  background: var(--surface-container);
+  border: 2px solid var(--outline-variant);
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-group label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+  color: var(--text);
+}
+
+.input-wrapper {
+  position: relative;
+}
+
+.input-wrapper:focus-within {
+  outline: 3px solid var(--primary);
+  outline-offset: 2px;
+  border-radius: 0.25rem;
+}
+
+.input-wrapper input {
+  width: 100%;
+  height: 56px;
+  background: var(--surface-container-low);
+  border: 2px solid var(--outline);
+  color: var(--text);
+  padding: 0 1.5rem;
+  font-family: 'Inter', sans-serif;
+  font-size: 1.125rem;
+  border-radius: 0.25rem;
+  transition: border-color 0.2s;
+}
+
+.input-wrapper input:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+.input-wrapper input::placeholder {
+  color: var(--text-secondary);
+  opacity: 0.6;
+}
+
+.btn-primary {
+  width: 100%;
+  min-height: 64px;
+  background: var(--primary-container);
+  color: var(--on-primary-container);
+  border: none;
+  font-family: 'Inter', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 600;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(0,230,118,0.2);
+  transition: all 0.2s;
+  margin-top: 1rem;
+}
+
+.btn-primary:hover {
+  filter: brightness(1.1);
+}
+
+.btn-primary:focus-visible {
+  outline: 3px solid var(--text);
+  outline-offset: 3px;
+}
+
+.btn-primary:active {
+  transform: scale(0.95);
+}
+
+.helper-links {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 1rem;
+  gap: 0.75rem;
+}
+
+@media (min-width: 640px) {
+  .helper-links {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+}
+
+.helper-link {
+  min-height: var(--touch-min);
+  background: none;
+  border: none;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: var(--primary);
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  text-decoration-thickness: 2px;
+}
+
+.helper-link:hover {
+  opacity: 0.8;
+}
+
+.helper-link:focus-visible {
+  outline: 3px solid var(--primary);
+  outline-offset: 2px;
+  border-radius: 0.25rem;
+}
+
+.voice-toggle {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1rem;
+  width: 100%;
+  border: 2px dashed var(--primary-container);
+  border-radius: 0.5rem;
+  background: none;
+  cursor: pointer;
+  margin-top: 1rem;
+  transition: background 0.2s, transform 0.2s;
+}
+
+.voice-toggle:hover {
+  background: rgba(0, 230, 118, 0.08);
+}
+
+.voice-toggle:focus-visible {
+  outline: 3px solid var(--primary);
+  outline-offset: 2px;
+}
+
+.voice-toggle:active {
+  transform: scale(0.95);
+}
+
+.voice-icon-wrapper {
+  width: var(--touch-min);
+  height: var(--touch-min);
+  border-radius: 50%;
+  background: var(--primary-container);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.voice-text {
+  text-align: left;
+}
+
+.voice-text .main {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--primary-container);
+}
+
+.voice-text .sub {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  margin-top: 0.125rem;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.voice-feedback {
+  position: fixed;
+  inset: 0;
+  background: rgba(5, 26, 5, 0.95);
+  z-index: 50;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.pulse-ring {
+  width: 12rem;
+  height: 12rem;
+  position: relative;
+  margin-bottom: 2.5rem;
+}
+
+.pulse-ring .ring-outer {
+  position: absolute;
+  inset: 0;
+  background: var(--primary-container);
+  opacity: 0.2;
+  border-radius: 50%;
+  animation: ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+.pulse-ring .ring-middle {
+  position: absolute;
+  inset: 1rem;
+  background: var(--primary-container);
+  opacity: 0.4;
+  border-radius: 50%;
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.pulse-ring .ring-inner {
+  position: absolute;
+  inset: 2rem;
+  background: var(--primary-container);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 40px #00e676;
+}
+
+.voice-feedback h2 {
+  font-size: 2.25rem;
+  font-weight: 700;
+  color: var(--primary);
+  text-align: center;
+  margin-bottom: 1rem;
+  letter-spacing: -0.02em;
+}
+
+.voice-feedback > p {
+  font-size: 1.125rem;
+  color: var(--text);
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.btn-cancel {
+  padding: 0 2.5rem;
+  height: var(--touch-min);
+  border: 2px solid var(--error);
+  background: none;
+  color: var(--error);
+  border-radius: 0.5rem;
+  font-family: 'Inter', sans-serif;
+  font-size: 1.125rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.btn-cancel:hover {
+  background: rgba(255, 180, 171, 0.1);
+}
+
+.btn-cancel:focus-visible {
+  outline: 3px solid var(--error);
+  outline-offset: 2px;
+}
+
+.btn-cancel:active {
+  background: var(--error);
+  color: #690005;
+}
+
+@keyframes ping {
+  75%, 100% { transform: scale(2); opacity: 0; }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.6; }
+}
+
+footer {
+  height: 3rem;
+  width: 100%;
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div style="display:flex;align-items:center;gap:0.5rem">
+    <button class="btn-icon" aria-label="Abrir menú">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+    <h1>SIMIVOZ</h1>
+  </div>
+  <button class="btn-icon" aria-label="Configuración">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+  </button>
+</header>
+
+<main>
+  <div class="logo-section">
+    <img src="assets/img/logoSimi.png" alt="SIMIVOZ">
+    <span class="welcome">Hola</span>
+    <span class="tagline">Accesibilidad sin límites</span>
+  </div>
+
+  <div class="form-container">
+    <form onsubmit="handleLogin(event)">
+      <div class="form-group">
+        <label for="login-email">Correo Electrónico</label>
+        <div class="input-wrapper">
+          <input type="email" id="login-email" name="email" placeholder="ejemplo@correo.com" aria-label="Correo electrónico" required>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="login-password">Contraseña</label>
+        <div class="input-wrapper">
+          <input type="password" id="login-password" name="password" placeholder="&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;" aria-label="Contraseña" required>
+        </div>
+      </div>
+      <button type="submit" class="btn-primary">ENTRAR</button>
+      <div class="helper-links">
+        <button type="button" class="helper-link">OLVIDÉ MI CONTRASEÑA</button>
+        <a href="registrarse.html" class="helper-link" style="display:inline-flex;align-items:center;gap:0.5rem;text-decoration:none;color:var(--text);">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
+          CREAR CUENTA
+        </a>
+      </div>
+    </form>
+
+    <button class="voice-toggle" onclick="toggleVoice()" aria-label="Activar comando de voz">
+      <div class="voice-icon-wrapper">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+      </div>
+      <div class="voice-text">
+        <p class="main">INICIAR CON VOZ</p>
+        <p class="sub">Di "Iniciar" para entrar</p>
+      </div>
+    </button>
+  </div>
+</main>
+
+<div id="voice-feedback" class="hidden voice-feedback">
+  <div class="pulse-ring">
+    <div class="ring-outer"></div>
+    <div class="ring-middle"></div>
+    <div class="ring-inner">
+      <svg width="48" height="48" viewBox="0 0 24 24" fill="var(--on-primary-container)" stroke="none"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+    </div>
+  </div>
+  <h2>Escuchando...</h2>
+  <p>Di tu usuario o "Cancelar" para volver.</p>
+  <button class="btn-cancel" onclick="toggleVoice()">CANCELAR</button>
+</div>
+
+<footer></footer>
+
+<script>
+function handleLogin(e) {
+  e.preventDefault()
+}
+
+function toggleVoice() {
+  const feedback = document.getElementById('voice-feedback')
+  feedback.classList.toggle('hidden')
+}
+
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') {
+    const feedback = document.getElementById('voice-feedback')
+    if (!feedback.classList.contains('hidden')) toggleVoice()
+  }
+})
+
+document.querySelectorAll('button').forEach(function(btn) {
+  btn.addEventListener('touchstart', function() { btn.style.transform = 'scale(0.95)' })
+  btn.addEventListener('touchend', function() { btn.style.transform = '' })
+})
+</script>
+</body>
+</html>
