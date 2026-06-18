@@ -3,426 +3,352 @@
 <head>
 <meta charset="utf-8">
 <meta content="width=device-width, initial-scale=1.0" name="viewport">
-<title>SIMIVOZ - Inicio</title>
+<title>SIMIVOZ - Iniciar Sesión</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/variables.css">
+<link rel="stylesheet" href="css/global.css">
 <style>
-*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-
-body {
-  font-family: 'Inter', sans-serif;
-  background-color: var(--bg);
-  color: var(--text);
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  -webkit-tap-highlight-color: transparent;
-}
-
-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 1rem;
-  height: var(--touch-min);
-  border-bottom: 2px solid var(--primary);
-  background: var(--bg);
-  position: sticky;
-  top: 0;
-  z-index: 40;
-}
-
-header h1 {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: var(--primary);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-.btn-icon {
-  width: var(--touch-min);
-  height: var(--touch-min);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: none;
-  border: none;
-  color: var(--primary);
-  border-radius: 0.5rem;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-
-.btn-icon:hover, .btn-icon:focus-visible {
-  background: var(--primary);
-  color: var(--on-primary);
-  outline: 3px solid var(--primary);
-  outline-offset: 2px;
-}
-
 main {
   flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 1rem;
-  max-width: 42rem;
+  padding: 2rem 1.5rem;
+  max-width: 440px;
   margin: 0 auto;
   width: 100%;
+  position: relative;
+  z-index: 10;
 }
 
 .logo-section {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 2.5rem;
+  margin-bottom: 2rem;
+  text-align: center;
 }
 
 .logo-section img {
-  width: 8rem;
+  width: 90px;
   height: auto;
   margin-bottom: 1rem;
-  filter: drop-shadow(0 0 10px rgba(117,255,158,0.3));
+  filter: drop-shadow(0 0 15px var(--primary-glow));
+  animation: float 4s ease-in-out infinite;
 }
 
 .welcome {
   font-size: 2.25rem;
   font-weight: 800;
   color: var(--primary);
-  line-height: 1.2;
-  letter-spacing: -0.02em;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
 }
 
 .tagline {
-  font-size: 0.875rem;
-  font-weight: 600;
-  color: var(--primary);
-  letter-spacing: 0.2em;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  letter-spacing: 0.15em;
   text-transform: uppercase;
-  margin-top: 0.25rem;
+  margin-top: 0.5rem;
 }
 
 .form-container {
   width: 100%;
-  background: var(--surface-container);
-  border: 2px solid var(--outline-variant);
-  border-radius: 0.5rem;
-  padding: 1.5rem;
+  padding: 2rem;
 }
 
 .form-group {
-  margin-bottom: 1rem;
+  margin-bottom: 1.25rem;
 }
 
 .form-group label {
   display: block;
-  font-size: 0.875rem;
-  font-weight: 600;
-  letter-spacing: 0.05em;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   margin-bottom: 0.5rem;
-  color: var(--text);
+  color: var(--text-secondary);
 }
 
 .input-wrapper {
   position: relative;
 }
 
-.input-wrapper:focus-within {
-  outline: 3px solid var(--primary);
-  outline-offset: 2px;
-  border-radius: 0.25rem;
-}
-
 .input-wrapper input {
   width: 100%;
-  height: 56px;
+  height: 52px;
   background: var(--surface-container-low);
-  border: 2px solid var(--outline);
+  border: 1px solid var(--outline);
   color: var(--text);
-  padding: 0 1.5rem;
-  font-family: 'Inter', sans-serif;
-  font-size: 1.125rem;
-  border-radius: 0.25rem;
-  transition: border-color 0.2s;
+  padding: 0 1.25rem;
+  font-family: var(--font-base);
+  font-size: 1rem;
+  border-radius: 0.75rem;
+  transition: var(--transition-smooth);
 }
 
 .input-wrapper input:focus {
   outline: none;
   border-color: var(--primary);
+  box-shadow: 0 0 10px var(--primary-glow);
+  background: var(--surface-container-high);
 }
 
 .input-wrapper input::placeholder {
   color: var(--text-secondary);
-  opacity: 0.6;
+  opacity: 0.5;
 }
 
-.btn-primary {
+.btn-login {
   width: 100%;
-  min-height: 64px;
-  background: var(--primary-container);
-  color: var(--on-primary-container);
-  border: none;
-  font-family: 'Inter', sans-serif;
-  font-size: 1.5rem;
-  font-weight: 600;
-  border-radius: 0.5rem;
-  cursor: pointer;
-  box-shadow: 0 4px 20px rgba(0,230,118,0.2);
-  transition: all 0.2s;
-  margin-top: 1rem;
-}
-
-.btn-primary:hover {
-  filter: brightness(1.1);
-}
-
-.btn-primary:focus-visible {
-  outline: 3px solid var(--text);
-  outline-offset: 3px;
-}
-
-.btn-primary:active {
-  transform: scale(0.95);
+  height: 54px;
+  margin-top: 1.5rem;
 }
 
 .helper-links {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 1rem;
+  margin-top: 1.25rem;
   gap: 0.75rem;
-}
-
-@media (min-width: 640px) {
-  .helper-links {
-    flex-direction: row;
-    justify-content: space-between;
-  }
+  width: 100%;
 }
 
 .helper-link {
-  min-height: var(--touch-min);
   background: none;
   border: none;
-  font-family: 'Inter', sans-serif;
-  font-size: 0.875rem;
-  font-weight: 600;
+  font-family: var(--font-base);
+  font-size: 0.8rem;
+  font-weight: 700;
   letter-spacing: 0.05em;
   color: var(--primary);
   cursor: pointer;
-  text-decoration: underline;
-  text-underline-offset: 4px;
-  text-decoration-thickness: 2px;
+  text-decoration: none;
+  transition: var(--transition-smooth);
+  min-height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .helper-link:hover {
-  opacity: 0.8;
+  color: var(--text);
+  text-shadow: 0 0 8px var(--primary-glow);
 }
 
-.helper-link:focus-visible {
-  outline: 3px solid var(--primary);
-  outline-offset: 2px;
-  border-radius: 0.25rem;
-}
-
-.voice-toggle {
+.voice-toggle-card {
   display: flex;
   align-items: center;
-  gap: 1.5rem;
+  gap: 1.25rem;
   padding: 1rem;
   width: 100%;
-  border: 2px dashed var(--primary-container);
-  border-radius: 0.5rem;
-  background: none;
+  border: 1px dashed var(--primary);
+  border-radius: 1rem;
+  background: rgba(0, 168, 84, 0.03);
   cursor: pointer;
-  margin-top: 1rem;
-  transition: background 0.2s, transform 0.2s;
+  margin-top: 1.5rem;
+  transition: var(--transition-smooth);
+  text-align: left;
 }
 
-.voice-toggle:hover {
-  background: rgba(0, 230, 118, 0.08);
-}
-
-.voice-toggle:focus-visible {
-  outline: 3px solid var(--primary);
-  outline-offset: 2px;
-}
-
-.voice-toggle:active {
-  transform: scale(0.95);
+.voice-toggle-card:hover {
+  background: rgba(0, 168, 84, 0.08);
+  border-style: solid;
+  box-shadow: 0 0 15px var(--primary-glow);
 }
 
 .voice-icon-wrapper {
-  width: var(--touch-min);
-  height: var(--touch-min);
+  width: 46px;
+  height: 46px;
   border-radius: 50%;
-  background: var(--primary-container);
+  background: var(--primary);
+  color: var(--on-primary);
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  box-shadow: 0 4px 10px var(--primary-glow);
 }
 
-.voice-text {
-  text-align: left;
+.voice-text .main-text {
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--primary);
+  letter-spacing: 0.05em;
 }
 
-.voice-text .main {
-  font-size: 1.125rem;
-  font-weight: 700;
-  color: var(--primary-container);
-}
-
-.voice-text .sub {
+.voice-text .sub-text {
   font-size: 0.75rem;
   color: var(--text-secondary);
-  margin-top: 0.125rem;
+  margin-top: 1px;
 }
 
-body.modo-simplificado .simplified-hide {
-  display: none !important;
-}
-
-body.modo-simplificado .simplified-full-btn {
-  height: 88px !important;
-  font-size: 1.25rem !important;
-}
-
-.hidden {
-  display: none !important;
-}
-
+/* Voice modal styles */
 .voice-feedback {
   position: fixed;
   inset: 0;
-  background: rgba(5, 26, 5, 0.95);
-  z-index: 50;
+  background: rgba(240, 250, 244, 0.97);
+  backdrop-filter: blur(10px);
+  z-index: 1000;
+  display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   padding: 2rem;
+  opacity: 1;
+  transition: var(--transition-smooth);
 }
 
-.pulse-ring {
-  width: 12rem;
-  height: 12rem;
+.voice-feedback.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.pulse-ring-container {
+  width: 180px;
+  height: 180px;
   position: relative;
   margin-bottom: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.pulse-ring .ring-outer {
+.pulse-ring-container .ring-outer {
   position: absolute;
-  inset: 0;
-  background: var(--primary-container);
-  opacity: 0.2;
+  width: 100%;
+  height: 100%;
+  background: var(--primary-glow);
+  border: 1px solid var(--primary);
   border-radius: 50%;
-  animation: ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;
+  animation: ping 1.8s cubic-bezier(0, 0, 0.2, 1) infinite;
 }
 
-.pulse-ring .ring-middle {
+.pulse-ring-container .ring-middle {
   position: absolute;
-  inset: 1rem;
-  background: var(--primary-container);
-  opacity: 0.4;
+  width: 80%;
+  height: 80%;
+  background: var(--primary-glow);
+  border: 2px solid var(--primary);
   border-radius: 50%;
-  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  animation: ping-delayed 1.8s cubic-bezier(0, 0, 0.2, 1) infinite;
 }
 
-.pulse-ring .ring-inner {
+.pulse-ring-container .ring-inner {
   position: absolute;
-  inset: 2rem;
-  background: var(--primary-container);
+  width: 55%;
+  height: 55%;
+  background: var(--primary);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 0 40px #00e676;
+  box-shadow: 0 0 30px var(--primary);
+  z-index: 10;
+}
+
+.pulse-ring-container .ring-inner svg {
+  color: var(--on-primary);
+  animation: pulse-icon 1.5s ease-in-out infinite;
 }
 
 .voice-feedback h2 {
-  font-size: 2.25rem;
-  font-weight: 700;
+  font-size: 2rem;
+  font-weight: 800;
   color: var(--primary);
   text-align: center;
-  margin-bottom: 1rem;
+  margin-bottom: 0.75rem;
   letter-spacing: -0.02em;
 }
 
 .voice-feedback > p {
-  font-size: 1.125rem;
-  color: var(--text);
+  font-size: 1rem;
+  color: var(--text-secondary);
   text-align: center;
-  margin-bottom: 2.5rem;
+  margin-bottom: 3rem;
+  max-width: 320px;
+  line-height: 1.4;
 }
 
 .btn-cancel {
-  padding: 0 2.5rem;
+  padding: 0.75rem 2.5rem;
   height: var(--touch-min);
   border: 2px solid var(--error);
-  background: none;
+  background: var(--error-bg);
   color: var(--error);
-  border-radius: 0.5rem;
-  font-family: 'Inter', sans-serif;
-  font-size: 1.125rem;
-  font-weight: 700;
+  border-radius: 99px;
+  font-family: var(--font-base);
+  font-size: 1rem;
+  font-weight: 800;
   cursor: pointer;
-  transition: background 0.2s, color 0.2s;
+  transition: var(--transition-smooth);
 }
 
 .btn-cancel:hover {
-  background: rgba(255, 180, 171, 0.1);
-}
-
-.btn-cancel:focus-visible {
-  outline: 3px solid var(--error);
-  outline-offset: 2px;
+  background: var(--error);
+  color: var(--on-error);
+  box-shadow: 0 0 15px rgba(255, 180, 171, 0.4);
 }
 
 .btn-cancel:active {
-  background: var(--error);
-  color: #690005;
+  transform: scale(0.95);
 }
 
 @keyframes ping {
-  75%, 100% { transform: scale(2); opacity: 0; }
+  0% { transform: scale(0.7); opacity: 1; }
+  100% { transform: scale(1.4); opacity: 0; }
 }
 
-@keyframes pulse {
-  0%, 100% { opacity: 0.4; }
-  50% { opacity: 0.6; }
+@keyframes ping-delayed {
+  0% { transform: scale(0.7); opacity: 0; }
+  30% { transform: scale(0.7); opacity: 1; }
+  100% { transform: scale(1.2); opacity: 0; }
+}
+
+@keyframes pulse-icon {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.15); }
 }
 
 footer {
-  height: 3rem;
-  width: 100%;
+  text-align: center;
+  padding: 1.5rem;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  opacity: 0.6;
 }
 </style>
+<script src="js/app.js"></script>
 </head>
-<body>
+<body class="haptic-press">
 
-<header>
-  <div style="display:flex;align-items:center;gap:0.5rem">
-    <button class="btn-icon" aria-label="Abrir menú">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-    </button>
+<div class="ambient-bg">
+  <div class="ambient-glow-1"></div>
+  <div class="ambient-glow-2"></div>
+</div>
+
+<header class="unified-header">
+  <div class="logo-wrapper">
+    <img src="assets/img/logoSimi.png" alt="Logo de SIMIVOZ">
     <h1>SIMIVOZ</h1>
   </div>
-  <button class="btn-icon" aria-label="Configuración">
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+  <button class="btn-icon-header" onclick="location.href='configuracion.html'" aria-label="Configuración y accesibilidad">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
   </button>
 </header>
 
 <main>
   <div class="logo-section">
-    <img src="assets/img/logoSimi.png" alt="SIMIVOZ">
-    <span class="welcome">Hola</span>
-    <span class="tagline">Accesibilidad sin límites</span>
+    <img src="assets/img/logoSimi.png" alt="Logotipo SIMIVOZ">
+    <h2 class="welcome">Hola</h2>
+    <p class="tagline">Ecosistema de Accesibilidad</p>
   </div>
 
-  <div class="form-container">
+  <div class="form-container glass-card">
     <form onsubmit="handleLogin(event)">
       <div class="form-group">
         <label for="login-email">Correo Electrónico</label>
@@ -430,40 +356,46 @@ footer {
           <input type="email" id="login-email" name="email" placeholder="ejemplo@correo.com" aria-label="Correo electrónico" required>
         </div>
       </div>
+      
       <div class="form-group">
         <label for="login-password">Contraseña</label>
         <div class="input-wrapper">
-          <input type="password" id="login-password" name="password" placeholder="&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;" aria-label="Contraseña" required>
+          <input type="password" id="login-password" name="password" placeholder="••••••••" aria-label="Contraseña" required>
         </div>
       </div>
-      <button type="submit" class="btn-primary" aria-label="Iniciar sesión con tus credenciales">ENTRAR</button>
+      
+      <button type="submit" class="btn-primary-action btn-login" aria-label="Iniciar sesión con tus credenciales">
+        <span>ENTRAR</span>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </button>
+      
       <div class="helper-links">
-        <button type="button" class="helper-link" aria-label="Recuperar contraseña perdida">OLVIDÉ MI CONTRASEÑA</button>
-        <a href="registrarse.html" class="helper-link" style="display:inline-flex;align-items:center;gap:0.5rem;text-decoration:none;color:var(--text);" aria-label="Crear una nueva cuenta">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
+        <button type="button" class="helper-link" aria-label="Recuperar contraseña perdida">¿OLVIDASTE TU CONTRASEÑA?</button>
+        <a href="registrarse.html" class="helper-link" style="color:var(--text); gap:0.5rem;" aria-label="Crear una nueva cuenta de SIMIVOZ">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
           CREAR CUENTA
         </a>
       </div>
     </form>
 
-    <button class="voice-toggle" onclick="toggleVoice()" aria-label="Iniciar sesión usando comandos de voz de SIMIVOZ">
+    <button class="voice-toggle-card" onclick="toggleVoice()" aria-label="Iniciar sesión usando comandos de voz de SIMIVOZ">
       <div class="voice-icon-wrapper">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
       </div>
       <div class="voice-text">
-        <p class="main">INICIAR CON VOZ</p>
-        <p class="sub">Di "Iniciar" para entrar</p>
+        <p class="main-text">INICIAR CON VOZ</p>
+        <p class="sub-text">Di "Iniciar" o "Registrar"</p>
       </div>
     </button>
   </div>
 </main>
 
 <div id="voice-feedback" class="hidden voice-feedback" aria-live="polite" role="dialog" aria-modal="true" aria-labelledby="voice-feedback-title">
-  <div class="pulse-ring">
+  <div class="pulse-ring-container">
     <div class="ring-outer"></div>
     <div class="ring-middle"></div>
     <div class="ring-inner">
-      <svg width="48" height="48" viewBox="0 0 24 24" fill="var(--on-primary-container)" stroke="none"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+      <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
     </div>
   </div>
   <h2 id="voice-feedback-title">Escuchando...</h2>
@@ -471,19 +403,74 @@ footer {
   <button class="btn-cancel" onclick="toggleVoice()" aria-label="Cancelar comando de voz y cerrar diálogo">CANCELAR</button>
 </div>
 
-<footer></footer>
+<footer>
+  <p>© 2026 SIMIVOZ - Ecosistema de Accesibilidad Contextual</p>
+</footer>
 
 <script>
 var isListening = false
 var recognition = null
 
+function disabled_aplicarConfiguracion() {
+  try {
+    const logeado = localStorage.getItem('simivoz_usuario_logeado')
+    const tutorial = localStorage.getItem('simivoz_tutorial_completado')
+    if (logeado === 'true') {
+      if (tutorial === 'true') {
+        location.href = 'inicio.html'
+        return
+      } else {
+        location.href = 'bienvenido.html'
+        return
+      }
+    }
+
+    const config = JSON.parse(localStorage.getItem('simivoz_config'))
+    if (config) {
+      if (config.contrast) {
+        document.body.classList.add('high-contrast')
+      } else {
+        document.body.classList.remove('high-contrast')
+      }
+      
+      if (config.simplified) {
+        document.body.classList.add('modo-simplificado')
+      } else {
+        document.body.classList.remove('modo-simplificado')
+      }
+      
+      if (config.fontSize) {
+        // Quitar previas
+        document.body.classList.remove('big-font', 'massive-font')
+        if (config.fontSize === '1.125rem' || config.fontSize === '1.15rem' || config.fontSize === 'A+') {
+          document.body.classList.add('big-font')
+        } else if (config.fontSize === '1.25rem' || config.fontSize === '1.3rem' || config.fontSize === 'A++' || config.fontSize === 'A+++') {
+          document.body.classList.add('big-font', 'massive-font')
+        }
+      }
+    }
+  } catch (err) {
+    console.error('Error al aplicar configuración inicial:', err)
+  }
+}
+
+// old config listener disabled
+
 function handleLogin(e) {
   e.preventDefault()
+  if (window.navigator.vibrate) window.navigator.vibrate(50)
   localStorage.setItem('simivoz_usuario_logeado', 'true')
-  location.href = 'inicio.html'
+  
+  const tutorial = localStorage.getItem('simivoz_tutorial_completado')
+  if (tutorial === 'true') {
+    location.href = 'inicio.html'
+  } else {
+    location.href = 'bienvenido.html'
+  }
 }
 
 function toggleVoice() {
+  if (window.navigator.vibrate) window.navigator.vibrate(50)
   const feedback = document.getElementById('voice-feedback')
   const isHidden = feedback.classList.toggle('hidden')
   isListening = !isHidden
@@ -524,7 +511,12 @@ function iniciarSpeechRecognition() {
       window.speechSynthesis.speak(msg)
       setTimeout(function() {
         localStorage.setItem('simivoz_usuario_logeado', 'true')
-        location.href = 'inicio.html'
+        const tutorial = localStorage.getItem('simivoz_tutorial_completado')
+        if (tutorial === 'true') {
+          location.href = 'inicio.html'
+        } else {
+          location.href = 'bienvenido.html'
+        }
       }, 1000)
     } else if (resultText.includes('registrar') || resultText.includes('crear cuenta') || resultText.includes('cuenta')) {
       var msg = new SpeechSynthesisUtterance('Redirigiendo a registro')
@@ -557,9 +549,10 @@ document.addEventListener('keydown', function(e) {
   }
 })
 
-document.querySelectorAll('button').forEach(function(btn) {
-  btn.addEventListener('touchstart', function() { btn.style.transform = 'scale(0.95)' })
-  btn.addEventListener('touchend', function() { btn.style.transform = '' })
+document.querySelectorAll('button, a, .voice-toggle-card').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    if (window.navigator.vibrate) window.navigator.vibrate(50)
+  })
 })
 </script>
 </body>

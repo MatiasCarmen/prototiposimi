@@ -1,13 +1,164 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Simivoz — Nosotros</title>
-  <link rel="stylesheet" href="css/main.css">
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>SIMIVOZ - Sobre Nosotros</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/variables.css">
+<link rel="stylesheet" href="css/global.css">
+<script src="js/app.js"></script>
+<style>
+main {
+  flex: 1;
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 1.5rem 1.25rem;
+  padding-bottom: 7rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.page-header h2 {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: var(--primary);
+  letter-spacing: -0.02em;
+  margin-bottom: 0.25rem;
+}
+
+.page-header p {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+}
+
+.about-card {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  text-align: left;
+}
+
+.about-card h3 {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--primary);
+}
+
+.about-card p {
+  font-size: 0.95rem;
+  color: var(--text);
+  line-height: 1.6;
+}
+
+.team-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.team-member {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background: var(--surface-container-low);
+  border-radius: 1rem;
+  border: 1px solid var(--outline);
+}
+
+.avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: var(--primary);
+  color: var(--on-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 1.25rem;
+}
+</style>
 </head>
-<body>
-  <h1>Sobre Nosotros</h1>
-  <script type="module" src="js/main.js"></script>
+<body class="haptic-press">
+
+<div class="ambient-bg">
+  <div class="ambient-glow-1"></div>
+  <div class="ambient-glow-2"></div>
+</div>
+
+<header class="unified-header">
+  <div class="logo-wrapper">
+    <button onclick="history.back()" class="btn-icon-header" style="border:none" aria-label="Volver atrás">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+    </button>
+    <h1 style="font-size: 1.25rem; margin-left: 0.5rem;">Sobre Nosotros</h1>
+  </div>
+</header>
+
+<main>
+  <div class="page-header">
+    <h2>Nuestra Misión</h2>
+    <p>Romper barreras tecnológicas a través del diseño contextual y la voz.</p>
+  </div>
+
+  <div class="glass-card about-card">
+    <h3>¿Qué es SIMIVOZ?</h3>
+    <p>SIMIVOZ no es solo una web. Es un ecosistema de accesibilidad contextual diseñado para adaptarse a las necesidades auditivas, visuales y cognitivas de sus usuarios. A través de interfaces de alto contraste, lectura inteligente y feedback háptico, garantizamos que la información esté disponible para todos.</p>
+  </div>
+  
+  <div class="glass-card about-card">
+    <h3>Nuestro Equipo</h3>
+    <p>Desarrollado en el curso de Interacción Hombre-Máquina, ciclo 9.</p>
+    
+    <div class="team-list">
+      <div class="team-member">
+        <div class="avatar">E</div>
+        <div>
+          <strong>El Equipo</strong><br>
+          <span style="font-size:0.85rem; color:var(--text-secondary)">Desarrolladores & UX</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<nav class="unified-nav" aria-label="Navegación principal">
+  <div class="unified-nav-inner">
+    <a href="inicio.html" class="unified-nav-item" aria-label="Página de inicio">
+      <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+      <span>Inicio</span>
+    </a>
+    <a href="voz.html" class="unified-nav-item" aria-label="Asistente de voz">
+      <svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+      <span>Voz</span>
+    </a>
+    <a href="lectura.html" class="unified-nav-item" aria-label="Lector de textos">
+      <svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+      <span>Lectura</span>
+    </a>
+    <a href="servicios.html" class="unified-nav-item" aria-label="Mapa de servicios">
+      <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      <span>Mapa</span>
+    </a>
+    <a href="configuracion.html" class="unified-nav-item" aria-label="Ajustes">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1-2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      <span>Ajustes</span>
+    </a>
+  </div>
+</nav>
+<div class="nav-spacer"></div>
+
+<script>
+document.querySelectorAll('button, a').forEach(function(el) {
+  el.addEventListener('click', function() {
+    if (window.navigator.vibrate) window.navigator.vibrate(50);
+  });
+});
+</script>
 </body>
 </html>

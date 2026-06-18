@@ -1,62 +1,266 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="utf-8">
-  <meta content="width=device-width, initial-scale=1.0" name="viewport">
-  <title>SIMIVOZ - Registro</title>
-  <link rel="stylesheet" href="css/variables.css">
-  <style>
-    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      font-family: 'Inter', sans-serif;
-      background-color: var(--bg);
-      color: var(--text);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0 1rem;
-      height: var(--touch-min);
-      border-bottom: 2px solid var(--primary);
-      background: var(--bg);
-    }
-    header h1 { color: var(--primary); font-size: 1.5rem; font-weight: 700; text-transform: uppercase; }
-    main { flex: 1; display: flex; flex-direction: column; align-items: center; padding: 2rem 1rem; max-width: 36rem; margin: 0 auto; width: 100%; }
-    .form-group { width: 100%; margin-bottom: 1.5rem; }
-    .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 600; }
-    .form-group input { width: 100%; height: 56px; padding: 0 1rem; border: 2px solid var(--outline); border-radius: 0.5rem; }
-    .btn-primary { width: 100%; height: 64px; background: var(--primary); color: var(--on-primary); border: none; border-radius: 0.5rem; font-weight: 700; cursor: pointer; }
-  </style>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>SIMIVOZ - Registro</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/variables.css">
+<link rel="stylesheet" href="css/global.css">
+<style>
+main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1.5rem;
+  max-width: 440px;
+  margin: 0 auto;
+  width: 100%;
+  position: relative;
+  z-index: 10;
+}
+
+.logo-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.logo-section img {
+  width: 70px;
+  height: auto;
+  margin-bottom: 0.75rem;
+  filter: drop-shadow(0 0 15px var(--primary-glow));
+}
+
+.welcome-title {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--primary);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.form-container {
+  width: 100%;
+  padding: 2rem;
+}
+
+.form-group {
+  margin-bottom: 1.25rem;
+}
+
+.form-group label {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+  color: var(--text-secondary);
+}
+
+.input-wrapper {
+  position: relative;
+}
+
+.input-wrapper input {
+  width: 100%;
+  height: 52px;
+  background: var(--surface-container-low);
+  border: 1px solid var(--outline);
+  color: var(--text);
+  padding: 0 1.25rem;
+  font-family: var(--font-base);
+  font-size: 1rem;
+  border-radius: 0.75rem;
+  transition: var(--transition-smooth);
+}
+
+.input-wrapper input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 10px var(--primary-glow);
+  background: var(--surface-container-high);
+}
+
+.input-wrapper input::placeholder {
+  color: var(--text-secondary);
+  opacity: 0.5;
+}
+
+.btn-register {
+  width: 100%;
+  height: 54px;
+  margin-top: 1.5rem;
+}
+
+.helper-links {
+  display: flex;
+  justify-content: center;
+  margin-top: 1.25rem;
+  width: 100%;
+}
+
+.helper-link {
+  background: none;
+  border: none;
+  font-family: var(--font-base);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: var(--primary);
+  cursor: pointer;
+  text-decoration: none;
+  transition: var(--transition-smooth);
+  min-height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.helper-link:hover {
+  color: var(--text);
+  text-shadow: 0 0 8px var(--primary-glow);
+}
+
+footer {
+  text-align: center;
+  padding: 1.5rem;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  opacity: 0.6;
+}
+</style>
+<script src="js/app.js"></script>
 </head>
-<body>
-  <header>
+<body class="haptic-press">
+
+<div class="ambient-bg">
+  <div class="ambient-glow-1"></div>
+  <div class="ambient-glow-2"></div>
+</div>
+
+<header class="unified-header">
+  <div class="logo-wrapper">
+    <img src="assets/img/logoSimi.png" alt="Logo de SIMIVOZ">
     <h1>SIMIVOZ</h1>
-    <a href="index.html" class="btn-icon" aria-label="Volver">X</a>
-  </header>
-  <main>
-    <h1>CREAR CUENTA</h1>
+  </div>
+  <button class="btn-icon-header" onclick="location.href='index.html'" aria-label="Volver al inicio de sesión">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+  </button>
+</header>
+
+<main>
+  <div class="logo-section">
+    <h2 class="welcome-title">CREAR CUENTA</h2>
+    <p class="tagline">Únete al ecosistema accesible</p>
+  </div>
+
+  <div class="form-container glass-card">
     <form id="registroForm">
       <div class="form-group">
-        <label for="full_name">NOMBRE</label>
-        <input type="text" id="full_name" required>
+        <label for="full_name">Nombre Completo</label>
+        <div class="input-wrapper">
+          <input type="text" id="full_name" placeholder="Tu nombre y apellido" required aria-label="Nombre completo">
+        </div>
       </div>
+      
       <div class="form-group">
-        <label for="email">CORREO</label>
-        <input type="email" id="email" required>
+        <label for="email">Correo Electrónico</label>
+        <div class="input-wrapper">
+          <input type="email" id="email" placeholder="ejemplo@correo.com" required aria-label="Correo electrónico">
+        </div>
       </div>
-      <button type="submit" class="btn-primary">REGISTRARSE</button>
+      
+      <button type="submit" class="btn-primary-action btn-register" aria-label="Crear nueva cuenta y registrarse">
+        <span>REGISTRARSE</span>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
+      </button>
+      
+      <div class="helper-links">
+        <a href="index.html" class="helper-link" aria-label="Volver al inicio de sesión">¿YA TIENES CUENTA? ENTRA AQUÍ</a>
+      </div>
     </form>
-  </main>
-  <script>
-    document.getElementById('registroForm').onsubmit = (e) => {
-        e.preventDefault();
-        alert('Registro simulado con éxito.');
-        location.href = 'index.html';
-    };
-  </script>
+  </div>
+</main>
+
+<footer>
+  <p>© 2026 SIMIVOZ - Ecosistema de Accesibilidad Contextual</p>
+</footer>
+
+<script>
+function showToast(msg, isError) {
+  // Simple toast implementation for register page
+  var toast = document.createElement('div');
+  toast.textContent = msg;
+  toast.style.position = 'fixed';
+  toast.style.top = '20px';
+  toast.style.left = '50%';
+  toast.style.transform = 'translateX(-50%)';
+  toast.style.padding = '0.75rem 1.5rem';
+  toast.style.background = isError ? 'var(--error)' : 'var(--primary)';
+  toast.style.color = isError ? 'var(--on-error)' : 'var(--on-primary)';
+  toast.style.borderRadius = '2rem';
+  toast.style.fontWeight = '800';
+  toast.style.zIndex = '1000';
+  toast.style.boxShadow = '0 4px 15px rgba(0,0,0,0.2)';
+  document.body.appendChild(toast);
+  setTimeout(function() { toast.remove(); }, 3000);
+}
+
+document.getElementById('registroForm').onsubmit = (e) => {
+  e.preventDefault()
+  if (window.navigator.vibrate) window.navigator.vibrate(50)
+  
+  var name = document.getElementById('full_name').value.trim()
+  var email = document.getElementById('email').value.trim()
+  
+  if (name.length < 3) {
+    showToast('El nombre debe tener al menos 3 caracteres', true)
+    window.speechSynthesis.cancel()
+    var msgError = new SpeechSynthesisUtterance('Error, el nombre es muy corto')
+    msgError.lang = 'es-PE'
+    window.speechSynthesis.speak(msgError)
+    return;
+  }
+  
+  var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+  if (!emailRegex.test(email)) {
+    showToast('Correo electrónico no válido', true)
+    window.speechSynthesis.cancel()
+    var msgError = new SpeechSynthesisUtterance('Error, correo electrónico no válido')
+    msgError.lang = 'es-PE'
+    window.speechSynthesis.speak(msgError)
+    return;
+  }
+  
+  var btn = document.querySelector('.btn-register span')
+  btn.textContent = 'REGISTRANDO...'
+  
+  setTimeout(function() {
+    window.speechSynthesis.cancel()
+    var msg = new SpeechSynthesisUtterance('Registro completado con éxito. Por favor inicia sesión.')
+    msg.lang = 'es-PE'
+    window.speechSynthesis.speak(msg)
+    
+    showToast('¡Registro exitoso!', false)
+    
+    setTimeout(function() {
+      location.href = 'index.html'
+    }, 1500)
+  }, 800)
+}
+
+document.querySelectorAll('button, a').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    if (window.navigator.vibrate) window.navigator.vibrate(50)
+  })
+})
+</script>
 </body>
 </html>

@@ -1,51 +1,300 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SIMIVOZ - Lector Dinámico</title>
-  <link rel="stylesheet" href="css/variables.css">
-  <style>
-    body { font-family: 'Inter', sans-serif; background-color: var(--bg); color: var(--text); min-height: 100vh; padding: 1rem; }
-    .container { max-width: 800px; margin: 0 auto; }
-    h1 { color: var(--primary); margin-bottom: 1rem; }
-    textarea { width: 100%; height: 300px; padding: 1rem; border: 2px solid var(--primary); border-radius: 0.5rem; background: var(--bg); color: var(--text); font-size: 1.125rem; }
-    .controls { display: flex; gap: 1rem; margin-top: 1rem; }
-    button { padding: 1rem 2rem; background: var(--primary); color: var(--on-primary); border: none; border-radius: 0.5rem; font-weight: 700; cursor: pointer; min-height: var(--touch-min); }
-    button:hover { background: #006b35; }
-    input[type="file"] { margin-bottom: 1rem; color: var(--text); }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <h1>Lector Dinámico</h1>
-    <input type="file" id="file-upload" accept=".txt">
-    <textarea id="texto-contenido" placeholder="Carga un archivo o pega texto aquí..."></textarea>
-    <div class="controls">
-      <button onclick="reproducir()">LEER</button>
-      <button onclick="pausar()">PAUSAR</button>
-      <button onclick="detener()">DETENER</button>
-    </div>
-  </div>
-  <script>
-    let synth = window.speechSynthesis;
-    let utterance;
-    
-    document.getElementById('file-upload').addEventListener('change', (e) => {
-      const file = e.target.files[0];
-      const reader = new FileReader();
-      reader.onload = (e) => document.getElementById('texto-contenido').value = e.target.result;
-      reader.readAsText(file);
-    });
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SIMIVOZ - Lector Dinámico</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/variables.css">
+<link rel="stylesheet" href="css/global.css">
+<style>
+main {
+  flex: 1;
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 1.5rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
 
-    function reproducir() {
-      if (synth.speaking) synth.cancel();
-      utterance = new SpeechSynthesisUtterance(document.getElementById('texto-contenido').value);
-      utterance.lang = 'es-PE';
-      synth.speak(utterance);
+.page-title {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: var(--primary);
+  letter-spacing: -0.02em;
+}
+
+.dropzone {
+  border: 2px dashed var(--outline);
+  border-radius: 1.25rem;
+  padding: 2.25rem;
+  text-align: center;
+  background: rgba(0, 168, 84, 0.02);
+  cursor: pointer;
+  transition: var(--transition-smooth);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.dropzone:hover, .dropzone.dragover {
+  border-color: var(--primary);
+  background: rgba(0, 168, 84, 0.07);
+  box-shadow: 0 0 15px var(--primary-glow);
+}
+
+.dropzone svg {
+  color: var(--primary);
+  transition: var(--transition-smooth);
+}
+
+.dropzone:hover svg {
+  transform: translateY(-4px);
+}
+
+.dropzone p {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.dropzone span {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  opacity: 0.7;
+}
+
+#file-upload {
+  display: none;
+}
+
+.text-input-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.text-input-section label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+textarea {
+  width: 100%;
+  height: 200px;
+  padding: 1.25rem;
+  background: var(--surface-container-low);
+  border: 1px solid var(--outline);
+  border-radius: 1rem;
+  color: var(--text);
+  font-family: var(--font-base);
+  font-size: 1rem;
+  line-height: 1.5;
+  resize: none;
+  transition: var(--transition-smooth);
+}
+
+textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 10px var(--primary-glow);
+  background: var(--surface-container-high);
+}
+
+textarea::placeholder {
+  color: var(--text-secondary);
+  opacity: 0.4;
+}
+
+.btn-read-action {
+  width: 100%;
+  height: 56px;
+  margin-top: 0.5rem;
+}
+</style>
+<script src="js/app.js"></script>
+</head>
+<body class="haptic-press">
+
+<div class="ambient-bg">
+  <div class="ambient-glow-1"></div>
+  <div class="ambient-glow-2"></div>
+</div>
+
+<header class="unified-header">
+  <div class="logo-wrapper">
+    <a href="inicio.html" class="btn-icon-header" style="border:none" aria-label="Volver al inicio">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+    </a>
+    <h1 style="font-size: 1.25rem; margin-left: 0.5rem;">Lector Dinámico</h1>
+  </div>
+  <button class="btn-icon-header" onclick="location.href='configuracion.html'" aria-label="Ajustes y accesibilidad">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+  </button>
+</header>
+
+<main>
+  <div class="dropzone glass-card" id="dropzone" onclick="document.getElementById('file-upload').click()">
+    <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+    <p>Arrastra tu archivo .txt aquí</p>
+    <span>o haz clic para buscar en tu dispositivo</span>
+    <input type="file" id="file-upload" accept=".txt">
+  </div>
+
+  <div class="text-input-section">
+    <label for="texto-contenido">O escribe/pega el texto directamente:</label>
+    <textarea id="texto-contenido" placeholder="Escribe o pega aquí el contenido que deseas que lea SIMIVOZ..."></textarea>
+  </div>
+
+  <button onclick="procesarLectura()" class="btn-primary-action btn-read-action" aria-label="Procesar texto y abrir reproductor de voz">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+    <span>PROCESAR Y ESCUCHAR</span>
+  </button>
+</main>
+
+<nav class="unified-nav" aria-label="Navegación principal">
+  <div class="unified-nav-inner">
+    <a href="inicio.html" class="unified-nav-item" aria-label="Página de inicio">
+      <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+      <span>Inicio</span>
+    </a>
+    <a href="voz.html" class="unified-nav-item" aria-label="Asistente de voz">
+      <svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+      <span>Voz</span>
+    </a>
+    <a href="lectura.html" class="unified-nav-item active" aria-current="page" aria-label="Lector de textos">
+      <svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+      <span>Lectura</span>
+    </a>
+    <a href="servicios.html" class="unified-nav-item" aria-label="Mapa de servicios">
+      <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      <span>Mapa</span>
+    </a>
+    <a href="configuracion.html" class="unified-nav-item" aria-label="Ajustes">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      <span>Ajustes</span>
+    </a>
+  </div>
+</nav>
+
+<div class="nav-spacer"></div>
+
+<script>
+var selectedFileName = ''
+
+function disabled_aplicarConfiguracion() {
+  try {
+    const config = JSON.parse(localStorage.getItem('simivoz_config'))
+    if (config) {
+      if (config.contrast) document.body.classList.add('high-contrast')
+      if (config.simplified) document.body.classList.add('modo-simplificado')
+      if (config.fontSize) {
+        document.body.classList.remove('big-font', 'massive-font')
+        if (config.fontSize === '1.125rem' || config.fontSize === '1.15rem' || config.fontSize === 'A+') {
+          document.body.classList.add('big-font')
+        } else if (config.fontSize === '1.25rem' || config.fontSize === '1.3rem' || config.fontSize === 'A++' || config.fontSize === 'A+++') {
+          document.body.classList.add('big-font', 'massive-font')
+        }
+      }
     }
-    function pausar() { if (synth.speaking) synth.pause(); }
-    function detener() { synth.cancel(); }
-  </script>
+  } catch (err) {
+    console.error(err)
+  }
+}
+// old config listener disabled
+
+const dropzone = document.getElementById('dropzone')
+const fileInput = document.getElementById('file-upload')
+const textArea = document.getElementById('texto-contenido')
+
+// Drag events
+;['dragenter', 'dragover'].forEach(eventName => {
+  dropzone.addEventListener(eventName, e => {
+    e.preventDefault()
+    dropzone.classList.add('dragover')
+  }, false)
+})
+;['dragleave', 'drop'].forEach(eventName => {
+  dropzone.addEventListener(eventName, e => {
+    e.preventDefault()
+    dropzone.classList.remove('dragover')
+  }, false)
+})
+
+dropzone.addEventListener('drop', e => {
+  const dt = e.dataTransfer
+  const files = dt.files
+  if (files.length) handleFile(files[0])
+})
+
+fileInput.addEventListener('change', e => {
+  if (e.target.files.length) handleFile(e.target.files[0])
+})
+
+function handleFile(file) {
+  if (window.navigator.vibrate) window.navigator.vibrate(50)
+  if (!file.name.endsWith('.txt')) {
+    alert('Por favor, selecciona solo archivos de texto (.txt)')
+    return
+  }
+  selectedFileName = file.name.replace('.txt', '')
+  const reader = new FileReader()
+  reader.onload = e => {
+    textArea.value = e.target.result
+    dropzone.querySelector('p').textContent = 'Archivo cargado: ' + file.name
+    dropzone.querySelector('span').textContent = 'Haz clic para cambiar de archivo'
+  }
+  reader.readAsText(file)
+}
+
+function procesarLectura() {
+  const content = textArea.value.trim()
+  if (!content) {
+    var msg = new SpeechSynthesisUtterance('Escribe o carga algún texto primero')
+    msg.lang = 'es-PE'
+    window.speechSynthesis.speak(msg)
+    alert('Ingresa texto o carga un archivo antes de procesar.')
+    return
+  }
+
+  const titulo = selectedFileName || 'Texto Personalizado'
+  localStorage.setItem('simivoz_audio_titulo', titulo)
+  localStorage.setItem('simivoz_audio_contenido', content)
+
+  // Registrar en el historial local para la demo
+  registrarHistorial(titulo)
+
+  location.href = 'audio-player.html'
+}
+
+function registrarHistorial(titulo) {
+  try {
+    let historial = JSON.parse(localStorage.getItem('simivoz_historial') || '[]')
+    const item = {
+      id: Date.now(),
+      titulo: titulo,
+      fecha: new Date().toLocaleDateString('es-PE', { hour: '2-digit', minute: '2-digit' })
+    }
+    historial.unshift(item)
+    // Mantener máximo 10
+    if (historial.length > 10) historial.pop()
+    localStorage.setItem('simivoz_historial', JSON.stringify(historial))
+  } catch (err) {
+    console.error(err)
+  }
+}
+
+document.querySelectorAll('button, a, .dropzone').forEach(function(el) {
+  el.addEventListener('click', function() {
+    if (window.navigator.vibrate) window.navigator.vibrate(50)
+  })
+})
+</script>
 </body>
 </html>

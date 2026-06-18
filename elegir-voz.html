@@ -1,242 +1,406 @@
 <!DOCTYPE html>
-<html class="dark" lang="es">
+<html lang="es">
 <head>
 <meta charset="utf-8">
 <meta content="width=device-width, initial-scale=1.0" name="viewport">
-<title>SIMIVOZ - Elegir Voz del Asistente</title>
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
-<script>
-tailwind.config = {
-  darkMode: "class",
-  theme: {
-    extend: {
-      colors: {
-        "primary": "#75ff9e",
-        "primary-container": "#00e676",
-        "primary-fixed": "#62ff96",
-        "primary-fixed-dim": "#00e475",
-        "on-primary": "#003918",
-        "on-primary-container": "#00612e",
-        "on-primary-fixed": "#00210b",
-        "on-primary-fixed-variant": "#005226",
-        "surface": "#121414",
-        "surface-container": "#1e2020",
-        "surface-container-high": "#282a2b",
-        "surface-container-low": "#1a1c1c",
-        "surface-container-lowest": "#0c0f0f",
-        "surface-container-highest": "#333535",
-        "surface-variant": "#333535",
-        "surface-bright": "#38393a",
-        "surface-dim": "#121414",
-        "on-surface": "#e2e2e2",
-        "on-surface-variant": "#bacbb9",
-        "outline": "#859585",
-        "outline-variant": "#3b4a3d",
-        "secondary": "#b3ceab",
-        "secondary-container": "#354d32",
-        "on-secondary": "#1f361d",
-        "on-secondary-container": "#a2bc9a",
-        "on-secondary-fixed": "#0a2009",
-        "on-secondary-fixed-variant": "#354d32",
-        "secondary-fixed": "#cfeac6",
-        "secondary-fixed-dim": "#b3ceab",
-        "background": "#121414",
-        "on-background": "#e2e2e2",
-        "tertiary": "#e7e4e3",
-        "tertiary-container": "#cac8c7",
-        "error": "#ffb4ab",
-        "error-container": "#93000a",
-        "on-error": "#690005",
-        "on-error-container": "#ffdad6",
-        "inverse-surface": "#e2e2e2",
-        "inverse-on-surface": "#2f3131",
-        "inverse-primary": "#006d35",
-        "surface-tint": "#00e475"
-      },
-      borderRadius: {
-        DEFAULT: "0.125rem", lg: "0.25rem", xl: "0.5rem", full: "0.75rem"
-      },
-      spacing: {
-        "touch-target-min": "44px", "xs": "0.5rem", "sm": "1rem", "md": "1.5rem", "lg": "2.5rem", "xl": "4rem",
-        "margin-mobile": "1rem", "margin-desktop": "3rem", "gutter": "1.5rem", "base": "4px"
-      },
-      fontFamily: {
-        "headline-md": ["Inter"], "headline-lg": ["Inter"], "label-lg": ["Inter"],
-        "body-md": ["Inter"], "interactive-text": ["Inter"], "headline-lg-mobile": ["Inter"], "body-lg": ["Inter"]
-      },
-      fontSize: {
-        "headline-md": ["1.5rem", { "lineHeight": "1.3", "fontWeight": "600" }],
-        "headline-lg": ["2.25rem", { "lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700" }],
-        "label-lg": ["0.875rem", { "lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "600" }],
-        "body-md": ["1rem", { "lineHeight": "1.5", "fontWeight": "400" }],
-        "interactive-text": ["1.125rem", { "lineHeight": "1", "fontWeight": "700" }],
-        "headline-lg-mobile": ["1.75rem", { "lineHeight": "1.2", "fontWeight": "700" }],
-        "body-lg": ["1.125rem", { "lineHeight": "1.6", "fontWeight": "400" }]
-      }
-    }
-  }
-}
-</script>
+<title>SIMIVOZ - Voz del Asistente</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/variables.css">
+<link rel="stylesheet" href="css/global.css">
 <style>
-body.modo-simplificado .simplified-hide { display: none !important; }
-body.modo-simplificado .simplified-full-btn { height: 88px !important; font-size: 1.25rem !important; }
+main {
+  flex: 1;
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 1.5rem 1.25rem;
+  padding-bottom: 7rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
 
-*:focus-visible {
-  outline: 3px solid #75ff9e !important;
-  outline-offset: 2px !important;
+.page-header h2 {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: var(--primary);
+  letter-spacing: -0.02em;
+  margin-bottom: 0.25rem;
 }
-.radio-card:has(input:checked) {
-  border-color: #00e676;
-  background-color: #354d32;
+
+.page-header p {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
 }
-.radio-card:has(input:checked) .check-icon {
+
+.voice-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  width: 100%;
+}
+
+.voice-card-label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 1.25rem;
+  border-radius: 1rem;
+  border: 1px solid var(--outline);
+  background: var(--surface-container-low);
+  cursor: pointer;
+  transition: var(--transition-smooth);
+}
+
+.voice-card-label:hover {
+  background: var(--surface-container-high);
+  border-color: var(--primary);
+}
+
+.voice-card-wrapper input:checked + .voice-card-label {
+  border-color: var(--primary);
+  background: rgba(0, 168, 84, 0.05);
+  box-shadow: 0 0 12px var(--primary-glow);
+}
+
+.voice-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.voice-icon-circle {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--surface-container-high);
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border: 1px solid var(--outline);
+  transition: var(--transition-smooth);
+}
+
+.voice-card-wrapper input:checked + .voice-card-label .voice-icon-circle {
+  background: var(--primary);
+  color: var(--on-primary);
+  border-color: var(--primary);
+  box-shadow: 0 0 10px var(--primary-glow);
+}
+
+.voice-info {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+
+.voice-info h3 {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--text);
+}
+
+.voice-info p {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  margin-top: 0.15rem;
+}
+
+.voice-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.btn-play-sample {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid var(--primary);
+  color: var(--primary);
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+}
+
+.btn-play-sample:hover {
+  background: var(--primary);
+  color: var(--on-primary);
+  box-shadow: 0 0 10px var(--primary-glow);
+}
+
+.btn-play-sample:active {
+  transform: scale(0.9);
+}
+
+.check-indicator {
+  color: var(--primary);
+  opacity: 0;
+  transform: scale(0.8);
+  transition: var(--transition-smooth);
+}
+
+.voice-card-wrapper input:checked + .voice-card-label .check-indicator {
   opacity: 1;
+  transform: scale(1);
+}
+
+.btn-save-voice {
+  width: 100%;
+  height: 54px;
+  margin-top: 1.5rem;
+}
+
+.btn-save-voice.saved {
+  background: var(--primary-container);
+  box-shadow: 0 0 15px rgba(0, 168, 84, 0.4);
 }
 </style>
+<script src="js/app.js"></script>
 </head>
-<body class="bg-background text-on-background min-h-screen flex flex-col antialiased">
+<body class="haptic-press">
 
-<header class="w-full top-0 sticky z-40 bg-background border-b-2 border-outline-variant flex justify-between items-center px-margin-mobile md:px-margin-desktop h-touch-target-min">
-  <button onclick="history.back()" class="text-primary hover:bg-secondary-container transition-transform active:scale-95 flex items-center justify-center w-touch-target-min h-touch-target-min rounded-full" aria-label="Volver">
-    <span class="material-symbols-outlined">arrow_back</span>
-  </button>
-  <h1 class="font-headline-md text-headline-md font-bold text-primary">SIMIVOZ</h1>
-  <a href="configuracion.html" class="text-primary hover:bg-secondary-container transition-transform active:scale-95 flex items-center justify-center w-touch-target-min h-touch-target-min rounded-full" aria-label="Ajustes">
-    <span class="material-symbols-outlined">settings</span>
-  </a>
+<div class="ambient-bg">
+  <div class="ambient-glow-1"></div>
+  <div class="ambient-glow-2"></div>
+</div>
+
+<header class="unified-header">
+  <div class="logo-wrapper">
+    <button onclick="volverAtras()" class="btn-icon-header" style="border:none" aria-label="Volver atrás">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+    </button>
+    <h1 style="font-size: 1.25rem; margin-left: 0.5rem;">Voz del Asistente</h1>
+  </div>
 </header>
 
-<main class="flex-grow flex flex-col px-margin-mobile md:px-margin-desktop py-lg max-w-4xl mx-auto w-full">
-  <div class="mb-lg">
-    <h2 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface mb-xs">Elegir Voz del Asistente</h2>
-    <p class="font-body-lg text-body-lg text-on-surface-variant">Seleccione la voz que prefiera para la lectura y las notificaciones.</p>
+<main>
+  <div class="page-header">
+    <h2>Elige la Voz</h2>
+    <p>Personaliza el tono y género del sintetizador de voz (TTS) para SIMIVOZ.</p>
   </div>
 
-  <form class="flex-grow flex flex-col gap-md" id="voiceForm">
-    <div class="relative w-full radio-card">
-      <input class="sr-only" type="radio" name="voice_selection" id="voice_1" value="femenina" checked>
-      <label class="flex items-center justify-between bg-surface border-2 border-outline-variant rounded-xl p-md cursor-pointer transition-all hover:bg-surface-container-high" for="voice_1">
-        <div class="flex items-center gap-md">
-          <div class="w-12 h-12 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center flex-shrink-0">
-            <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">face_3</span>
+  <form class="voice-form" id="voiceForm">
+    <!-- Female Voice -->
+    <div class="voice-card-wrapper">
+      <input type="radio" name="voice_selection" id="voice_femenina" value="femenina" checked style="display:none">
+      <label class="voice-card-label glass-card" for="voice_femenina">
+        <div class="voice-left">
+          <div class="voice-icon-circle">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 12a5 5 0 1 0 0-10 5 5 0 0 0 0 10z"/><path d="M12 14v7"/><path d="M9 18h6"/><circle cx="12" cy="12" r="10" stroke="none"/></svg>
           </div>
-          <div>
-            <h3 class="font-interactive-text text-interactive-text text-on-surface mb-1">Voz Femenina (Clara)</h3>
-            <p class="font-body-md text-body-md text-on-surface-variant">Tono agudo, ideal para entornos ruidosos.</p>
+          <div class="voice-info">
+            <h3>Voz Femenina (Clara)</h3>
+            <p>Tono agudo y nítido. Óptimo para entornos ruidosos.</p>
           </div>
         </div>
-        <div class="flex items-center gap-sm">
-          <button type="button" onclick="reproducirEjemplo('femenina')" class="w-touch-target-min h-touch-target-min rounded-full border-2 border-primary text-primary flex items-center justify-center hover:bg-primary-container hover:text-on-primary-container active:scale-95 transition-all" aria-label="Reproducir ejemplo Voz Femenina">
-            <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+        <div class="voice-actions">
+          <button type="button" onclick="reproducirEjemplo('femenina')" class="btn-play-sample" aria-label="Escuchar ejemplo de Voz Femenina Clara">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="5 3 19 12 5 21 5 3"/></svg>
           </button>
-          <div class="check-icon opacity-0 text-primary transition-opacity duration-200">
-            <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+          <div class="check-indicator">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
           </div>
         </div>
       </label>
     </div>
 
-    <div class="relative w-full radio-card">
-      <input class="sr-only" type="radio" name="voice_selection" id="voice_2" value="masculina">
-      <label class="flex items-center justify-between bg-surface border-2 border-outline-variant rounded-xl p-md cursor-pointer transition-all hover:bg-surface-container-high" for="voice_2">
-        <div class="flex items-center gap-md">
-          <div class="w-12 h-12 rounded-full bg-surface-container-highest text-on-surface-variant flex items-center justify-center flex-shrink-0">
-            <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">face_6</span>
+    <!-- Male Voice -->
+    <div class="voice-card-wrapper">
+      <input type="radio" name="voice_selection" id="voice_masculina" value="masculina" style="display:none">
+      <label class="voice-card-label glass-card" for="voice_masculina">
+        <div class="voice-left">
+          <div class="voice-icon-circle">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 12a5 5 0 1 0 0-10 5 5 0 0 0 0 10z"/><path d="M12 14v7"/><circle cx="12" cy="12" r="10" stroke="none"/></svg>
           </div>
-          <div>
-            <h3 class="font-interactive-text text-interactive-text text-on-surface mb-1">Voz Masculina (Grave)</h3>
-            <p class="font-body-md text-body-md text-on-surface-variant">Tono profundo, relajante y pausado.</p>
+          <div class="voice-info">
+            <h3>Voz Masculina (Grave)</h3>
+            <p>Tono profundo y pausado. Muy relajante para la lectura.</p>
           </div>
         </div>
-        <div class="flex items-center gap-sm">
-          <button type="button" onclick="reproducirEjemplo('masculina')" class="w-touch-target-min h-touch-target-min rounded-full border-2 border-primary text-primary flex items-center justify-center hover:bg-primary-container hover:text-on-primary-container active:scale-95 transition-all" aria-label="Reproducir ejemplo Voz Masculina">
-            <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+        <div class="voice-actions">
+          <button type="button" onclick="reproducirEjemplo('masculina')" class="btn-play-sample" aria-label="Escuchar ejemplo de Voz Masculina Grave">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="5 3 19 12 5 21 5 3"/></svg>
           </button>
-          <div class="check-icon opacity-0 text-primary transition-opacity duration-200">
-            <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+          <div class="check-indicator">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
           </div>
         </div>
       </label>
     </div>
 
-    <div class="relative w-full radio-card">
-      <input class="sr-only" type="radio" name="voice_selection" id="voice_3" value="neutra">
-      <label class="flex items-center justify-between bg-surface border-2 border-outline-variant rounded-xl p-md cursor-pointer transition-all hover:bg-surface-container-high" for="voice_3">
-        <div class="flex items-center gap-md">
-          <div class="w-12 h-12 rounded-full bg-surface-container-highest text-on-surface-variant flex items-center justify-center flex-shrink-0">
-            <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">record_voice_over</span>
+    <!-- Neutral Voice -->
+    <div class="voice-card-wrapper">
+      <input type="radio" name="voice_selection" id="voice_neutra" value="neutra" style="display:none">
+      <label class="voice-card-label glass-card" for="voice_neutra">
+        <div class="voice-left">
+          <div class="voice-icon-circle">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><circle cx="12" cy="12" r="10" stroke="none"/></svg>
           </div>
-          <div>
-            <h3 class="font-interactive-text text-interactive-text text-on-surface mb-1">Voz Neutra</h3>
-            <p class="font-body-md text-body-md text-on-surface-variant">Sintética y altamente inteligible.</p>
+          <div class="voice-info">
+            <h3>Voz Neutra</h3>
+            <p>Sintética, de ritmo constante. Altamente inteligible.</p>
           </div>
         </div>
-        <div class="flex items-center gap-sm">
-          <button type="button" onclick="reproducirEjemplo('neutra')" class="w-touch-target-min h-touch-target-min rounded-full border-2 border-primary text-primary flex items-center justify-center hover:bg-primary-container hover:text-on-primary-container active:scale-95 transition-all" aria-label="Reproducir ejemplo Voz Neutra">
-            <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+        <div class="voice-actions">
+          <button type="button" onclick="reproducirEjemplo('neutra')" class="btn-play-sample" aria-label="Escuchar ejemplo de Voz Neutra">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="5 3 19 12 5 21 5 3"/></svg>
           </button>
-          <div class="check-icon opacity-0 text-primary transition-opacity duration-200">
-            <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+          <div class="check-indicator">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
           </div>
         </div>
       </label>
     </div>
 
-    <div class="mt-auto pt-xl">
-      <button type="submit" class="w-full bg-primary-container text-on-primary font-interactive-text text-interactive-text uppercase tracking-widest py-md rounded-xl min-h-[64px] hover:bg-primary active:scale-[0.98] transition-all flex items-center justify-center gap-sm">
-        <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">save</span>
-        Guardar Selección
-      </button>
-    </div>
+    <!-- Submit btn -->
+    <button type="submit" class="btn-primary-action btn-save-voice" aria-label="Guardar configuración de voz del asistente">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+      <span>GUARDAR SELECCIÓN</span>
+    </button>
   </form>
 </main>
 
+<nav class="unified-nav" aria-label="Navegación principal">
+  <div class="unified-nav-inner">
+    <a href="inicio.html" class="unified-nav-item" aria-label="Página de inicio">
+      <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+      <span>Inicio</span>
+    </a>
+    <a href="voz.html" class="unified-nav-item" aria-label="Asistente de voz">
+      <svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+      <span>Voz</span>
+    </a>
+    <a href="lectura.html" class="unified-nav-item" aria-label="Lector de textos">
+      <svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+      <span>Lectura</span>
+    </a>
+    <a href="servicios.html" class="unified-nav-item" aria-label="Mapa de servicios">
+      <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      <span>Mapa</span>
+    </a>
+    <a href="configuracion.html" class="unified-nav-item active" aria-label="Ajustes">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1-2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      <span>Ajustes</span>
+    </a>
+  </div>
+</nav>
+
+<div class="nav-spacer"></div>
+
 <script>
+function disabled_aplicarConfiguracion() {
+  try {
+    const config = JSON.parse(localStorage.getItem('simivoz_config'))
+    if (config) {
+      if (config.contrast) document.body.classList.add('high-contrast')
+      if (config.simplified) document.body.classList.add('modo-simplificado')
+      if (config.fontSize) {
+        document.body.classList.remove('big-font', 'massive-font')
+        if (config.fontSize === '1.125rem' || config.fontSize === '1.15rem' || config.fontSize === 'A+') {
+          document.body.classList.add('big-font')
+        } else if (config.fontSize === '1.25rem' || config.fontSize === '1.3rem' || config.fontSize === 'A++' || config.fontSize === 'A+++') {
+          document.body.classList.add('big-font', 'massive-font')
+        }
+      }
+    }
+  } catch (err) {
+    console.error(err)
+  }
+  
+  if (localStorage.getItem('simivoz_tutorial_completado') !== 'true') {
+    document.body.classList.add('onboarding-active');
+  }
+}
+// old config listener disabled
+
+function volverAtras() {
+  if (localStorage.getItem('simivoz_tutorial_completado') !== 'true') {
+    location.href = 'lector-inteligente.html';
+  } else {
+    location.href = 'configuracion.html';
+  }
+}
+
 function reproducirEjemplo(tipo) {
+  if (window.navigator.vibrate) window.navigator.vibrate(50)
+  
   var textos = {
     femenina: 'Esta es la voz femenina clara, ideal para lectura de textos largos.',
     masculina: 'Esta es la voz masculina grave, relajante y pausada para escuchar.',
-    neutra: 'Esta es la voz neutra, sintética y altamente inteligible.'
+    neutra: 'Esta es la voz neutra, sintética y de ritmo constante.'
   }
+  
+  window.speechSynthesis.cancel()
   var msg = new SpeechSynthesisUtterance(textos[tipo] || 'Ejemplo de voz')
   msg.lang = 'es-PE'
   if (tipo === 'masculina') {
-    msg.pitch = 0.7
-    msg.rate = 0.9
+    msg.pitch = 0.75
+    msg.rate = 0.95
   } else if (tipo === 'femenina') {
-    msg.pitch = 1.4
-    msg.rate = 1.1
+    msg.pitch = 1.35
+    msg.rate = 1.05
   } else {
     msg.pitch = 1.0
     msg.rate = 1.0
   }
-  speechSynthesis.speak(msg)
+  window.speechSynthesis.speak(msg)
 }
 
 document.getElementById('voiceForm').addEventListener('submit', function(e) {
   e.preventDefault()
+  if (window.navigator.vibrate) window.navigator.vibrate(50)
+
   var seleccion = document.querySelector('input[name="voice_selection"]:checked')
   if (seleccion) {
     localStorage.setItem('simivoz_voice', seleccion.value)
+    
     var btn = this.querySelector('button[type="submit"]')
-    btn.innerHTML = '<span class="material-symbols-outlined">check_circle</span> GUARDADO'
-    btn.classList.remove('bg-primary-container', 'hover:bg-primary')
-    btn.classList.add('bg-primary-fixed')
-    setTimeout(function() {
-      btn.innerHTML = '<span class="material-symbols-outlined" style="font-variation-settings: \'FILL\' 1;">save</span> Guardar Selección'
-      btn.classList.remove('bg-primary-fixed')
-      btn.classList.add('bg-primary-container', 'hover:bg-primary')
-    }, 2000)
+    btn.querySelector('span').textContent = 'CONFIGURACIÓN GUARDADA'
+    btn.classList.add('saved')
+
+    window.speechSynthesis.cancel()
+    var msg = new SpeechSynthesisUtterance('Voz guardada correctamente')
+    msg.lang = 'es-PE'
+    window.speechSynthesis.speak(msg)
+
+    const tutorialCompletado = localStorage.getItem('simivoz_tutorial_completado')
+    if (tutorialCompletado !== 'true') {
+      localStorage.setItem('simivoz_tutorial_completado', 'true')
+      setTimeout(function() {
+        window.speechSynthesis.cancel()
+        var welcomeMsg = new SpeechSynthesisUtterance('Tutorial completado. Bienvenido a SimiVoz.')
+        welcomeMsg.lang = 'es-PE'
+        window.speechSynthesis.speak(welcomeMsg)
+        location.href = 'inicio.html'
+      }, 1500)
+    } else {
+      setTimeout(function() {
+        btn.querySelector('span').textContent = 'GUARDAR SELECCIÓN'
+        btn.classList.remove('saved')
+      }, 2000)
+    }
   }
 })
 
+// Cargar la voz guardada inicialmente
 var savedVoice = localStorage.getItem('simivoz_voice')
 if (savedVoice) {
-  var radio = document.getElementById('voice_' + {fem: 1, femenina: 1, mas: 2, masculina: 2, neut: 3, neutra: 3}[savedVoice] || '1')
+  var radio = document.getElementById('voice_' + savedVoice)
   if (radio) radio.checked = true
 }
+
+document.querySelectorAll('.voice-card-label, .btn-play-sample, button').forEach(function(el) {
+  el.addEventListener('click', function() {
+    if (window.navigator.vibrate) window.navigator.vibrate(50)
+  })
+})
 </script>
 </body>
 </html>

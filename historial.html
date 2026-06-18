@@ -1,152 +1,320 @@
 <!DOCTYPE html>
-<html class="dark" lang="es">
+<html lang="es">
 <head>
 <meta charset="utf-8">
 <meta content="width=device-width, initial-scale=1.0" name="viewport">
 <title>Historial - SIMIVOZ</title>
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
-<script>
-tailwind.config = {
-  darkMode: "class",
-  theme: {
-    extend: {
-      colors: {
-        "primary": "#75ff9e", "primary-container": "#00e676", "primary-fixed": "#62ff96", "primary-fixed-dim": "#00e475",
-        "on-primary": "#003918", "on-primary-container": "#00612e", "on-primary-fixed": "#00210b", "on-primary-fixed-variant": "#005226",
-        "surface": "#121414", "surface-container": "#1e2020", "surface-container-high": "#282a2b",
-        "surface-container-low": "#1a1c1c", "surface-container-lowest": "#0c0f0f", "surface-container-highest": "#333535",
-        "surface-variant": "#333535", "on-surface": "#e2e2e2", "on-surface-variant": "#bacbb9",
-        "outline": "#859585", "outline-variant": "#3b4a3d",
-        "secondary": "#b3ceab", "secondary-container": "#354d32",
-        "on-secondary": "#1f361d", "on-secondary-container": "#a2bc9a",
-        "background": "#121414", "on-background": "#e2e2e2",
-        "tertiary": "#e7e4e3", "tertiary-container": "#cac8c7",
-        "error": "#ffb4ab", "error-container": "#93000a", "on-error": "#690005", "on-error-container": "#ffdad6",
-        "inverse-surface": "#e2e2e2", "inverse-on-surface": "#2f3131", "inverse-primary": "#006d35", "surface-tint": "#00e475"
-      },
-      borderRadius: { DEFAULT: "0.125rem", lg: "0.25rem", xl: "0.5rem", full: "0.75rem" },
-      spacing: {
-        "touch-target-min": "44px", "xs": "0.5rem", "sm": "1rem", "md": "1.5rem", "lg": "2.5rem", "xl": "4rem",
-        "margin-mobile": "1rem", "margin-desktop": "3rem", "gutter": "1.5rem", "base": "4px"
-      },
-      fontFamily: {
-        "headline-md": ["Inter"], "headline-lg": ["Inter"], "label-lg": ["Inter"],
-        "body-md": ["Inter"], "interactive-text": ["Inter"], "headline-lg-mobile": ["Inter"], "body-lg": ["Inter"]
-      },
-      fontSize: {
-        "headline-md": ["1.5rem", { "lineHeight": "1.3", "fontWeight": "600" }],
-        "headline-lg": ["2.25rem", { "lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700" }],
-        "label-lg": ["0.875rem", { "lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "600" }],
-        "body-md": ["1rem", { "lineHeight": "1.5", "fontWeight": "400" }],
-        "interactive-text": ["1.125rem", { "lineHeight": "1", "fontWeight": "700" }],
-        "headline-lg-mobile": ["1.75rem", { "lineHeight": "1.2", "fontWeight": "700" }],
-        "body-lg": ["1.125rem", { "lineHeight": "1.6", "fontWeight": "400" }]
-      }
-    }
-  }
-}
-</script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/variables.css">
+<link rel="stylesheet" href="css/global.css">
 <style>
-body.modo-simplificado .simplified-hide { display: none !important; }
-body.modo-simplificado .simplified-full-btn { height: 88px !important; font-size: 1.25rem !important; }
+main {
+  flex: 1;
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 1.5rem 1.25rem;
+  padding-bottom: 7rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
 
-*:focus-visible { outline: 3px solid #75ff9e !important; outline-offset: 2px !important; }
+.page-header h2 {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: var(--primary);
+  letter-spacing: -0.02em;
+  margin-bottom: 0.25rem;
+}
+
+.page-header p {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+}
+
+.history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  width: 100%;
+}
+
+.history-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 1.25rem;
+  border-radius: 1rem;
+  border: 1px solid var(--outline);
+  background: var(--surface-container-low);
+  transition: var(--transition-smooth);
+  text-decoration: none;
+  color: var(--text);
+  text-align: left;
+}
+
+.history-item:hover {
+  background: var(--surface-container-high);
+  border-color: var(--primary);
+}
+
+.history-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.history-icon-circle {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--surface-container-high);
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border: 1px solid var(--outline);
+  transition: var(--transition-smooth);
+}
+
+.history-item:hover .history-icon-circle {
+  background: var(--primary);
+  color: var(--on-primary);
+  box-shadow: 0 0 10px var(--primary-glow);
+  border-color: var(--primary);
+}
+
+.history-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.history-info .item-title {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--text);
+  margin-bottom: 0.15rem;
+}
+
+.history-info .item-meta {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.history-date {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  opacity: 0.7;
+  white-space: nowrap;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 3rem 1.5rem;
+}
+
+.empty-state p {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  margin-top: 0.5rem;
+}
+
+.btn-clear-history {
+  width: 100%;
+  height: 52px;
+  border: 1px solid var(--error);
+  color: var(--error);
+  background: var(--error-bg);
+  border-radius: 0.85rem;
+  font-family: var(--font-base);
+  font-size: 1rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.btn-clear-history:hover {
+  background: var(--error);
+  color: var(--on-error);
+  box-shadow: 0 0 15px rgba(255, 180, 171, 0.4);
+}
+
+.btn-clear-history:active {
+  transform: scale(0.97);
+}
+
+/* Modo simplificado updates */
+body.modo-simplificado .history-item {
+  padding: 1.25rem 1.5rem;
+}
+body.modo-simplificado .history-info .item-meta {
+  display: none;
+}
+body.modo-simplificado .history-info .item-title {
+  font-size: 1.25rem;
+}
 </style>
+<script src="js/app.js"></script>
 </head>
-<body class="antialiased flex flex-col min-h-screen bg-background text-on-background">
+<body class="haptic-press">
 
-<header class="fixed top-0 w-full z-50 flex justify-between items-center h-16 px-margin-mobile bg-background border-b-2 border-outline-variant">
-  <button onclick="location.href='inicio.html'" class="text-primary hover:bg-secondary-container active:scale-95 transition-transform w-touch-target-min h-touch-target-min flex items-center justify-center rounded" aria-label="Menú principal">
-    <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">menu</span>
-  </button>
-  <h1 class="font-headline-md text-headline-md font-bold text-primary tracking-tight">HISTORIAL</h1>
-  <a href="configuracion.html" class="text-primary hover:bg-secondary-container active:scale-95 transition-transform w-touch-target-min h-touch-target-min flex items-center justify-center rounded" aria-label="Ajustes">
-    <span class="material-symbols-outlined">settings</span>
-  </a>
+<div class="ambient-bg">
+  <div class="ambient-glow-1"></div>
+  <div class="ambient-glow-2"></div>
+</div>
+
+<header class="unified-header">
+  <div class="logo-wrapper">
+    <button onclick="history.back()" class="btn-icon-header" style="border:none" aria-label="Volver atrás">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+    </button>
+    <h1 style="font-size: 1.25rem; margin-left: 0.5rem;">Historial</h1>
+  </div>
 </header>
 
-<main class="flex-1 mt-16 mb-20 p-margin-mobile md:p-margin-desktop w-full max-w-4xl mx-auto flex flex-col gap-sm">
-  <div class="mb-sm">
-    <h2 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-primary mb-xs">Actividad Reciente</h2>
-    <p class="font-body-md text-body-md text-on-surface-variant">Revisa tus últimas acciones y comandos procesados por SIMIVOZ.</p>
+<main>
+  <div class="page-header">
+    <h2>Actividad Reciente</h2>
+    <p>Revisa o elimina tu historial de textos leídos por SIMIVOZ.</p>
   </div>
 
-  <div class="flex flex-col gap-sm">
-    <button onclick="location.href='lectura.html'" class="w-full bg-surface border border-outline-variant rounded-lg p-md flex items-center gap-md touch-target focus-ring hover:bg-surface-container-highest active:bg-secondary-container transition-colors text-left group">
-      <div class="flex-shrink-0 w-12 h-12 rounded-full bg-primary-container/20 flex items-center justify-center text-primary-container group-hover:bg-primary-container group-hover:text-on-primary-container transition-colors">
-        <span class="material-symbols-outlined text-3xl">menu_book</span>
-      </div>
-      <div class="flex-1 flex flex-col">
-        <span class="font-interactive-text text-interactive-text text-on-surface mb-1">Documento leído</span>
-        <span class="font-body-md text-body-md text-on-surface-variant">Especificaciones Técnicas</span>
-      </div>
-      <div class="flex-shrink-0 text-on-surface-variant text-sm whitespace-nowrap">Hace 10 min</div>
-    </button>
-
-    <button onclick="location.href='voz.html'" class="w-full bg-surface border border-outline-variant rounded-lg p-md flex items-center gap-md touch-target focus-ring hover:bg-surface-container-highest active:bg-secondary-container transition-colors text-left group">
-      <div class="flex-shrink-0 w-12 h-12 rounded-full bg-primary-container/20 flex items-center justify-center text-primary-container group-hover:bg-primary-container group-hover:text-on-primary-container transition-colors">
-        <span class="material-symbols-outlined text-3xl">mic</span>
-      </div>
-      <div class="flex-1 flex flex-col">
-        <span class="font-interactive-text text-interactive-text text-on-surface mb-1">Comando de voz</span>
-        <span class="font-body-md text-body-md text-on-surface-variant">Buscar Farmacia Cercana</span>
-      </div>
-      <div class="flex-shrink-0 text-on-surface-variant text-sm whitespace-nowrap">Hace 2 horas</div>
-    </button>
-
-    <button onclick="location.href='configuracion.html'" class="w-full bg-surface border border-outline-variant rounded-lg p-md flex items-center gap-md touch-target focus-ring hover:bg-surface-container-highest active:bg-secondary-container transition-colors text-left group">
-      <div class="flex-shrink-0 w-12 h-12 rounded-full bg-primary-container/20 flex items-center justify-center text-primary-container group-hover:bg-primary-container group-hover:text-on-primary-container transition-colors">
-        <span class="material-symbols-outlined text-3xl">settings</span>
-      </div>
-      <div class="flex-1 flex flex-col">
-        <span class="font-interactive-text text-interactive-text text-on-surface mb-1">Ajuste cambiado</span>
-        <span class="font-body-md text-body-md text-on-surface-variant">Activado Alto Contraste</span>
-      </div>
-      <div class="flex-shrink-0 text-on-surface-variant text-sm whitespace-nowrap">Ayer</div>
-    </button>
-
-    <button onclick="location.href='servicios.html'" class="w-full bg-surface border border-outline-variant rounded-lg p-md flex items-center gap-md touch-target focus-ring hover:bg-surface-container-highest active:bg-secondary-container transition-colors text-left group">
-      <div class="flex-shrink-0 w-12 h-12 rounded-full bg-primary-container/20 flex items-center justify-center text-primary-container group-hover:bg-primary-container group-hover:text-on-primary-container transition-colors">
-        <span class="material-symbols-outlined text-3xl">map</span>
-      </div>
-      <div class="flex-1 flex flex-col">
-        <span class="font-interactive-text text-interactive-text text-on-surface mb-1">Ruta trazada</span>
-        <span class="font-body-md text-body-md text-on-surface-variant">Navegación a Centro Médico</span>
-      </div>
-      <div class="flex-shrink-0 text-on-surface-variant text-sm whitespace-nowrap">Ayer</div>
-    </button>
-
-    <div class="mt-md flex justify-center">
-      <button onclick="if(confirm('¿Borrar todo el historial?')){localStorage.removeItem('simivoz_historial');this.textContent='HISTORIAL BORRADO';this.classList.add('bg-error-container','text-on-error-container');}" class="bg-primary-container text-on-primary-container font-interactive-text text-interactive-text px-xl py-sm rounded touch-target uppercase tracking-wide hover:bg-primary transition-colors active:scale-95 w-full md:w-auto">
-        Borrar Historial
-      </button>
-    </div>
+  <div class="history-list" id="history-container">
+    <!-- Carga dinámica -->
   </div>
+
+  <button class="btn-clear-history" id="clear-history-btn" onclick="clearHistory()" aria-label="Eliminar todo el historial de SIMIVOZ">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>
+    <span>BORRAR TODO EL HISTORIAL</span>
+  </button>
 </main>
 
-<nav class="fixed bottom-0 w-full z-50 flex justify-around items-center h-20 bg-background px-2 border-t-2 border-outline-variant">
-  <a href="inicio.html" class="flex flex-col items-center justify-center text-on-surface-variant min-h-[44px] min-w-[64px] hover:bg-surface-container-highest rounded-lg active:scale-90 transition-all no-underline">
-    <span class="material-symbols-outlined">home</span>
-    <span class="font-label-lg text-label-lg mt-1">Inicio</span>
-  </a>
-  <a href="voz.html" class="flex flex-col items-center justify-center text-on-surface-variant min-h-[44px] min-w-[64px] hover:bg-surface-container-highest rounded-lg active:scale-90 transition-all no-underline">
-    <span class="material-symbols-outlined">mic</span>
-    <span class="font-label-lg text-label-lg mt-1">Voz</span>
-  </a>
-  <a href="lectura.html" class="flex flex-col items-center justify-center text-on-surface-variant min-h-[44px] min-w-[64px] hover:bg-surface-container-highest rounded-lg active:scale-90 transition-all no-underline">
-    <span class="material-symbols-outlined">auto_stories</span>
-    <span class="font-label-lg text-label-lg mt-1">Lectura</span>
-  </a>
-  <a href="servicios.html" class="flex flex-col items-center justify-center text-on-surface-variant min-h-[44px] min-w-[64px] hover:bg-surface-container-highest rounded-lg active:scale-90 transition-all no-underline">
-    <span class="material-symbols-outlined">map</span>
-    <span class="font-label-lg text-label-lg mt-1">Mapa</span>
-  </a>
-  <a href="configuracion.html" class="flex flex-col items-center justify-center text-on-surface-variant min-h-[44px] min-w-[64px] hover:bg-surface-container-highest rounded-lg active:scale-90 transition-all no-underline">
-    <span class="material-symbols-outlined">settings</span>
-    <span class="font-label-lg text-label-lg mt-1">Ajustes</span>
-  </a>
+<nav class="unified-nav" aria-label="Navegación principal">
+  <div class="unified-nav-inner">
+    <a href="inicio.html" class="unified-nav-item" aria-label="Página de inicio">
+      <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+      <span>Inicio</span>
+    </a>
+    <a href="voz.html" class="unified-nav-item" aria-label="Asistente de voz">
+      <svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+      <span>Voz</span>
+    </a>
+    <a href="lectura.html" class="unified-nav-item" aria-label="Lector de textos">
+      <svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+      <span>Lectura</span>
+    </a>
+    <a href="servicios.html" class="unified-nav-item" aria-label="Mapa de servicios">
+      <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      <span>Mapa</span>
+    </a>
+    <a href="configuracion.html" class="unified-nav-item active" aria-label="Ajustes">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1-2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      <span>Ajustes</span>
+    </a>
+  </div>
 </nav>
+
+<div class="nav-spacer"></div>
+
+<script>
+function disabled_aplicarConfiguracion() {
+  try {
+    const config = JSON.parse(localStorage.getItem('simivoz_config'))
+    if (config) {
+      if (config.contrast) document.body.classList.add('high-contrast')
+      if (config.simplified) document.body.classList.add('modo-simplificado')
+      if (config.fontSize) {
+        document.body.classList.remove('big-font', 'massive-font')
+        if (config.fontSize === '1.125rem' || config.fontSize === '1.15rem' || config.fontSize === 'A+') {
+          document.body.classList.add('big-font')
+        } else if (config.fontSize === '1.25rem' || config.fontSize === '1.3rem' || config.fontSize === 'A++' || config.fontSize === 'A+++') {
+          document.body.classList.add('big-font', 'massive-font')
+        }
+      }
+    }
+  } catch (err) {
+    console.error(err)
+  }
+}
+
+function renderHistory() {
+  const container = document.getElementById('history-container')
+  const clearBtn = document.getElementById('clear-history-btn')
+  
+  let historial = []
+  try {
+    historial = JSON.parse(localStorage.getItem('simivoz_historial') || '[]')
+  } catch (e) {
+    historial = []
+  }
+
+  if (historial.length === 0) {
+    container.innerHTML = `
+      <div class="empty-state glass-card">
+        <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="var(--text-secondary)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v4l3 3"/><circle cx="12" cy="12" r="10"/></svg>
+        <p>No tienes actividad registrada aún.</p>
+      </div>
+    `
+    clearBtn.style.display = 'none'
+    return
+  }
+
+  clearBtn.style.display = 'flex'
+  container.innerHTML = ''
+  
+  historial.forEach(item => {
+    // Al hacer clic, cargamos en el reproductor de audio directamente
+    const link = document.createElement('a')
+    link.href = 'lectura.html' // redirigir a lectura para editar o procesar
+    link.className = 'history-item glass-card'
+    link.setAttribute('aria-label', `Texto ${item.titulo} procesado el ${item.fecha}`)
+    link.innerHTML = `
+      <div class="history-left">
+        <div class="history-icon-circle">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+        </div>
+        <div class="history-info">
+          <span class="item-title">${item.titulo}</span>
+          <span class="item-meta">Texto procesado</span>
+        </div>
+      </div>
+      <span class="history-date">${item.fecha}</span>
+    `
+    container.appendChild(link)
+  })
+}
+
+function clearHistory() {
+  if (window.navigator.vibrate) window.navigator.vibrate(50)
+  if (confirm('¿Deseas eliminar todo tu historial de lecturas recientes?')) {
+    localStorage.removeItem('simivoz_historial')
+    
+    window.speechSynthesis.cancel()
+    var msg = new SpeechSynthesisUtterance('Historial borrado')
+    msg.lang = 'es-PE'
+    window.speechSynthesis.speak(msg)
+
+    renderHistory()
+  }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  aplicarConfiguracion()
+  renderHistory()
+})
+
+document.querySelectorAll('button, a').forEach(function(el) {
+  el.addEventListener('click', function() {
+    if (window.navigator.vibrate) window.navigator.vibrate(50)
+  })
+})
+</script>
 </body>
 </html>

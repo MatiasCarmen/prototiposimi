@@ -1,9 +1,69 @@
 :root {
-  --bg: #FFFFFF;
-  --text: #121212;
-  --primary: #008744;
-  --on-primary: #FFFFFF;
-  --surface: #F5F5F5;
-  --outline: #767676;
-  --touch-min: 44px;
+  /* === TEMA BLANCO Y VERDE === */
+
+  /* Fondo principal blanco limpio */
+  --bg: #f4faf6;
+
+  /* Superficies de tarjetas blancas translúcidas */
+  --surface: rgba(255, 255, 255, 0.82);
+  --surface-solid: #ffffff;
+  --surface-border: rgba(0, 168, 84, 0.18);
+  --surface-container-low: #eef7f1;
+  --surface-container-high: #e0f2e8;
+
+  /* Acento Verde Marca */
+  --primary: #00a854;          /* Verde vibrante principal */
+  --primary-container: #00c462;
+  --primary-glow: rgba(0, 168, 84, 0.22);
+  --on-primary: #ffffff;       /* Texto sobre verde: blanco */
+  --on-primary-container: #002611;
+
+  /* Tipografía oscura sobre fondo blanco */
+  --text: #0d2018;             /* Casi negro verdoso */
+  --text-secondary: #3d6b50;   /* Verde oscuro secundario */
+  --outline: #b2d8c0;          /* Borde verde claro */
+  --outline-variant: #d4eddc;
+
+  /* Helpers */
+  --error: #c0392b;
+  --error-bg: rgba(192, 57, 43, 0.08);
+  --on-error: #ffffff;
+
+  /* Accesibilidad */
+  --touch-min: 48px;
+  --font-base: 'Inter', sans-serif;
+  --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ================================================
+   MODO ALTO CONTRASTE — Fondo negro, verde brillante
+   (exactamente lo que tenías antes como tema normal)
+   ================================================ */
+body.high-contrast {
+  --bg: #0a0d0a;
+  --surface: rgba(16, 22, 17, 0.85);
+  --surface-solid: #111812;
+  --surface-border: rgba(94, 255, 145, 0.18);
+  --surface-container-low: #0f1410;
+  --surface-container-high: #19221a;
+  --primary: #5eff91;
+  --primary-container: #00e676;
+  --primary-glow: rgba(94, 255, 145, 0.25);
+  --on-primary: #021a08;
+  --on-primary-container: #003316;
+  --text: #e8f5ec;
+  --text-secondary: #a0bca7;
+  --outline: #2d4233;
+  --outline-variant: #1e2d23;
+  --error: #ffb4ab;
+  --error-bg: rgba(255, 180, 171, 0.1);
+  --on-error: #690005;
+}
+
+/* Escalas de fuente accesibles (aplicadas al html para escalar rems) */
+html.big-font {
+  font-size: 110%; /* Escala rem un 10% más */
+}
+html.massive-font {
+  font-size: 125%; /* Escala rem un 25% más */
 }
