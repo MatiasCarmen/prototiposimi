@@ -258,6 +258,43 @@ main {
   padding: 8px 8px 0 0 !important;
 }
 
+.popup-detail-btn {
+  width: 100%;
+  margin-top: 0.5rem;
+  border: none;
+  border-radius: 0.55rem;
+  background: var(--primary);
+  color: var(--on-primary);
+  font-family: var(--font-base);
+  font-weight: 800;
+  padding: 0.45rem 0.6rem;
+  cursor: pointer;
+}
+
+.toast-demo {
+  position: fixed;
+  left: 50%;
+  bottom: 7rem;
+  transform: translateX(-50%);
+  width: calc(100% - 2.5rem);
+  max-width: 420px;
+  padding: 0.9rem 1rem;
+  border-radius: 0.85rem;
+  background: var(--surface-solid);
+  border: 1px solid var(--surface-border);
+  box-shadow: 0 8px 24px rgba(0, 100, 50, 0.16);
+  color: var(--text);
+  font-weight: 800;
+  text-align: center;
+  z-index: 2000;
+}
+
+.toast-demo.error {
+  border-color: var(--error);
+  color: var(--error);
+  background: var(--error-bg);
+}
+
 /* Simplify overrides */
 body.modo-simplificado .category-list {
   grid-template-columns: 1fr;
@@ -395,20 +432,20 @@ var defaultLng = -77.028;
 
 var serviciosData = {
   farmacias: [
-    { name: "Farmacia Inkafarma Accesible", lat: -12.121, lng: -77.029, desc: "Farmacia con rampa de acceso antideslizante y atención con lenguaje de señas básico.", dist: "150 metros" },
-    { name: "Farmacia Mifarma - Ingreso Nivelado", lat: -12.124, lng: -77.027, desc: "Ingreso sin escalones, pasadizos amplios y señalización visual de alta visibilidad.", dist: "350 metros" }
+    { id: 1, name: "Farmacia Inkafarma Accesible", address: "Av. Constitución 124, Miraflores", category: "FARMACIA", phone: "+51 1 234 5678", lat: -12.121, lng: -77.029, desc: "Farmacia con rampa de acceso antideslizante y atención con lenguaje de señas básico.", dist: "150 metros" },
+    { id: 2, name: "Farmacia Mifarma - Ingreso Nivelado", address: "Jr. Unión 456, Miraflores", category: "FARMACIA", phone: "+51 1 234 5679", lat: -12.124, lng: -77.027, desc: "Ingreso sin escalones, pasadizos amplios y señalización visual de alta visibilidad.", dist: "350 metros" }
   ],
   hospitales: [
-    { name: "Clínica Delgado - Centro de Urgencias", lat: -12.119, lng: -77.028, desc: "Hospital con accesibilidad universal completa, ascensores hablados y guías podotáctiles en el suelo.", dist: "450 metros" },
-    { name: "Hospital de Emergencias Casimiro Ulloa", lat: -12.126, lng: -77.025, desc: "Rampas reglamentarias, personal capacitado y estacionamiento exclusivo para vehículos autorizados de personas con discapacidad.", dist: "600 metros" }
+    { id: 3, name: "Clínica Delgado - Centro de Urgencias", address: "Av. Angamos Oeste 120, Miraflores", category: "HOSPITAL", phone: "+51 1 234 5680", lat: -12.119, lng: -77.028, desc: "Hospital con accesibilidad universal completa, ascensores hablados y guías podotáctiles en el suelo.", dist: "450 metros" },
+    { id: 4, name: "Hospital de Emergencias Casimiro Ulloa", address: "Av. República de Panamá 6355, Miraflores", category: "HOSPITAL", phone: "+51 1 234 5681", lat: -12.126, lng: -77.025, desc: "Rampas reglamentarias, personal capacitado y estacionamiento exclusivo para vehículos autorizados de personas con discapacidad.", dist: "600 metros" }
   ],
   supermercados: [
-    { name: "Supermercado Wong - Accesibilidad Integral", lat: -12.122, lng: -77.031, desc: "Carritos de compra acoplables a sillas de ruedas, personal de asistencia preferencial.", dist: "300 metros" },
-    { name: "Supermercado Metro Larco", lat: -12.125, lng: -77.030, desc: "Entrada a nivel de vereda, cajas preferenciales con altura adaptada y señalización accesible.", dist: "500 metros" }
+    { id: 5, name: "Supermercado Wong - Accesibilidad Integral", address: "Av. Santa Cruz 771, Miraflores", category: "SUPERMERCADO", phone: "+51 1 234 5682", lat: -12.122, lng: -77.031, desc: "Carritos de compra acoplables a sillas de ruedas, personal de asistencia preferencial.", dist: "300 metros" },
+    { id: 6, name: "Supermercado Metro Larco", address: "Av. Larco 1080, Miraflores", category: "SUPERMERCADO", phone: "+51 1 234 5683", lat: -12.125, lng: -77.030, desc: "Entrada a nivel de vereda, cajas preferenciales con altura adaptada y señalización accesible.", dist: "500 metros" }
   ],
   transporte: [
-    { name: "Estación Metropolitano Benavides", lat: -12.123, lng: -77.026, desc: "Estación de tránsito con ascensores funcionales, puertas de embarque niveladas con los buses y anuncios por voz.", dist: "200 metros" },
-    { name: "Paradero Larco Táctil", lat: -12.121, lng: -77.032, desc: "Paradero adaptado con baldosas de advertencia e información táctil y audible mediante código QR.", dist: "400 metros" }
+    { id: 7, name: "Estación Metropolitano Benavides", address: "Av. Benavides con Vía Expresa", category: "TRANSPORTE", phone: "+51 1 234 5684", lat: -12.123, lng: -77.026, desc: "Estación de tránsito con ascensores funcionales, puertas de embarque niveladas con los buses y anuncios por voz.", dist: "200 metros" },
+    { id: 8, name: "Paradero Larco Táctil", address: "Av. Larco cuadra 8, Miraflores", category: "TRANSPORTE", phone: "+51 1 234 5685", lat: -12.121, lng: -77.032, desc: "Paradero adaptado con baldosas de advertencia e información táctil y audible mediante código QR.", dist: "400 metros" }
   ]
 };
 
@@ -442,6 +479,12 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function initMap() {
+  if (typeof L === 'undefined') {
+    document.getElementById('map').innerHTML = '<div style="padding:1rem;color:var(--text);font-weight:800;">No se pudo cargar el mapa. Revisa tu conexión e intenta nuevamente.</div>'
+    showToast('No se pudo cargar Leaflet para el mapa', true)
+    return
+  }
+
   // Inicializar Leaflet map
   map = L.map('map', {
     zoomControl: false
@@ -463,6 +506,11 @@ function initMap() {
 }
 
 function cargarMarcadores(categoria) {
+  if (!markersGroup || !map) {
+    showToast('El mapa todavía no está disponible', true)
+    return
+  }
+
   markersGroup.clearLayers();
   currentCategory = categoria;
   
@@ -492,6 +540,7 @@ function cargarMarcadores(categoria) {
         <h4 style="color: var(--primary); font-weight:800; font-size: 0.95rem; margin-bottom:0.25rem;">${item.name}</h4>
         <p style="font-size:0.75rem; color: var(--text-secondary); margin-bottom:0.4rem; line-height: 1.3;">${item.desc}</p>
         <span style="font-size:0.75rem; font-weight:bold; color: var(--primary);">A: ${item.dist}</span>
+        <button class="popup-detail-btn" onclick="location.href='detalle-servicio.html?id=${item.id}'">VER DETALLE</button>
       </div>
     `;
     
@@ -523,6 +572,10 @@ function cargarMarcadores(categoria) {
 
 function recenterMap() {
   if (window.navigator.vibrate) window.navigator.vibrate(50);
+  if (!map) {
+    showToast('El mapa todavía no está disponible', true)
+    return
+  }
   map.setView([defaultLat, defaultLng], 15);
   
   window.speechSynthesis.cancel();
@@ -564,11 +617,8 @@ function iniciarBusquedaVoz() {
   
   voiceBtn.classList.add('listening')
   searchInput.placeholder = 'Escuchando tu voz...'
-
-  window.speechSynthesis.cancel();
-  var msg = new SpeechSynthesisUtterance('Di el tipo de servicio que deseas buscar')
-  msg.lang = 'es-PE'
-  window.speechSynthesis.speak(msg)
+  window.speechSynthesis.cancel()
+  showToast('Escuchando búsqueda')
 
   searchRecognition.onresult = function(event) {
     var text = event.results[0][0].transcript.toLowerCase().trim();
@@ -580,7 +630,7 @@ function iniciarBusquedaVoz() {
     window.speechSynthesis.speak(confirm)
     
     // Filtrar marcadores automáticamente basado en la coincidencia del término
-    if (text.includes('farma') || text.includes('medic') || text.includes('botica')) {
+    if (text.includes('farma') || text.includes('botica')) {
       cargarMarcadores('farmacias');
     } else if (text.includes('hospit') || text.includes('clin') || text.includes('medic') || text.includes('salud')) {
       cargarMarcadores('hospitales');
@@ -608,12 +658,17 @@ function iniciarBusquedaVoz() {
     detenerBusquedaVoz()
   }
 
-  searchRecognition.start()
+  try {
+    searchRecognition.start()
+  } catch (err) {
+    showToast('El micrófono ya se está iniciando', true)
+    detenerBusquedaVoz()
+  }
 }
 
 function detenerBusquedaVoz() {
   if (searchRecognition) {
-    searchRecognition.stop()
+    try { searchRecognition.stop() } catch (err) {}
     searchRecognition = null
   }
   isListening = false
@@ -631,6 +686,7 @@ function filtrarPorNombre(text) {
     if (coincidencias.length > 0) {
       // Cargar marcadores de esa categoría y enfocar
       cargarMarcadores(cat);
+      showToast('Mostrando coincidencias en ' + cat)
       encontrado = true;
       break;
     }
@@ -640,6 +696,7 @@ function filtrarPorNombre(text) {
     var msg = new SpeechSynthesisUtterance('No se encontraron servicios relacionados con ' + text);
     msg.lang = 'es-PE';
     window.speechSynthesis.speak(msg);
+    showToast('No encontramos servicios para "' + text + '"', true)
   }
 }
 
@@ -648,10 +705,26 @@ searchInput.addEventListener('keypress', function(e) {
   if (e.key === 'Enter') {
     var text = searchInput.value.toLowerCase().trim();
     if (text) {
+      localStorage.setItem('simivoz_busqueda', text)
       filtrarPorNombre(text);
     }
   }
 });
+
+function showToast(message, isError) {
+  var existing = document.querySelector('.toast-demo')
+  if (existing) existing.remove()
+
+  var toast = document.createElement('div')
+  toast.className = 'toast-demo' + (isError ? ' error' : '')
+  toast.textContent = message
+  toast.setAttribute('role', 'status')
+  document.body.appendChild(toast)
+
+  setTimeout(function() {
+    toast.remove()
+  }, 2600)
+}
 
 // Detener síntesis al salir de la página
 window.addEventListener('beforeunload', function() {

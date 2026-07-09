@@ -117,6 +117,30 @@ textarea::placeholder {
   height: 56px;
   margin-top: 0.5rem;
 }
+
+.toast-demo {
+  position: fixed;
+  left: 50%;
+  bottom: 7rem;
+  transform: translateX(-50%);
+  width: calc(100% - 2.5rem);
+  max-width: 420px;
+  padding: 0.9rem 1rem;
+  border-radius: 0.85rem;
+  background: var(--surface-solid);
+  border: 1px solid var(--surface-border);
+  box-shadow: 0 8px 24px rgba(0, 100, 50, 0.16);
+  color: var(--text);
+  font-weight: 800;
+  text-align: center;
+  z-index: 200;
+}
+
+.toast-demo.error {
+  border-color: var(--error);
+  color: var(--error);
+  background: var(--error-bg);
+}
 </style>
 <script src="js/app.js"></script>
 </head>
@@ -188,6 +212,21 @@ textarea::placeholder {
 <script>
 var selectedFileName = ''
 
+function showToast(message, isError) {
+  var existing = document.querySelector('.toast-demo')
+  if (existing) existing.remove()
+
+  var toast = document.createElement('div')
+  toast.className = 'toast-demo' + (isError ? ' error' : '')
+  toast.textContent = message
+  toast.setAttribute('role', 'status')
+  document.body.appendChild(toast)
+
+  setTimeout(function() {
+    toast.remove()
+  }, 2600)
+}
+
 function disabled_aplicarConfiguracion() {
   try {
     const config = JSON.parse(localStorage.getItem('simivoz_config'))
@@ -217,6 +256,22 @@ const dropzone = document.getElementById('dropzone')
 const fileInput = document.getElementById('file-upload')
 const textArea = document.getElementById('texto-contenido')
 
+document.addEventListener('DOMContentLoaded', function() {
+  try {
+    var draft = JSON.parse(localStorage.getItem('simivoz_historial_restore'))
+    if (!draft) return
+
+    selectedFileName = draft.titulo || 'Texto Restaurado'
+    textArea.value = draft.contenido || ''
+    dropzone.querySelector('p').textContent = 'Texto restaurado: ' + selectedFileName
+    dropzone.querySelector('span').textContent = 'Puedes editarlo o procesarlo de nuevo'
+    localStorage.removeItem('simivoz_historial_restore')
+    showToast('Texto del historial restaurado', false)
+  } catch (err) {
+    localStorage.removeItem('simivoz_historial_restore')
+  }
+})
+
 // Drag events
 ;['dragenter', 'dragover'].forEach(eventName => {
   dropzone.addEventListener(eventName, e => {
@@ -244,7 +299,7 @@ fileInput.addEventListener('change', e => {
 function handleFile(file) {
   if (window.navigator.vibrate) window.navigator.vibrate(50)
   if (!file.name.endsWith('.txt')) {
-    alert('Por favor, selecciona solo archivos de texto (.txt)')
+    showToast('Selecciona solo archivos de texto .txt', true)
     return
   }
   selectedFileName = file.name.replace('.txt', '')
@@ -263,7 +318,7 @@ function procesarLectura() {
     var msg = new SpeechSynthesisUtterance('Escribe o carga algún texto primero')
     msg.lang = 'es-PE'
     window.speechSynthesis.speak(msg)
-    alert('Ingresa texto o carga un archivo antes de procesar.')
+    showToast('Ingresa texto o carga un archivo antes de procesar', true)
     return
   }
 
@@ -272,17 +327,18 @@ function procesarLectura() {
   localStorage.setItem('simivoz_audio_contenido', content)
 
   // Registrar en el historial local para la demo
-  registrarHistorial(titulo)
+  registrarHistorial(titulo, content)
 
   location.href = 'audio-player.html'
 }
 
-function registrarHistorial(titulo) {
+function registrarHistorial(titulo, contenido) {
   try {
     let historial = JSON.parse(localStorage.getItem('simivoz_historial') || '[]')
     const item = {
       id: Date.now(),
       titulo: titulo,
+      contenido: contenido,
       fecha: new Date().toLocaleDateString('es-PE', { hour: '2-digit', minute: '2-digit' })
     }
     historial.unshift(item)

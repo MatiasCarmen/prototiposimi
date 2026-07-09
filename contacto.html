@@ -106,6 +106,24 @@ main {
   justify-content: center;
   color: var(--primary);
 }
+
+.toast-demo {
+  position: fixed;
+  left: 50%;
+  bottom: 7rem;
+  transform: translateX(-50%);
+  width: calc(100% - 2.5rem);
+  max-width: 420px;
+  padding: 0.9rem 1rem;
+  border-radius: 0.85rem;
+  background: var(--surface-solid);
+  border: 1px solid var(--surface-border);
+  box-shadow: 0 8px 24px rgba(0, 100, 50, 0.16);
+  color: var(--text);
+  font-weight: 800;
+  text-align: center;
+  z-index: 200;
+}
 </style>
 </head>
 <body class="haptic-press">
@@ -202,19 +220,57 @@ document.getElementById('contactForm').addEventListener('submit', function(e) {
   e.preventDefault();
   if (window.navigator.vibrate) window.navigator.vibrate(50);
   
+  var asunto = document.getElementById('asunto').value.trim();
+  var mensaje = document.getElementById('mensaje').value.trim();
   var btn = this.querySelector('button');
   btn.querySelector('span').textContent = 'ENVIANDO...';
+  btn.disabled = true;
   
   setTimeout(function() {
+    var mensajes = [];
+    try {
+      mensajes = JSON.parse(localStorage.getItem('simivoz_contacto_demo') || '[]');
+    } catch (err) {
+      mensajes = [];
+    }
+
+    mensajes.unshift({
+      asunto: asunto,
+      mensaje: mensaje,
+      fecha: new Date().toLocaleString('es-PE')
+    });
+    localStorage.setItem('simivoz_contacto_demo', JSON.stringify(mensajes.slice(0, 10)));
+
     window.speechSynthesis.cancel();
     var msg = new SpeechSynthesisUtterance('Mensaje enviado correctamente. Te contactaremos pronto.');
     msg.lang = 'es-PE';
     window.speechSynthesis.speak(msg);
-    
-    alert('Mensaje simulado enviado con éxito.');
-    history.back();
+
+    document.getElementById('contactForm').reset();
+    btn.querySelector('span').textContent = 'MENSAJE ENVIADO';
+    showToast('Mensaje demo guardado correctamente');
+
+    setTimeout(function() {
+      btn.querySelector('span').textContent = 'ENVIAR MENSAJE';
+      btn.disabled = false;
+    }, 1800);
   }, 1000);
 });
+
+function showToast(message) {
+  var existing = document.querySelector('.toast-demo');
+  if (existing) existing.remove();
+
+  var toast = document.createElement('div');
+  toast.className = 'toast-demo';
+  toast.textContent = message;
+  toast.setAttribute('role', 'status');
+  document.body.appendChild(toast);
+
+  setTimeout(function() {
+    toast.remove();
+  }, 2600);
+}
 
 document.querySelectorAll('button, a').forEach(function(el) {
   el.addEventListener('click', function() {

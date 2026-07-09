@@ -493,6 +493,16 @@ body.modo-simplificado .commands-list    { grid-template-columns: 1fr; }
         <div class="cmd-chip-text"><span class="cmd-chip-label">Ajustes</span><span class="cmd-chip-example">"ir a ajustes"</span></div>
       </button>
 
+      <button class="cmd-chip" data-cmd="ir a historial">
+        <div class="cmd-chip-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 3v6h6"/><path d="M12 7v5l3 2"/></svg></div>
+        <div class="cmd-chip-text"><span class="cmd-chip-label">Historial</span><span class="cmd-chip-example">"ir a historial"</span></div>
+      </button>
+
+      <button class="cmd-chip" data-cmd="silenciar voz">
+        <div class="cmd-chip-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4V5z"/><path d="m23 9-6 6"/><path d="m17 9 6 6"/></svg></div>
+        <div class="cmd-chip-text"><span class="cmd-chip-label">Voz</span><span class="cmd-chip-example">"silenciar voz"</span></div>
+      </button>
+
     </div>
   </div>
 </main>
@@ -528,7 +538,7 @@ body.modo-simplificado .commands-list    { grid-template-columns: 1fr; }
 /* ==========================================================
    SIMIVOZ – Asistente de Voz (voz.html) — v2.0
    Mejoras respecto a v1:
-   1. Auto-restart al cortar por silencio (no pierde el hilo)
+   1. Reconocimiento de una orden por toque para evitar bucles de escucha
    2. Visualizador de audio real con AudioContext + AnalyserNode
    3. Texto interino diferenciado del texto final
    4. Toast visual + TTS confirmación de comandos
@@ -536,14 +546,14 @@ body.modo-simplificado .commands-list    { grid-template-columns: 1fr; }
    6. Comandos clickables en las chips para demo/presentación
    7. Botón mute TTS sin romper el reconocimiento
    8. Manejo de errores específicos (no-speech, network, denied)
-   9. Fallback a lang es-CO si es-PE no está disponible
+   9. Idioma alineado a es-PE para el demo
   10. Limpieza correcta en beforeunload
    ========================================================== */
 
 // ——— Config ———
+var VOICE_LANG = 'es-PE';
 var TTS_ENABLED = true;
 var isListening = false;
-var shouldRestart = false;   // flag para auto-restart
 var recognition = null;
 var audioCtx = null;
 var analyser = null;
@@ -571,6 +581,24 @@ var rings            = [
   document.getElementById('ring-3')
 ];
 
+function setTtsEnabled(enabled, persist) {
+  TTS_ENABLED = Boolean(enabled);
+  if (!TTS_ENABLED && window.speechSynthesis) window.speechSynthesis.cancel();
+
+  iconTtsOn.style.display  = TTS_ENABLED ? 'block' : 'none';
+  iconTtsOff.style.display = TTS_ENABLED ? 'none'  : 'block';
+  btnTtsToggle.setAttribute('aria-label', TTS_ENABLED ? 'Silenciar voz del asistente' : 'Activar voz del asistente');
+  btnTtsToggle.title = TTS_ENABLED ? 'Silenciar asistente' : 'Activar asistente';
+
+  if (persist !== false) {
+    try {
+      var config = JSON.parse(localStorage.getItem('simivoz_config')) || {};
+      config.ttsEnabled = TTS_ENABLED;
+      localStorage.setItem('simivoz_config', JSON.stringify(config));
+    } catch(e) {}
+  }
+}
+
 // ——— Aplicar config de accesibilidad ———
 (function disabled_aplicarConfiguracion() {
   try {
@@ -579,9 +607,7 @@ var rings            = [
     if (config.contrast)   document.body.classList.add('high-contrast');
     if (config.simplified) document.body.classList.add('modo-simplificado');
     if (config.ttsEnabled === false) {
-      TTS_ENABLED = false;
-      iconTtsOn.style.display = 'none';
-      iconTtsOff.style.display = 'block';
+      setTtsEnabled(false, false);
     }
     if (config.fontSize) {
       document.documentElement.classList.remove('small-font', 'big-font', 'massive-font', 'ultra-font');
@@ -602,16 +628,7 @@ var rings            = [
 // ——— Botón mute TTS ———
 btnTtsToggle.addEventListener('click', function() {
   if (window.navigator.vibrate) window.navigator.vibrate(40);
-  TTS_ENABLED = !TTS_ENABLED;
-  window.speechSynthesis.cancel();
-  iconTtsOn.style.display  = TTS_ENABLED ? 'block' : 'none';
-  iconTtsOff.style.display = TTS_ENABLED ? 'none'  : 'block';
-  // Persistir preferencia
-  try {
-    var config = JSON.parse(localStorage.getItem('simivoz_config')) || {};
-    config.ttsEnabled = TTS_ENABLED;
-    localStorage.setItem('simivoz_config', JSON.stringify(config));
-  } catch(e) {}
+  setTtsEnabled(!TTS_ENABLED);
   showToast(TTS_ENABLED ? '🔊 Voz activada' : '🔇 Voz silenciada', false);
 });
 
@@ -631,8 +648,8 @@ function speak(text) {
   if (!TTS_ENABLED || !window.speechSynthesis) return;
   window.speechSynthesis.cancel();
   var u = new SpeechSynthesisUtterance(text);
-  u.lang = 'es-CO';
-  u.rate = 1.05;
+  u.lang = VOICE_LANG;
+  u.rate = 0.98;
   window.speechSynthesis.speak(u);
 }
 
@@ -752,24 +769,47 @@ function processCommand(text) {
   if (/^(detener|parar|para|stop|cancela|silencio)/.test(cmd)) {
     showToast('⏹ Asistente detenido');
     speak('Deteniendo');
-    shouldRestart = false;
-    recognition.stop();
+    if (recognition && isListening) {
+      try { recognition.stop(); } catch(e) {}
+    }
+    setListeningState(false);
     return true;
   }
 
-  // 2) Buscar servicio
+  // 2) Activar o silenciar la respuesta hablada
+  if (/^(silenciar voz|silencia voz|sin voz|mute|callate)/.test(cmd)) {
+    setTtsEnabled(false);
+    showToast('🔇 Voz silenciada');
+    return true;
+  }
+
+  if (/^(activar voz|activa voz|con voz|sonido|habla)/.test(cmd)) {
+    setTtsEnabled(true);
+    showToast('🔊 Voz activada');
+    speak('Voz activada');
+    return true;
+  }
+
+  // 3) Registro demo
+  if (/^(registrar|registrarme|registro|crear cuenta|crear usuario)/.test(cmd)) {
+    showToast('📝 Abriendo registro');
+    speak('Abriendo registro');
+    setTimeout(function() { location.href = 'registrarse.html'; }, 1200);
+    return true;
+  }
+
+  // 4) Buscar servicio
   var buscarMatch = cmd.match(/^(buscar|encuentra|donde hay|necesito|quiero|busca)\s+(.+)/);
   if (buscarMatch) {
     var termino = buscarMatch[2].trim();
     localStorage.setItem('simivoz_busqueda', termino);
     showToast('🔍 Buscando: ' + termino);
     speak('Buscando ' + termino);
-    shouldRestart = false;
     setTimeout(function() { location.href = 'resultados-busqueda.html'; }, 1600);
     return true;
   }
 
-  // 3) Navegar a sección
+  // 5) Navegar a sección
   var navMatch = cmd.match(/^(ir a|abrir|navegar a|abre|ve a|llévame a|llevame a)\s+(.+)/);
   if (navMatch) {
     var destino = navMatch[2].trim();
@@ -780,7 +820,6 @@ function processCommand(text) {
     if (url) {
       showToast('📍 Abriendo: ' + destino);
       speak('Abriendo ' + destino);
-      shouldRestart = false;
       setTimeout(function() { location.href = url; }, 1400);
     } else {
       showToast('❓ Destino no encontrado: ' + destino, true);
@@ -789,16 +828,15 @@ function processCommand(text) {
     return true;
   }
 
-  // 4) Leer / abrir lector
+  // 6) Leer / abrir lector
   if (/^(leer|lee|lector|documento|libro|texto)/.test(cmd)) {
     showToast('📖 Abriendo lector');
     speak('Abriendo el lector inteligente');
-    shouldRestart = false;
     setTimeout(function() { location.href = 'lectura.html'; }, 1400);
     return true;
   }
 
-  // 5) Limpiar transcripción
+  // 7) Limpiar transcripción
   if (/^(limpiar|borrar|borra|limpia)/.test(cmd)) {
     transcriptBox.value = '';
     showToast('🗑 Transcripción limpiada');
@@ -806,9 +844,9 @@ function processCommand(text) {
     return true;
   }
 
-  // 6) Repetir / ayuda
+  // 8) Repetir / ayuda
   if (/^(ayuda|comandos|que puedo decir|que puedo hacer|que digo)/.test(cmd)) {
-    speak('Puedes decir: buscar farmacia, ir a inicio, abrir mapa, leer documento, ir a ajustes o detener.');
+    speak('Puedes decir: buscar farmacia, abrir mapa, leer documento, ir a historial, silenciar voz o detener.');
     showToast('💬 Comandos leídos');
     return true;
   }
@@ -821,8 +859,8 @@ if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
 
   var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
   recognition = new SR();
-  recognition.lang = 'es-CO';  // mejor soporte que es-PE en Chrome
-  recognition.continuous = true;
+  recognition.lang = VOICE_LANG;
+  recognition.continuous = false;
   recognition.interimResults = true;
   recognition.maxAlternatives = 3;
 
@@ -832,7 +870,7 @@ if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
     voiceHint.textContent = 'Di un comando o habla libremente';
     startVisualizer();
     if (window.navigator.vibrate) window.navigator.vibrate([40, 30, 40]);
-    speak('Te escucho');
+    showToast('Escuchando comando');
   };
 
   recognition.onresult = function(event) {
@@ -856,45 +894,38 @@ if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
       transcriptBox.value += (transcriptBox.value ? ' ' : '') + final_.trim();
       transcriptBox.scrollTop = transcriptBox.scrollHeight;
 
+      if (recognition && isListening) {
+        try { recognition.stop(); } catch(e) {}
+      }
+
       // Intentar procesar como comando
       var handled = processCommand(final_);
       if (!handled) {
-        // No fue un comando: confirmar que se oyó
-        voiceStatus.textContent = 'Recibido ✓';
-        setTimeout(function() {
-          if (isListening) voiceStatus.textContent = 'Escuchando…';
-        }, 1200);
+        voiceStatus.textContent = 'Comando no reconocido';
+        voiceHint.textContent = 'Prueba con "buscar farmacia", "abrir mapa" o "leer documento".';
+        showToast('No reconocí ese comando', true);
+        speak('No reconocí ese comando');
       }
     }
   };
 
   recognition.onend = function() {
-    // Auto-restart si el usuario no pidió detener explícitamente
-    if (shouldRestart && isListening) {
-      try { recognition.start(); } catch(e) {}
-      return;
-    }
     setListeningState(false);
     voiceStatus.textContent = 'Listo para escuchar';
     voiceHint.textContent = 'Presiona el micrófono o di un comando';
-    // No anunciamos "desactivado" salvo que sea un stop explícito
   };
 
   recognition.onerror = function(event) {
     var msg = '';
     switch(event.error) {
       case 'no-speech':
-        msg = 'No detecté voz. ¿Sigues ahí?';
-        // Silencio → reiniciar automáticamente sin molestar al usuario
-        if (shouldRestart) { try { recognition.start(); } catch(e){} return; }
+        msg = 'No detecté voz. Toca el micrófono e intenta de nuevo.';
         break;
       case 'audio-capture':
         msg = 'Sin micrófono detectado';
-        shouldRestart = false;
         break;
       case 'not-allowed':
         msg = 'Permiso de micrófono denegado';
-        shouldRestart = false;
         noSupportBanner.style.display = 'block';
         noSupportBanner.textContent = '🔒 Sin permiso de micrófono. Haz clic en el candado del navegador para permitirlo.';
         break;
@@ -906,10 +937,8 @@ if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
     }
     voiceStatus.textContent = msg;
     showToast('⚠️ ' + msg, true);
-    if (!shouldRestart) {
-      setListeningState(false);
-      voiceHint.textContent = 'Presiona el micrófono para reintentar';
-    }
+    setListeningState(false);
+    voiceHint.textContent = 'Presiona el micrófono para reintentar';
   };
 
 } else {
@@ -926,13 +955,12 @@ micBtn.addEventListener('click', function() {
   if (!recognition) return;
 
   if (isListening) {
-    shouldRestart = false;
-    recognition.stop();
+    try { recognition.stop(); } catch(e) {}
     speak('Asistente desactivado');
   } else {
-    shouldRestart = true;
+    if (window.speechSynthesis) window.speechSynthesis.cancel();
     try { recognition.start(); } catch(e) {
-      // Si ya estaba arrancando, ignorar
+      showToast('El micrófono ya se está iniciando', true);
     }
   }
 });
@@ -967,7 +995,6 @@ document.querySelectorAll('button, a').forEach(function(el) {
 
 // ——— Limpieza al salir ———
 window.addEventListener('beforeunload', function() {
-  shouldRestart = false;
   window.speechSynthesis.cancel();
   stopVisualizer();
   if (recognition && isListening) {

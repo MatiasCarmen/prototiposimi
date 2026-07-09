@@ -321,6 +321,24 @@ footer {
   color: var(--text-secondary);
   opacity: 0.6;
 }
+
+.toast-demo {
+  position: fixed;
+  left: 50%;
+  bottom: 2rem;
+  transform: translateX(-50%);
+  width: calc(100% - 2.5rem);
+  max-width: 420px;
+  padding: 0.9rem 1rem;
+  border-radius: 0.85rem;
+  background: var(--error-bg);
+  border: 1px solid var(--error);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.16);
+  color: var(--error);
+  font-weight: 800;
+  text-align: center;
+  z-index: 1200;
+}
 </style>
 <script src="js/app.js"></script>
 </head>
@@ -407,6 +425,21 @@ footer {
 var isListening = false
 var recognition = null
 
+function showToast(message) {
+  var existing = document.querySelector('.toast-demo')
+  if (existing) existing.remove()
+
+  var toast = document.createElement('div')
+  toast.className = 'toast-demo'
+  toast.textContent = message
+  toast.setAttribute('role', 'status')
+  document.body.appendChild(toast)
+
+  setTimeout(function() {
+    toast.remove()
+  }, 2600)
+}
+
 function disabled_aplicarConfiguracion() {
   try {
     const logeado = localStorage.getItem('simivoz_usuario_logeado')
@@ -458,6 +491,26 @@ function disabled_aplicarConfiguracion() {
 function handleLogin(e) {
   e.preventDefault()
   if (window.navigator.vibrate) window.navigator.vibrate(50)
+
+  var email = document.getElementById('login-email').value.trim()
+  var password = document.getElementById('login-password').value
+  var usuarioRegistrado = null
+
+  try {
+    usuarioRegistrado = JSON.parse(localStorage.getItem('simivoz_usuario_registrado'))
+  } catch (err) {
+    usuarioRegistrado = null
+  }
+
+  if (usuarioRegistrado && (usuarioRegistrado.email !== email || usuarioRegistrado.password !== password)) {
+    window.speechSynthesis.cancel()
+    var msgError = new SpeechSynthesisUtterance('Correo o contraseña incorrectos')
+    msgError.lang = 'es-PE'
+    window.speechSynthesis.speak(msgError)
+    showToast('Correo o contraseña incorrectos')
+    return
+  }
+
   localStorage.setItem('simivoz_usuario_logeado', 'true')
   
   const tutorial = localStorage.getItem('simivoz_tutorial_completado')
@@ -491,18 +544,21 @@ function iniciarSpeechRecognition() {
   var SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition
   recognition = new SpeechRecognition()
   recognition.lang = 'es-PE'
-  recognition.continuous = true
+  recognition.continuous = false
   recognition.interimResults = false
 
   recognition.onstart = function() {
-    var msg = new SpeechSynthesisUtterance('Escuchando comandos de inicio de sesión')
-    msg.lang = 'es-PE'
-    window.speechSynthesis.speak(msg)
+    window.speechSynthesis.cancel()
+    document.getElementById('voice-feedback-title').textContent = 'Escuchando'
+    document.getElementById('voice-feedback-desc').textContent = 'Di "iniciar sesión", "crear cuenta" o "cancelar".'
   }
 
   recognition.onresult = function(event) {
     var resultText = event.results[event.results.length - 1][0].transcript.toLowerCase().trim()
     console.log('Comando captado:', resultText)
+    if (recognition) {
+      try { recognition.stop() } catch (err) {}
+    }
     
     if (resultText.includes('iniciar') || resultText.includes('entrar') || resultText.includes('ingresar') || resultText.includes('entrate')) {
       var msg = new SpeechSynthesisUtterance('Iniciando sesión')
@@ -524,14 +580,30 @@ function iniciarSpeechRecognition() {
       setTimeout(function() { location.href = 'registrarse.html' }, 1000)
     } else if (resultText.includes('cancelar') || resultText.includes('salir') || resultText.includes('volver')) {
       toggleVoice()
+    } else {
+      document.getElementById('voice-feedback-title').textContent = 'No reconocido'
+      document.getElementById('voice-feedback-desc').textContent = 'Prueba con "iniciar sesión" o "crear cuenta".'
+      showToast('No reconocí ese comando')
     }
   }
 
   recognition.onerror = function(e) {
     console.error('Error de voz:', e)
+    document.getElementById('voice-feedback-title').textContent = 'Error de micrófono'
+    document.getElementById('voice-feedback-desc').textContent = 'Toca cancelar e intenta de nuevo.'
+    showToast('No se pudo usar el micrófono')
   }
 
-  recognition.start()
+  recognition.onend = function() {
+    isListening = false
+  }
+
+  window.speechSynthesis.cancel()
+  try {
+    recognition.start()
+  } catch (err) {
+    showToast('El micrófono ya se está iniciando')
+  }
 }
 
 function detenerSpeechRecognition() {

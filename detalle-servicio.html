@@ -198,6 +198,24 @@ main {
   transform: scale(0.97);
 }
 
+.toast-demo {
+  position: fixed;
+  left: 50%;
+  bottom: 1.5rem;
+  transform: translateX(-50%);
+  width: calc(100% - 2.5rem);
+  max-width: 420px;
+  padding: 0.9rem 1rem;
+  border-radius: 0.85rem;
+  background: var(--surface-solid);
+  border: 1px solid var(--surface-border);
+  box-shadow: 0 8px 24px rgba(0, 100, 50, 0.16);
+  color: var(--text);
+  font-weight: 800;
+  text-align: center;
+  z-index: 200;
+}
+
 .btn-detail-back {
   width: 100%;
   height: 52px;
@@ -341,9 +359,14 @@ body.modo-simplificado .btn-detail-action, body.modo-simplificado .btn-detail-se
 
 <script>
 var servicios = [
-  { id: 1, nombre: 'Farmacia Central "San José"', direccion: 'Av. Constitución 124, Miraflores, Lima', categoria: 'FARMACIA', lat: -12.121, lng: -77.029, telefono: '+51 1 234 5678', desc: 'Establecimiento adaptado con rampas para sillas de ruedas y personal entrenado en lenguaje de señas.' },
-  { id: 2, nombre: 'Farmacia Central 24h', direccion: 'Jr. Unión 456, Miraflores, Lima', categoria: 'FARMACIA', lat: -12.124, lng: -77.027, telefono: '+51 1 234 5679', desc: 'Entrada accesible nivelada a la vereda, pasillos amplios y dispensación rápida de medicamentos.' },
-  { id: 3, nombre: 'Farmacias de Guardia Sur', direccion: 'Av. Larco 789, Miraflores, Lima', categoria: 'FARMACIA', lat: -12.126, lng: -77.030, telefono: '+51 1 234 5680', desc: 'Entrada accesible con rampa mecánica asistida y señalización podotáctil.' }
+  { id: 1, nombre: 'Farmacia Inkafarma Accesible', direccion: 'Av. Constitución 124, Miraflores, Lima', categoria: 'FARMACIA', lat: -12.121, lng: -77.029, telefono: '+51 1 234 5678', desc: 'Farmacia con rampa de acceso antideslizante y atención con lenguaje de señas básico.' },
+  { id: 2, nombre: 'Farmacia Mifarma - Ingreso Nivelado', direccion: 'Jr. Unión 456, Miraflores, Lima', categoria: 'FARMACIA', lat: -12.124, lng: -77.027, telefono: '+51 1 234 5679', desc: 'Ingreso sin escalones, pasadizos amplios y señalización visual de alta visibilidad.' },
+  { id: 3, nombre: 'Clínica Delgado - Centro de Urgencias', direccion: 'Av. Angamos Oeste 120, Miraflores, Lima', categoria: 'HOSPITAL', lat: -12.119, lng: -77.028, telefono: '+51 1 234 5680', desc: 'Hospital con accesibilidad universal completa, ascensores hablados y guías podotáctiles en el suelo.' },
+  { id: 4, nombre: 'Hospital de Emergencias Casimiro Ulloa', direccion: 'Av. República de Panamá 6355, Miraflores, Lima', categoria: 'HOSPITAL', lat: -12.126, lng: -77.025, telefono: '+51 1 234 5681', desc: 'Rampas reglamentarias, personal capacitado y estacionamiento exclusivo para vehículos autorizados de personas con discapacidad.' },
+  { id: 5, nombre: 'Supermercado Wong - Accesibilidad Integral', direccion: 'Av. Santa Cruz 771, Miraflores, Lima', categoria: 'SUPERMERCADO', lat: -12.122, lng: -77.031, telefono: '+51 1 234 5682', desc: 'Carritos de compra acoplables a sillas de ruedas, personal de asistencia preferencial.' },
+  { id: 6, nombre: 'Supermercado Metro Larco', direccion: 'Av. Larco 1080, Miraflores, Lima', categoria: 'SUPERMERCADO', lat: -12.125, lng: -77.030, telefono: '+51 1 234 5683', desc: 'Entrada a nivel de vereda, cajas preferenciales con altura adaptada y señalización accesible.' },
+  { id: 7, nombre: 'Estación Metropolitano Benavides', direccion: 'Av. Benavides con Vía Expresa, Miraflores, Lima', categoria: 'TRANSPORTE', lat: -12.123, lng: -77.026, telefono: '+51 1 234 5684', desc: 'Estación de tránsito con ascensores funcionales, puertas de embarque niveladas con los buses y anuncios por voz.' },
+  { id: 8, nombre: 'Paradero Larco Táctil', direccion: 'Av. Larco cuadra 8, Miraflores, Lima', categoria: 'TRANSPORTE', lat: -12.121, lng: -77.032, telefono: '+51 1 234 5685', desc: 'Paradero adaptado con baldosas de advertencia e información táctil y audible mediante código QR.' }
 ]
 
 var params = new URLSearchParams(window.location.search)
@@ -385,6 +408,12 @@ function disabled_aplicarConfiguracion() {
 // old config listener disabled
 
 function initMap(lat, lng) {
+  if (typeof L === 'undefined') {
+    document.getElementById('map').innerHTML = '<div style="padding:1rem;color:var(--text);font-weight:800;">No se pudo cargar el mapa. Revisa tu conexión e intenta nuevamente.</div>'
+    showToast('No se pudo cargar Leaflet para el mapa')
+    return
+  }
+
   // Inicializar mapa Leaflet centrado en el usuario
   map = L.map('map', {
     zoomControl: false
@@ -454,17 +483,20 @@ function calculateDistance(lat1, lon1, lat2, lon2) {
 
 function getDirections() {
   if (window.navigator.vibrate) window.navigator.vibrate(50)
-  if (serviceMarker) {
-    var latlng = serviceMarker.getLatLng()
-    window.speechSynthesis.cancel()
-    var msg = new SpeechSynthesisUtterance('Abriendo indicaciones de ruta hacia ' + servicio.nombre)
-    msg.lang = 'es-PE'
-    window.speechSynthesis.speak(msg)
-    
-    setTimeout(function() {
-      window.open('https://www.openstreetmap.org/directions?from=&to=' + latlng.lat + '%2C' + latlng.lng, '_blank')
-    }, 1200)
+  if (!serviceMarker) {
+    showToast('El mapa todavía no está disponible')
+    return
   }
+
+  var latlng = serviceMarker.getLatLng()
+  window.speechSynthesis.cancel()
+  var msg = new SpeechSynthesisUtterance('Abriendo indicaciones de ruta hacia ' + servicio.nombre)
+  msg.lang = 'es-PE'
+  window.speechSynthesis.speak(msg)
+  
+  setTimeout(function() {
+    window.open('https://www.openstreetmap.org/directions?from=&to=' + latlng.lat + '%2C' + latlng.lng, '_blank')
+  }, 1200)
 }
 
 function callService() {
@@ -473,7 +505,25 @@ function callService() {
   var msg = new SpeechSynthesisUtterance('Llamando a ' + servicio.nombre)
   msg.lang = 'es-PE'
   window.speechSynthesis.speak(msg)
-  alert('Llamando al número del local: ' + servicio.telefono + '...')
+  showToast('Abriendo llamada: ' + servicio.telefono)
+  setTimeout(function() {
+    window.location.href = 'tel:' + servicio.telefono.replace(/\s/g, '')
+  }, 700)
+}
+
+function showToast(message) {
+  var existing = document.querySelector('.toast-demo')
+  if (existing) existing.remove()
+
+  var toast = document.createElement('div')
+  toast.className = 'toast-demo'
+  toast.textContent = message
+  toast.setAttribute('role', 'status')
+  document.body.appendChild(toast)
+
+  setTimeout(function() {
+    toast.remove()
+  }, 2600)
 }
 
 // Geolocalización

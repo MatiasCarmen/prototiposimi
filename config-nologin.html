@@ -424,12 +424,17 @@ document.getElementById('save-btn').addEventListener('click', function() {
   btn.querySelector('span').textContent = 'CAMBIOS GUARDADOS'
   btn.classList.add('saved')
 
-  var settings = {
+  var previousSettings = {}
+  try {
+    previousSettings = JSON.parse(localStorage.getItem('simivoz_config')) || {}
+  } catch (e) {}
+
+  var settings = Object.assign({}, previousSettings, {
     fontSize: fontSizes[currentFontSizeIndex],
     contrast: contrastMode,
     simplified: simplifiedMode,
     speed: speedSlider.value
-  }
+  })
   localStorage.setItem('simivoz_config', JSON.stringify(settings))
 
   // Feedback auditivo real
@@ -439,26 +444,32 @@ document.getElementById('save-btn').addEventListener('click', function() {
   window.speechSynthesis.speak(msg)
 })
 
-document.getElementById('logout-btn').addEventListener('click', function() {
-  if (window.navigator.vibrate) window.navigator.vibrate([40, 50, 40])
-  localStorage.removeItem('simivoz_usuario_logeado')
-  localStorage.removeItem('simivoz_tutorial_completado')
-  
-  window.speechSynthesis.cancel()
-  var msg = new SpeechSynthesisUtterance('Sesión cerrada. Redirigiendo.')
-  msg.lang = 'es-PE'
-  window.speechSynthesis.speak(msg)
-  
-  setTimeout(function() {
-    window.location.replace('index.html')
-  }, 1500)
-})
+var logoutBtn = document.getElementById('logout-btn')
+if (logoutBtn) {
+  logoutBtn.addEventListener('click', function() {
+    if (window.navigator.vibrate) window.navigator.vibrate([40, 50, 40])
+    localStorage.removeItem('simivoz_usuario_logeado')
+    localStorage.removeItem('simivoz_tutorial_completado')
+    
+    window.speechSynthesis.cancel()
+    var msg = new SpeechSynthesisUtterance('Sesión cerrada. Redirigiendo.')
+    msg.lang = 'es-PE'
+    window.speechSynthesis.speak(msg)
+    
+    setTimeout(function() {
+      window.location.replace('index.html')
+    }, 1500)
+  })
+}
 
 // Cargar voz del asistente desde local storage si está definida
 var savedVoice = localStorage.getItem('simivoz_voice')
 if (savedVoice) {
   var labels = { femenina: 'Femenina (Clara)', masculina: 'Masculina (Grave)', neutra: 'Neutra' }
-  document.getElementById('voz-seleccionada').textContent = labels[savedVoice] || 'Femenina (Clara)'
+  var selectedVoiceLabel = document.getElementById('voz-seleccionada')
+  if (selectedVoiceLabel) {
+    selectedVoiceLabel.textContent = labels[savedVoice] || 'Femenina (Clara)'
+  }
 }
 
 document.querySelectorAll('button, a, input[type="range"]').forEach(function(el) {

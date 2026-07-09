@@ -151,6 +151,57 @@ main {
   transform: scale(0.97);
 }
 
+.history-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.history-action-btn {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1px solid var(--outline);
+  background: var(--surface-container-high);
+  color: var(--primary);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+}
+
+.history-action-btn:hover {
+  background: var(--primary);
+  color: var(--on-primary);
+  border-color: var(--primary);
+}
+
+.toast-demo {
+  position: fixed;
+  left: 50%;
+  bottom: 7rem;
+  transform: translateX(-50%);
+  width: calc(100% - 2.5rem);
+  max-width: 420px;
+  padding: 0.9rem 1rem;
+  border-radius: 0.85rem;
+  background: var(--surface-solid);
+  border: 1px solid var(--surface-border);
+  box-shadow: 0 8px 24px rgba(0, 100, 50, 0.16);
+  color: var(--text);
+  font-weight: 800;
+  text-align: center;
+  z-index: 200;
+}
+
+.toast-demo.error {
+  border-color: var(--error);
+  color: var(--error);
+  background: var(--error-bg);
+}
+
 /* Modo simplificado updates */
 body.modo-simplificado .history-item {
   padding: 1.25rem 1.5rem;
@@ -274,39 +325,79 @@ function renderHistory() {
   container.innerHTML = ''
   
   historial.forEach(item => {
-    // Al hacer clic, cargamos en el reproductor de audio directamente
-    const link = document.createElement('a')
-    link.href = 'lectura.html' // redirigir a lectura para editar o procesar
-    link.className = 'history-item glass-card'
-    link.setAttribute('aria-label', `Texto ${item.titulo} procesado el ${item.fecha}`)
-    link.innerHTML = `
+    const row = document.createElement('div')
+    row.className = 'history-item glass-card'
+    row.setAttribute('role', 'group')
+    row.setAttribute('aria-label', `Texto ${item.titulo} procesado el ${item.fecha}`)
+    row.innerHTML = `
       <div class="history-left">
         <div class="history-icon-circle">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
         </div>
         <div class="history-info">
           <span class="item-title">${item.titulo}</span>
-          <span class="item-meta">Texto procesado</span>
+          <span class="item-meta">${item.contenido ? 'Listo para reabrir' : 'Registro antiguo sin contenido'}</span>
         </div>
       </div>
-      <span class="history-date">${item.fecha}</span>
+      <div class="history-actions">
+        <span class="history-date">${item.fecha}</span>
+        <button class="history-action-btn" type="button" aria-label="Escuchar ${item.titulo}">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        </button>
+      </div>
     `
-    container.appendChild(link)
+    row.querySelector('button').addEventListener('click', function() {
+      openHistoryItem(item)
+    })
+    row.addEventListener('click', function(e) {
+      if (e.target.closest('button')) return
+      openHistoryItem(item)
+    })
+    container.appendChild(row)
   })
 }
 
 function clearHistory() {
   if (window.navigator.vibrate) window.navigator.vibrate(50)
-  if (confirm('¿Deseas eliminar todo tu historial de lecturas recientes?')) {
-    localStorage.removeItem('simivoz_historial')
-    
-    window.speechSynthesis.cancel()
-    var msg = new SpeechSynthesisUtterance('Historial borrado')
-    msg.lang = 'es-PE'
-    window.speechSynthesis.speak(msg)
+  localStorage.removeItem('simivoz_historial')
+  
+  window.speechSynthesis.cancel()
+  var msg = new SpeechSynthesisUtterance('Historial borrado')
+  msg.lang = 'es-PE'
+  window.speechSynthesis.speak(msg)
 
-    renderHistory()
+  showToast('Historial borrado', false)
+  renderHistory()
+}
+
+function openHistoryItem(item) {
+  if (!item.contenido) {
+    showToast('Este registro antiguo no tiene texto guardado', true)
+    return
   }
+
+  localStorage.setItem('simivoz_audio_titulo', item.titulo)
+  localStorage.setItem('simivoz_audio_contenido', item.contenido)
+  localStorage.setItem('simivoz_historial_restore', JSON.stringify({
+    titulo: item.titulo,
+    contenido: item.contenido
+  }))
+  location.href = 'audio-player.html'
+}
+
+function showToast(message, isError) {
+  var existing = document.querySelector('.toast-demo')
+  if (existing) existing.remove()
+
+  var toast = document.createElement('div')
+  toast.className = 'toast-demo' + (isError ? ' error' : '')
+  toast.textContent = message
+  toast.setAttribute('role', 'status')
+  document.body.appendChild(toast)
+
+  setTimeout(function() {
+    toast.remove()
+  }, 2600)
 }
 
 document.addEventListener('DOMContentLoaded', function() {

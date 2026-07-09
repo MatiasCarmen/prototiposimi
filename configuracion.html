@@ -522,12 +522,17 @@ document.getElementById('save-btn').addEventListener('click', function() {
   btn.querySelector('span').textContent = 'CAMBIOS GUARDADOS'
   btn.classList.add('saved')
 
-  var settings = {
+  var previousSettings = {}
+  try {
+    previousSettings = JSON.parse(localStorage.getItem('simivoz_config')) || {}
+  } catch (e) {}
+
+  var settings = Object.assign({}, previousSettings, {
     fontSize: fontSizes[currentFontSizeIndex],
     contrast: contrastMode,
     simplified: simplifiedMode,
     speed: speedSlider.value
-  }
+  })
   localStorage.setItem('simivoz_config', JSON.stringify(settings))
 
   // Feedback auditivo real

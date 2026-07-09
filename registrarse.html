@@ -176,6 +176,13 @@ footer {
           <input type="email" id="email" placeholder="ejemplo@correo.com" required aria-label="Correo electrónico">
         </div>
       </div>
+
+      <div class="form-group">
+        <label for="password">Contraseña</label>
+        <div class="input-wrapper">
+          <input type="password" id="password" placeholder="Mínimo 6 caracteres" required minlength="6" aria-label="Contraseña">
+        </div>
+      </div>
       
       <button type="submit" class="btn-primary-action btn-register" aria-label="Crear nueva cuenta y registrarse">
         <span>REGISTRARSE</span>
@@ -219,6 +226,7 @@ document.getElementById('registroForm').onsubmit = (e) => {
   
   var name = document.getElementById('full_name').value.trim()
   var email = document.getElementById('email').value.trim()
+  var password = document.getElementById('password').value
   
   if (name.length < 3) {
     showToast('El nombre debe tener al menos 3 caracteres', true)
@@ -238,9 +246,24 @@ document.getElementById('registroForm').onsubmit = (e) => {
     window.speechSynthesis.speak(msgError)
     return;
   }
+
+  if (password.length < 6) {
+    showToast('La contraseña debe tener al menos 6 caracteres', true)
+    window.speechSynthesis.cancel()
+    var msgError = new SpeechSynthesisUtterance('Error, la contraseña debe tener al menos seis caracteres')
+    msgError.lang = 'es-PE'
+    window.speechSynthesis.speak(msgError)
+    return;
+  }
   
   var btn = document.querySelector('.btn-register span')
   btn.textContent = 'REGISTRANDO...'
+
+  localStorage.setItem('simivoz_usuario_registrado', JSON.stringify({
+    name: name,
+    email: email,
+    password: password
+  }))
   
   setTimeout(function() {
     window.speechSynthesis.cancel()
