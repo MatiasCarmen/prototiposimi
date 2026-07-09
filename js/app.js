@@ -47,12 +47,16 @@
         
         // Escalado de Fuente (Aplicado a HTML para afectar a unidades rem)
         if (config.fontSize) {
-          document.documentElement.classList.remove('big-font', 'massive-font');
+          document.documentElement.classList.remove('small-font', 'big-font', 'massive-font', 'ultra-font');
           var fs = config.fontSize;
-          if (fs === '1.125rem' || fs === '1.15rem' || fs === 'A+') {
+          if (fs === '0.75rem' || fs === '0.875rem' || fs === 'A-') {
+            document.documentElement.classList.add('small-font');
+          } else if (fs === '1.125rem' || fs === '1.15rem' || fs === 'A+') {
             document.documentElement.classList.add('big-font');
-          } else if (fs === '1.25rem' || fs === '1.3rem' || fs === 'A++' || fs === 'A+++') {
-            document.documentElement.classList.add('big-font', 'massive-font');
+          } else if (fs === '1.25rem' || fs === '1.3rem' || fs === 'A++') {
+            document.documentElement.classList.add('massive-font');
+          } else if (fs === '1.4rem' || fs === '1.40rem' || fs === 'A+++') {
+            document.documentElement.classList.add('ultra-font');
           }
         }
       }

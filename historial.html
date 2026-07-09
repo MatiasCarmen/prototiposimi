@@ -231,11 +231,15 @@ function aplicarConfiguracion() {
       if (config.contrast) document.body.classList.add('high-contrast')
       if (config.simplified) document.body.classList.add('modo-simplificado')
       if (config.fontSize) {
-        document.body.classList.remove('big-font', 'massive-font')
-        if (config.fontSize === '1.125rem' || config.fontSize === '1.15rem' || config.fontSize === 'A+') {
-          document.body.classList.add('big-font')
-        } else if (config.fontSize === '1.25rem' || config.fontSize === '1.3rem' || config.fontSize === 'A++' || config.fontSize === 'A+++') {
-          document.body.classList.add('big-font', 'massive-font')
+        document.documentElement.classList.remove('small-font', 'big-font', 'massive-font', 'ultra-font')
+        if (config.fontSize === '0.75rem' || config.fontSize === '0.875rem' || config.fontSize === 'A-') {
+          document.documentElement.classList.add('small-font')
+        } else if (config.fontSize === '1.125rem' || config.fontSize === '1.15rem' || config.fontSize === 'A+') {
+          document.documentElement.classList.add('big-font')
+        } else if (config.fontSize === '1.25rem' || config.fontSize === '1.3rem' || config.fontSize === 'A++') {
+          document.documentElement.classList.add('massive-font')
+        } else if (config.fontSize === '1.4rem' || config.fontSize === '1.40rem' || config.fontSize === 'A+++') {
+          document.documentElement.classList.add('ultra-font')
         }
       }
     }

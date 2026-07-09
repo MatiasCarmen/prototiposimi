@@ -61,9 +61,15 @@ body.high-contrast {
 }
 
 /* Escalas de fuente accesibles (aplicadas al html para escalar rems) */
+html.small-font {
+  font-size: 90%; /* Escala rem un 10% menos */
+}
 html.big-font {
   font-size: 110%; /* Escala rem un 10% más */
 }
 html.massive-font {
   font-size: 125%; /* Escala rem un 25% más */
+}
+html.ultra-font {
+  font-size: 140%; /* Escala rem un 40% más */
 }

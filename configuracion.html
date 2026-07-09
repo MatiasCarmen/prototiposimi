@@ -95,7 +95,7 @@ main {
 }
 
 .font-btn:active {
-  transform: scale(0.9);
+  transform: scale(0.96);
 }
 
 .font-display {
@@ -407,7 +407,7 @@ input[type="range"]::-webkit-slider-thumb {
 <script>
 var simplifiedMode = false
 var contrastMode = false
-var currentFontSizeIndex = 2
+var currentFontSizeIndex = 1
 var fontSizes = ['A-', 'A', 'A+', 'A++', 'A+++']
 
 var fontDisplay = document.getElementById('font-size-display')
@@ -439,11 +439,11 @@ function cargarConfiguracion() {
         currentFontSizeIndex = i
       } else {
         // Fallback por si guardó valor rem
-        if (savedSize === '0.75rem') currentFontSizeIndex = 0
-        else if (savedSize === '0.875rem') currentFontSizeIndex = 1
-        else if (savedSize === '1rem') currentFontSizeIndex = 2
-        else if (savedSize === '1.125rem' || savedSize === '1.15rem') currentFontSizeIndex = 3
-        else if (savedSize === '1.25rem' || savedSize === '1.3rem') currentFontSizeIndex = 4
+        if (savedSize === '0.75rem' || savedSize === '0.875rem') currentFontSizeIndex = 0
+        else if (savedSize === '1rem') currentFontSizeIndex = 1
+        else if (savedSize === '1.125rem' || savedSize === '1.15rem') currentFontSizeIndex = 2
+        else if (savedSize === '1.25rem' || savedSize === '1.3rem') currentFontSizeIndex = 3
+        else if (savedSize === '1.4rem' || savedSize === '1.40rem') currentFontSizeIndex = 4
       }
       updateFontSizeVisuals()
 
@@ -482,11 +482,15 @@ function updateFontSizeVisuals() {
   fontDisplay.textContent = sizeLabel
   
   // Aplicar clases de forma reactiva de inmediato en el HTML (para rem scaling)
-  document.documentElement.classList.remove('big-font', 'massive-font')
-  if (sizeLabel === 'A+') {
+  document.documentElement.classList.remove('small-font', 'big-font', 'massive-font', 'ultra-font')
+  if (sizeLabel === 'A-') {
+    document.documentElement.classList.add('small-font')
+  } else if (sizeLabel === 'A+') {
     document.documentElement.classList.add('big-font')
-  } else if (sizeLabel === 'A++' || sizeLabel === 'A+++') {
-    document.documentElement.classList.add('big-font', 'massive-font')
+  } else if (sizeLabel === 'A++') {
+    document.documentElement.classList.add('massive-font')
+  } else if (sizeLabel === 'A+++') {
+    document.documentElement.classList.add('ultra-font')
   }
 }
 

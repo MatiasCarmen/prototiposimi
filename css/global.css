@@ -313,13 +313,10 @@ body.modo-simplificado .simplified-full-btn {
 }
 
 /* ========================
-   HAPTIC TOUCH ANIMATION
+   HAPTIC TOUCH
    ======================== */
 .haptic-press {
-  transition: transform 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-.haptic-press:active {
-  transform: scale(0.98);
+  -webkit-tap-highlight-color: transparent;
 }
 
 /* ========================
