@@ -21,9 +21,13 @@
       if (tutorial) window.location.replace('inicio.html');
       else window.location.replace('bienvenido.html');
     }
-  } else if (page === 'bienvenido.html' || page === 'lector-inteligente.html' || page === 'elegir-voz.html') {
+  } else if (page === 'bienvenido.html' || page === 'lector-inteligente.html') {
     if (!logeado) window.location.replace('index.html');
     else if (tutorial) window.location.replace('inicio.html');
+  } else if (page === 'elegir-voz.html') {
+    // Se usa durante el tutorial Y como página de ajustes ("Voz Narradora")
+    // después del onboarding, así que aquí solo exigimos sesión iniciada.
+    if (!logeado) window.location.replace('index.html');
   } else if (page !== 'configuracion.html') {
     // Páginas internas (inicio, servicios, mapa, etc.) excepto configuracion
     if (!logeado) window.location.replace('index.html');
@@ -57,8 +61,10 @@
     }
   };
   
-  // Ejecutar inmediatamente para evitar parpadeos
-  window.simivozAplicarConfiguracion();
+  // Ejecutar inmediatamente para evitar parpadeos (solo si el <body> ya existe)
+  if (document.body) {
+    window.simivozAplicarConfiguracion();
+  }
   
   // Y volver a ejecutar al terminar de cargar el DOM (por si el body/html no estaban listos)
   document.addEventListener('DOMContentLoaded', window.simivozAplicarConfiguracion);
