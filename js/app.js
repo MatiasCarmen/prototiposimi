@@ -28,7 +28,7 @@
     // Se usa durante el tutorial Y como página de ajustes ("Voz Narradora")
     // después del onboarding, así que aquí solo exigimos sesión iniciada.
     if (!logeado) window.location.replace('index.html');
-  } else if (page !== 'configuracion.html') {
+  } else if (page !== 'configuracion.html' && page !== 'config-nologin.html') {
     // Páginas internas (inicio, servicios, mapa, etc.) excepto configuracion
     if (!logeado) window.location.replace('index.html');
     else if (!tutorial) window.location.replace('bienvenido.html');
